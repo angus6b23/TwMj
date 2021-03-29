@@ -1,0 +1,655 @@
+ :root {
+    --p1-color: #d08770;
+    --p2-color: #ebcb8b;
+    --p3-color: #a3be8c;
+    --p4-color: #b48ead;
+    --bg-nord: #2e3440;
+    --fg-nord: #e5e9f0;
+    --highlight: #81a1c1;
+}
+
+::-webkit-scrollbar {
+    width: 0.5vw;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--bg-nord);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--highlight);
+}
+
+#global{
+    scrollbar-color: var(--highlight) transparent;
+    scrollbar-width: thin;
+}
+
+body{
+    background-color: var(--bg-nord);
+}
+
+a {
+    color: var(--fg-nofd);
+}
+
+#initial {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 2.5vh;
+    background: var(--bg-nord);
+    color: var(--fg-nord);
+    z-index: 99;
+}
+
+.title {
+    font-size: 4vw;
+}
+
+#initial input {
+    width: 24vw;
+    background: var(--bg-nord);
+    color: var(--fg-nord);
+    text-align: center;
+}
+
+
+input:focus{
+    outline: none;
+}
+
+#name_east {
+    border: solid black 0px;
+    border-bottom: solid var(--p1-color) 0.5vh;
+}
+
+#name_east:focus {
+    background-color: var(--p1-color);
+    transition: 0.5s;
+}
+
+#name_south {
+    border: solid black 0px;
+    border-bottom: solid var(--p2-color) 0.5vh;
+}
+
+#name_south:focus {
+    background-color: var(--p2-color);
+    transition: 0.5s;
+}
+
+#name_west {
+    border: solid black 0px;
+    border-bottom: solid var(--p3-color) 0.5vh;
+}
+
+#name_west:focus {
+    background-color: var(--p3-color);
+    transition: 0.5s;
+}
+
+#name_north {
+    border: solid black 0px;
+    border-bottom: solid var(--p4-color) 0.5vh;
+}
+
+#name_north:focus {
+    background-color: var(--p4-color);
+    transition: 0.5s;
+}
+
+.button {
+    display: inline-block;
+    text-align: center;
+    width: 8vw;
+    background: var(--highlight);
+    color: var(--bg-nord);
+    transition: 0.5s;
+    border-radius: 0.5vh;
+    font-size: 2.5vh;
+}
+
+.button-big {
+    display: inline-block;
+    font-size: 4vh;
+    width: 100%;
+}
+
+.button-medium {
+    display: inline-block;
+    font-size: 2.5vw;
+    width: 20vw;
+}
+
+div a:hover {
+    text-decoration: none;
+    color: var(--fg-nord);
+    transition: 0.5s;
+}
+
+.button:active{
+    filter: brightness(0.8);
+    transition: 0s;
+}
+
+.none {
+    display: none;
+    visibility: hidden;
+}
+
+.fas.none{
+    display: none;
+}
+
+#main {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    font-size: 2.5vh;
+    background: var(--bg-nord);
+    color: var(--fg-nord);
+    z-index: 0;
+}
+
+#turn {
+    text-align: right;
+}
+
+#table_wrap {
+    width: 48vw;
+    height: 70vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#table {
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    margin: 0px;
+    padding: 0px;
+}
+
+.right {
+    float: right;
+}
+
+.corner {
+    height: 12.5%;
+    width: 25%;
+}
+
+.hori-block {
+    display: flex;
+    height: 12.5%;
+    width: 50%;
+    justify-content: center;
+    align-items: center;
+    font-size: 5vh;
+    z-index: 4;
+}
+
+.vert-block {
+    display:flex;
+    height: 50%;
+    width: 12.5%;
+    justify-content: center;
+    align-items: center;
+    font-size: 5vh;
+    z-index: 4;
+}
+
+#center {
+    height: 50%;
+    width: 50%;
+    display: flex;
+    justify-content: center;
+}
+
+.text-block {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    font-size: 3vh;
+    z-index: 5;
+}
+
+.dots {
+    height: 2.5vh;
+    width: 2.5vh;
+    border-radius: 50%;
+    background-color: var(--bg-nord);
+}
+
+.modal-content div {
+    background: var(--bg-nord);
+    color: var(--fg-nord);
+}
+
+.button.select {
+    background: var(--bg-nord);
+    color: var(--fg-nord);
+    border-radius: 0px;
+}
+
+.select:hover {
+    color: var(--highlight);
+}
+
+
+.select.active {
+    border-bottom: solid 0.5vh var(--highlight);
+    transition: 0s;
+}
+
+.nav {
+    justify-content: center;
+}
+
+.nav-link.nav-custom {
+    color: var(--fg-nord);
+    font-size: 3vw;
+    border-radius: 0;
+    padding-bottom: 0px;
+}
+
+.nav-link.nav-custom:hover {
+    color: var(--highlight);
+    transition: 0s;
+}
+
+.nav-link.nav-custom.active {
+    background: var(--bg-nord);
+    color: var(--fg-nord);
+    border-bottom: solid 0.5vh var(--highlight);
+    transition: 0s;
+}
+
+.nav-link.nav-stat {
+    color: var(--fg-nord);
+    font-size: 3vh;
+    border-radius: 0;
+    padding-bottom: 0px;
+}
+
+.nav-link.nav-stat:hover {
+    color: var(--highlight);
+    transition: 0s;
+}
+
+.nav-link.nav-stat.active {
+    background: var(--bg-nord);
+    color: var(--fg-nord);
+    border-top: solid 0.5vh var(--highlight);
+    transition: 0s;
+}
+
+#rightbuttongroup {
+    display: flex;
+    width: 100%;
+    justify-content: flex-end;
+    height: 5vh;
+}
+
+#rightbuttongroup a {
+    color: var(--fg-nord);
+    font-size: 1.2vw;
+    opacity: 0.7;
+}
+
+#rightbuttongroup a:hover {
+    opacity: 1.0;
+    transition: 0s;
+}
+
+#rightbuttongroup a:active {
+    color: var(--highlight);
+    opacity: 1.0;
+    transition: 0s;
+}
+
+#rightbuttongroup a.inactive {
+    opacity: 0.3;
+}
+
+#rightbuttongroup a.inactive:hover {
+    opacity: 0.3;
+}
+
+#rightbuttongroup a.inactive:active {
+    color: var(--fg-nord);
+    opacity: 0.3;
+}
+
+#record {
+    width: 100%;
+    height: 40vh;
+    overflow-y: scroll;
+}
+
+th {
+    position: sticky;
+    position: -webkit-sticky;
+    top: 0;
+    background-color: var(--bg-nord);
+}
+
+table {
+    width: 100%;
+    text-align: center;
+    border-collapse: separate;
+    table-layout: fixed;
+}
+
+#record tr {
+    height: 3vh;
+}
+
+.first_row {
+    border-bottom: 0.5vh solid var(--highlight);
+    width: 10%;
+}
+
+.other_row {
+    width: 22.5%;
+}
+
+.p1name {
+    border-bottom: solid 0.5vh var(--p1-color);
+}
+
+.p2name {
+    border-bottom: solid 0.5vh var(--p2-color);
+}
+
+.p3name {
+    border-bottom: solid 0.5vh var(--p3-color);
+}
+
+.p4name {
+    border-bottom: solid 0.5vh var(--p4-color);
+}
+
+#stat_view {
+    height: 42vh;
+    overflow-y: scroll;
+}
+
+#stat_nav {
+    height: 3vh;
+    bottom: 1vh;
+}
+
+#stat_nav a{
+    font-size: 1.5vw;
+}
+
+#history td {
+    border-bottom: solid 0.25vh var(--fg-nord);
+    font-size: 2vh;
+}
+
+#history tr.removed {
+    text-decoration: line-through;
+}
+
+#break td {
+    border-bottom: solid 0.25vh var(--fg-nord);
+}
+
+.tab-content {
+    font-size: 2.5vh;
+}
+
+.player_select {
+    text-align: center;
+}
+
+input.others {
+    width: 3vw;
+    background: var(--bg-nord);
+    color: var(--fg-nord);
+    border: solid 0px black;
+    text-align: left;
+}
+
+
+input[type=number]::-webkit-outer-spin-button,
+input[type=number]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
+.select_pan a {
+    font-size: 3vh;
+    transition: 0s;
+}
+
+.select_pan a:hover {
+    transition: 0s;
+}
+
+a.p1box:hover {
+    color: var(--p1-color);
+}
+
+a.p2box:hover {
+    color: var(--p2-color);
+}
+
+a.p3box:hover {
+    color: var(--p3-color);
+}
+
+a.p4box:hover {
+    color: var(--p4-color);
+}
+
+a.p1box.active {
+    border-bottom: 0.5vh solid var(--p1-color);
+}
+
+a.p2box.active {
+    border-bottom: 0.5vh solid var(--p2-color);
+}
+
+a.p3box.active {
+    border-bottom: 0.5vh solid var(--p3-color);
+}
+
+a.p4box.active {
+    border-bottom: 0.5vh solid var(--p4-color);
+}
+
+.center_button_container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#ron input[type=number] {
+    width: 6vh;
+    border: 0px solid black;
+    border-bottom: 0.5vh solid var(--fg-nord);
+    background: var(--bg-nord);
+    color: var(--fg-nord);
+    text-align: center;
+}
+
+#ron input[type=number]:focus {
+    border-bottom: 0.5vh solid var(--highlight);
+}
+
+#ron input:disabled {
+    border: 0px solid black;
+    width: 6vh;
+    background: var(--bg-nord);
+    color: var(--fg-nord);
+}
+
+#ron a{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* CSS animations */
+/* animation for blinking block of banker */
+@keyframes banker_ani {
+    to {background-color: var(--bg-nord);}
+}
+
+#table .banker{
+    animation-name: banker_ani;
+    animation-duration: 0.5s;
+    animation-iteration-count: 6;
+    animation-direction: alternate;
+    animation-timing-function: ease;
+}
+
+@keyframes E_to_S{
+    from {position:absolute; left: 22%; top: 50%; background-color: var(--E);}
+    to{position:absolute; left: 50%; top: 77%; background-color: var(--S);}
+}
+
+@keyframes E_to_W{
+    from {position:absolute; left: 22%; top: 50%; background-color: var(--E);}
+    to{position:absolute; left: 77%; top: 50%; background-color: var(--W);}
+}
+
+@keyframes E_to_N{
+    from {position:absolute; left: 23%; top: 50%; background-color: var(--E);}
+    to{position:absolute; left: 50%; top: 22%; background-color: var(--N);}
+}
+
+@keyframes S_to_W{
+    from {position:absolute; left: 50%; top: 77%; background-color: var(--S);}
+    to{position:absolute; left: 77%; top: 50%; background-color: var(--W);}
+}
+
+@keyframes S_to_N{
+    from {position:absolute; left: 50%; top: 77%; background-color: var(--S);}
+    to{position:absolute; left: 50%; top: 22%; background-color: var(--N);}
+}
+
+@keyframes W_to_N{
+    from {position:absolute; left: 77%; top: 50%; background-color: var(--W);}
+    to{position:absolute; left: 50%; top: 22%; background-color: var(--N);}
+}
+
+.ES{
+    animation-name: E_to_S;
+}
+
+.EW{
+    animation-name: E_to_W;
+}
+
+.EN{
+    animation-name: E_to_N;
+}
+
+.SE{
+    animation-name: E_to_S;
+    animation-direction: reverse;
+}
+
+.SW{
+    animation-name: S_to_W;
+}
+
+.SN{
+    animation-name: S_to_N;
+}
+
+.WE{
+    animation-name: E_to_W;
+    animation-direction: reverse;
+}
+
+.WS{
+    animation-name: S_to_W;
+    animation-direction: reverse;
+}
+
+.WN{
+    animation-name: W_to_N;
+}
+
+.NE{
+    animation-name: E_to_N;
+    animation-direction: reverse;
+}
+
+.NS{
+    animation-name: S_to_N;
+    animation-direction: reverse;
+}
+
+.NW{
+    animation-name: W_to_N;
+    animation-direction: reverse;
+}
+
+#table .dots{
+    animation-duration: 2s;
+    animation-iteration-count: infinite;
+    animation-timing-function: ease-in-out;
+    z-index: 2;
+}
+
+.delay_0{
+    animation-delay: 0s;
+}
+
+.delay_1{
+    animation-delay: 0.25s;
+}
+
+.delay_2{
+    animation-delay: 0.5s;
+}
+
+.delay_3{
+    animation-delay: 0.75s;
+}
+
+.delay_4{
+    animation-delay: 1s;
+}
+
+.delay_5{
+    animation-delay: 1.25s;
+}
+
+.delay_6{
+    animation-delay: 1.5s;
+}
+
+#context{
+    position: absolute;
+    z-index: 10;
+}
+
+#context .list-group-item{
+    font-size: 2vh;
+    background-color: var(--bg-nord);
+    color: var(--fg-nord);
+    border: 1px solid black;
+    height: 5vh;
+}
+
+#context :not(#context_name).list-group-item:hover{
+    color: var(--highlight);
+    transition: 0s;
+}
