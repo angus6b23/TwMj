@@ -3,8 +3,8 @@
     <meta charset="utf-8">
     <title>台牌面版</title>
     <!-- Google fonts for Noto Serif and Sans-->
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@600&display=swap" rel="stylesheet"> 
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400&display=swap" rel="stylesheet"> 
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400&display=swap" rel="stylesheet">
     <!-- Bootstrap, jQuery and JS bundle w/ Popper.js -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
@@ -137,7 +137,7 @@
                                             <td>即收總和</td>
                                             <td></td>
                                         </tr>
-                                        <tr id="stat_pay">  
+                                        <tr id="stat_pay">
                                             <td>即付總和</td>
                                             <td></td>
                                         </tr>
@@ -272,11 +272,11 @@
     </div>
     <!--Context Menu-->
     <div class="list-group none" id="context">
-        <li class="list-group-item list-group-item-action" id="context_name" style="font-weight: bold"></li>
-        <a class="list-group-item list-group-item-action" id="context_instantget">即收</a>
-        <a class="list-group-item list-group-item-action" id="context_instantpay">即付</a>
-        <a class="list-group-item list-group-item-action" id="context_deal">出統</a>
-        <a class="list-group-item list-group-item-action" id="context_tsumo">自摸</a>
+        <li class="list-group-item list-group-item-action" id="context_name" style="font-weight: bold"><div class="context_wrap"></div></li>
+        <a class="list-group-item list-group-item-action" id="context_instantget"><div class="context_wrap">即收</div></a>
+        <a class="list-group-item list-group-item-action" id="context_instantpay"><div class="context_wrap">即付</div></a>
+        <a class="list-group-item list-group-item-action" id="context_deal"><div class="context_wrap">出統</div></a>
+        <a class="list-group-item list-group-item-action" id="context_tsumo"><div class="context_wrap">自摸</div></a>
     </div>
     <!-- Modals -->
     <!-- Initial option modal -->
@@ -325,7 +325,6 @@
                                     <a class="button select col-4" href="javascript:void(0);">8</a>
                                     <a class="button select col" href="javascript:void(0);">其他：<input type="number" class="others ml-2 numonly" id="instantget_others"></input></a>
                                 </div>
-
                             </div>
                             <div class="mt-2 center_button_container none">
                                 <a class="button" href="javascript:instant('get');">確定</a>
@@ -404,22 +403,22 @@
                         <div class="tab-pane" id="tsumo">
                             <div class="mt-2">請先選擇自摸玩家，並輸入其他玩家的番數：</div>
                             <div class="mt-1 row player_select select_pan">
-                                    <div class="col">
-                                        <a class="p1box" href="javascript:void(0);"></a>
-                                        <input type="number" class="numonly p1form none"></input>
-                                    </div>
-                                    <div class="col">
-                                        <a class="p2box" href="javascript:void(0);"></a>
-                                        <input type="number" class="numonly p2form none"></input>
-                                    </div>
-                                    <div class="col">
-                                        <a class="p3box" href="javascript:void(0);"></a>
-                                        <input type="number" class="numonly p3form none"></input>
-                                    </div>
-                                    <div class="col">
-                                        <a class="p4box" href="javascript:void(0);"></a>
-                                        <input type="number" class="numonly p4form none"></input>
-                                    </div>
+                                <div class="col">
+                                    <a class="p1box" href="javascript:void(0);"></a>
+                                    <input type="number" class="numonly p1form none"></input>
+                                </div>
+                                <div class="col">
+                                    <a class="p2box" href="javascript:void(0);"></a>
+                                    <input type="number" class="numonly p2form none"></input>
+                                </div>
+                                <div class="col">
+                                    <a class="p3box" href="javascript:void(0);"></a>
+                                    <input type="number" class="numonly p3form none"></input>
+                                </div>
+                                <div class="col">
+                                    <a class="p4box" href="javascript:void(0);"></a>
+                                    <input type="number" class="numonly p4form none"></input>
+                                </div>
                             </div>
                             <div class="center_button_container none" style="margin-top: 2vh;">
                                 <a class="button" href="javascript:tsumo();">確定</a>
@@ -493,6 +492,48 @@
                             </table>
                             <div class="center_button_container none">
                                 <a class="button" href="javascript:iset('all');">結算全部</a>
+                            </div>
+                        </div>
+                        <div class="tab-pane" id="adjust">
+                            <div class="mt-2" style="font-size: 4vh">
+                            所有調整皆不會影響現時的拉踢：
+                            </div>
+                            <table style="width: 100%">
+                                <tr>
+                                    <th style="width: 30%">玩家名稱</th>
+                                    <th style="width: 20%">現時番數</th>
+                                    <th style="width: 30%">動作</th>
+                                    <th style="width: 20%">數值</th>
+                                </tr>
+                                <tr>
+                                    <td class="p1box"></td>
+                                    <td></td>
+                                    <td><div class="select_pan adjust_select_pan row"><a class="select" href="javascript:void(0);" title="增加番數"><div class="col"><i class="fas fa-plus-square"></i></div></a><a class="select" href="javascript:void(0);" title="減少番數"><div class="col"><i class="fas fa-minus-square"></i></div></a><a class="select" href="javascript:void(0);" title="設定番數為右方數值"><div class="col"><i class="fas fa-equals"></i></div></a></div></td>
+                                    <td><input type="number" class="numonly p1_input"></td>
+                                </tr>
+                                <tr>
+                                    <td class="p2box"></td>
+                                    <td></td>
+                                    <td><div class="select_pan adjust_select_pan row"><a class="select" href="javascript:void(0);" title="增加番數"><div class="col"><i class="fas fa-plus-square"></i></div></a><a class="select" href="javascript:void(0);" title="減少番數"><div class="col"><i class="fas fa-minus-square"></i></div></a><a class="select" href="javascript:void(0);" title="設定番數為右方數值"><div class="col"><i class="fas fa-equals"></i></div></a></div></td>
+                                    <td><input type="number" class="numonly p2_input"></td>
+                                </tr>
+                                <tr>
+                                    <td class="p3box"></td>
+                                    <td></td>
+                                    <td><div class="select_pan adjust_select_pan row"><a class="select" href="javascript:void(0);" title="增加番數"><div class="col"><i class="fas fa-plus-square"></i></div></a><a class="select" href="javascript:void(0);" title="減少番數"><div class="col"><i class="fas fa-minus-square"></i></div></a><a class="select" href="javascript:void(0);" title="設定番數為右方數值" ><div class="col"><i class="fas fa-equals"></i></div></a></div></td>
+                                    <td><input type="number" class="numonly p3_input"></td>
+                                </tr>
+                                <tr>
+                                    <td class="p4box"></td>
+                                    <td></td>
+                                    <td><div class="select_pan adjust_select_pan row"><a class="select" href="javascript:void(0);" title="增加番數"><div class="col"><i class="fas fa-plus-square"></i></div></a><a class="select" href="javascript:void(0);" title="減少番數"><div class="col"><i class="fas fa-minus-square"></i></div></a><a class="select" href="javascript:void(0);"title="設定番數為右方數值"><div class="col"><i class="fas fa-equals"></i></div></a></div></td>
+                                    <td><input type="number" class="numonly p4_input"></td>
+                                </tr>
+                                    <td>
+                                </tr>
+                            </table>
+                            <div class="center_button_container">
+                                <a class="button" href="javascript:void(0);">即時調整</a>
                             </div>
                         </div>
                     </div>
