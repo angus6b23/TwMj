@@ -503,6 +503,81 @@ a.p4box.active {
     align-items: center;
 }
 
+#context{
+    position: absolute;
+    z-index: 10;
+}
+
+#context .list-group-item{
+    font-size: 2vh;
+    background-color: var(--bg-nord);
+    color: var(--fg-nord);
+    border: 1px solid black;
+    height: 5vh;
+}
+
+#context :not(#context_name).list-group-item:hover{
+    color: var(--highlight);
+    transition: 0s;
+}
+
+.context_wrap{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+}
+
+.adjust_select_pan{
+    align-items: center;
+    justify-content: center;
+    flex: auto;
+}
+
+#settle input{
+    border: solid black 0px;
+    background-color: var(--bg-nord);
+    color: var(--fg-nord);
+    text-align: center;
+    transition: 0.5s;
+    width: 6vw;
+}
+
+#settle .p1_input{
+    border-bottom: solid var(--p1-color) 0.5vh;
+}
+
+#settle .p1_input:focus{
+    background-color: var(--p1-color);
+    transition: 0.5s;
+}
+
+#settle .p2_input{
+    border-bottom: solid var(--p2-color) 0.5vh;
+}
+
+#settle .p2_input:focus{
+    background-color: var(--p2-color);
+    transition: 0.5s;
+}
+#settle .p3_input{
+    border-bottom: solid var(--p3-color) 0.5vh;
+}
+
+#settle .p3_input:focus{
+    background-color: var(--p3-color);
+    transition: 0.5s;
+}
+#settle .p4_input{
+    border-bottom: solid var(--p4-color) 0.5vh;
+}
+
+#settle .p4_input:focus{
+    background-color: var(--p4-color);
+    transition: 0.5s;
+}
+
 /* CSS animations */
 /* animation for blinking block of banker */
 @keyframes banker_ani {
@@ -634,22 +709,4 @@ a.p4box.active {
 
 .delay_6{
     animation-delay: 1.5s;
-}
-
-#context{
-    position: absolute;
-    z-index: 10;
-}
-
-#context .list-group-item{
-    font-size: 2vh;
-    background-color: var(--bg-nord);
-    color: var(--fg-nord);
-    border: 1px solid black;
-    height: 5vh;
-}
-
-#context :not(#context_name).list-group-item:hover{
-    color: var(--highlight);
-    transition: 0s;
 }

@@ -331,7 +331,7 @@ function inputcontrol(){ //only allow positive integers for input .numonly
         if (event.shiftKey == true) {
             event.preventDefault();
         }
-        if ((event.keyCode >= 48 && event.keyCode <= 57) || (event.keyCode >= 96 && event.keyCode <= 105) || event.keyCode == 8 || event.keyCode == 9 || event.keyCode == 37 || event.keyCode == 39 || event.keyCode == 46 || event.keyCode == 35 || event.keyCode == 36) { 
+        if ((event.keyCode >= 48 && event.keyCode <= 57) || (event.keyCode >= 96 && event.keyCode <= 105) || event.keyCode == 8 || event.keyCode == 9 || event.keyCode == 37 || event.keyCode == 39 || event.keyCode == 46 || event.keyCode == 35 || event.keyCode == 36) {
         } else {
             event.preventDefault();
         };
@@ -343,7 +343,7 @@ function inputcontrol(){ //only allow positive integers for input .numonly
             if ($('.p' + x + 'form').is(':disabled')) x+=1;
             event.preventDefault();
             $('.p' + x + 'form').focus();
-        } 
+        }
         else if (event.keyCode == 9 && event.shiftKey == true){
             let x = parseInt(this.classList[1].slice(1,2));
             x -= 1;
@@ -368,14 +368,14 @@ function resetinput_instant(){
     $('.player_select a').removeClass('active');
     $('#instant .select_pan a').removeClass('active');
     $('.others').val('');
-    $('.center_button_container').addClass('none');
+    $('#instant .center_button_container').addClass('none');
 }
 
 function resetinput_ron(){
     $('.player_select a').removeClass('active')
     $('#ron input').val('');
     $('#ron input').addClass('none');
-    $('.center_button_container').addClass('none');
+    $('#ron .center_button_container').addClass('none');
 }
 
 function validateinstant(get_or_pay){
@@ -477,9 +477,9 @@ function deal(){
                 allplayer[x].status = 'win';
                 allplayer[x].win = parseInt(allplayer[x].win) + 1;
                 allplayer[x].deal_win = parseInt(allplayer[x].deal_win) + 1;
-                msg = msg + allplayer[ron_obj.selected].name + ' 出銃了 ' + win_value + '番給 ' + allplayer[x].name + '<br>'; 
+                msg = msg + allplayer[ron_obj.selected].name + ' 出銃了 ' + win_value + '番給 ' + allplayer[x].name + '<br>';
                 game.push(parseInt(win_value));
-                
+
                 } else if ( win_value == '' ||  win_value == 0) {
                 allplayer[x].status = 'neutral';
                 game.push(0);
@@ -525,7 +525,7 @@ function tsumo(){
                 game.push(parseInt(win_value));
                 } else if ( ron_obj.selected !== x ) {
                     if ( win_value == '' || win_value == 0){
-                        // Add exception if no value input for tsumo 
+                        // Add exception if no value input for tsumo
                         game = [NaN];
                         return;
                     }
@@ -606,7 +606,7 @@ function post_draw(){
 
 function settle(deal_or_tsumo){
     for ( x = 1; x < 5 ; x++){ //loop for all player and search for status of current match
-        if ( allplayer[x].status == 'lose' ){ 
+        if ( allplayer[x].status == 'lose' ){
             for ( y = 1; y < 5; y++){
                 if( allplayer[y].status == 'win'){ //Lose play add value to 'streak from' and 'loss to' winning player
                     if ( parseInt(allplayer[x]['sf' + y]) > 0){
@@ -743,7 +743,7 @@ function calculateturn(){
     if ( round == 2 ) { pw_tc = '南' };
     if ( round == 3 ) { pw_tc = '西' };
     if ( round == 4 ) { pw_tc = '北' };
-    if( gamestat.banker == 'E' ){ 
+    if( gamestat.banker == 'E' ){
         banker_tc = '東';
         $('#east').addClass('banker');
     }
@@ -751,12 +751,12 @@ function calculateturn(){
         banker_tc = '南';
         $('#south').addClass('banker');
     }
-    if( gamestat.banker == 'W' ){ 
+    if( gamestat.banker == 'W' ){
          banker_tc = '西';
         $('#west').addClass('banker');
     }
     if( gamestat.banker == 'N' ) {
-        banker_tc = '北' 
+        banker_tc = '北'
         $('#north').addClass('banker');
     }
     turn_display = '第' + turn + '局‧' + pw_tc + '圈' + banker_tc;
@@ -777,7 +777,7 @@ function timestamp(){
     var timestamp = hour + ':' + minute;
     return timestamp;
 }
-    
+
 function uicontrol(){
     $('.select_pan a').click(function(){ //Click control for all selection panels
         $(this).parents('.select_pan').find('a').removeClass('active');
@@ -799,11 +799,14 @@ function uicontrol(){
         $('#ron span').remove();//Clear ron modal input on tab change
         resetinput_ron();
     });
+    $('#ron .nav-link:nth(2)').click(function(){ //Display confirm button on selecting draw in ron modal
+        $('.center_button_container').removeClass('none');
+    })
     $('#ron').on('hidden.bs.modal', function(){
         $('#ron span').remove();//Clear ron modal input on modal close
         resetinput_ron();
     });
-    $('.player_select a').click(function(){
+    $('.player_select a').click(function(){ //Show confirm button on selecting player
         $('.center_button_container').removeClass('none');
     });
     $('#ron .player_select a').click(function(){ //Show input field for ron modal
@@ -829,7 +832,7 @@ function uicontrol(){
         } else {
             $('input.p1form').focus();
         }
-    }); 
+    });
     $('#ron input').keyup(function(){ // Calculate input value for deal and tsumo modal
         ron_obj.value = 0;
         let deal_total = 0;
@@ -860,14 +863,15 @@ function uicontrol(){
                 }
             }
         }
-        if ($('#settle td').length == 0){
+        if ($('#instant_settle td').length == 0){
             $('#instant_settle table').after('<div class="iset" style="font-size: 4vh">暫未有拉踢可結算</div>');
             $('#instant_settle .center_button_container').addClass('none');
         } else {
             $('#instant_settle .center_button_container').removeClass('none');
         }
     });
-    $('#north,#east,#south,#west').click(function(event){
+
+    $('#north,#east,#south,#west').click(function(event){ //Show quick function menu on clicking blocks
         let cursor_x = event.pageX;
         let cursor_y = event.pageY;
         let context_name = null;
@@ -891,18 +895,21 @@ function uicontrol(){
             context_name=getplayernamebyposition('N')
             context_no=getplayernumberbyposition('N');
         };
-        $('#context_name').html(context_name);
-        $('#context_name').css('color', 'var(--p' + context_no + '-color)');
+        $('#context_name div').html(context_name);
+        $('#context_name').css('background-color', 'var(--p' + context_no + '-color)');
         $('#context_instantget').attr('href', 'javascript:context("get",' + context_no + ");");
         $('#context_instantpay').attr('href', 'javascript:context("pay",' + context_no + ");");
         $('#context_deal').attr('href', 'javascript:context("deal",' + context_no + ");");
         $('#context_tsumo').attr('href', 'javascript:context("tsumo",' + context_no + ");");
     });
-    $(document).click(function(event){
+    $(document).click(function(event){ //Hide quick function menu when clicking outside blocks
         if (event.target.parentElement.id == 'context' | event.target.id == 'east' | event.target.id == 'south' | event.target.id == 'west' |event.target.id == 'north'){
         } else {
             $('#context').addClass('none');
         }
+    });
+    $('#end a:nth(1)').click(function(){ //Hide end modal when clicking cancel
+        $('#end').modal('hide');
     });
 }
 
@@ -1026,7 +1033,7 @@ function reload(){
         default_setting = JSON.parse(localStorage.getItem('default_setting'));
         applytheme(default_setting.theme);
     }
-    
+
     if (localStorage.getItem('data') === null){
     } else {
         data = JSON.parse(localStorage.getItem('data'));
