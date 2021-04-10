@@ -14,6 +14,7 @@ var gamestat={ //Object for holding game statistics
     instantpay: 0,
     total_change: 0,
     max_streak: 0,
+    modified: false,
 };
 
 var data = new Object();
@@ -181,7 +182,10 @@ function applytheme(theme_name){
 }
 
 function updatetabledisplay(){
-        for (x = 1; x < 5; x++){ //Loop for all players, fill in name and balance into table
+    if (gamestat.modified == true){
+        $('#center i').removeClass('none');
+    }
+    for (x = 1; x < 5; x++){ //Loop for all players, fill in name and balance into table
         if (allplayer[x].position == 'E'){
             if (allplayer[x].unrealized > 0){
                 $('#E-text').html(allplayer[x].name + '<br>' + allplayer[x].balance + '(+' + allplayer[x].unrealized + ')');
@@ -228,7 +232,7 @@ function updatetabledisplay(){
         }
     }
     $('.streak').html('');
-    if (gamestat.streak > 0){ // Full in streak in the color box
+    if (gamestat.streak > 0){ // Fill in streak in the color box
         if(gamestat.banker == 'E'){
             $('#east .streak').html(gamestat.streak);
         }
@@ -727,6 +731,48 @@ function iset(fm, to){ //Function for handlin instant settle
     addhistory(msg);
 }
 
+function adjust(){
+    let action = 0;
+    let msg = '手動番數調整：<br>'
+    for(x=1; x<5; x++){
+        let adj_value = $('#adjust tr:nth(' + x + ') input').val();
+        if (adj_value == 0 || adj_value == ''){
+        } else {
+            if($('#adjust tr:nth(' + x + ') .select_pan a:nth(0)').hasClass('active')){
+                allplayer[x].balance += parseInt(adj_value);
+                action += 1;
+                msg = msg + allplayer[x].name + ' 增加了 ' + adj_value +'番<br>'
+            }
+            else if ($('#adjust tr:nth(' + x + ') .select_pan a:nth(1)').hasClass('active')){
+                allplayer[x].balance -= parseInt(adj_value);
+                action += 1;
+                msg = msg + allplayer[x].name + ' 減少了 ' + adj_value +'番<br>'
+            }
+            else if ($('#adjust tr:nth(' + x + ') .select_pan a:nth(2)').hasClass('active')){
+                allplayer[x].balance = parseInt(adj_value);
+                action += 1;
+                msg = msg + allplayer[x].name + ' 的番數設定為 ' + adj_value +'番<br>'
+            } else {
+                //Add visual feedback for no operation
+                return;
+            }
+        }
+    }
+    if (action !== 0){
+        gamestat.modified = true;
+        addhistory(msg);
+        save();
+    }
+    updatetabledisplay();
+    $('#settle').modal('toggle');
+    resetinput_settle();
+}
+
+function resetinput_settle(){
+    $('#adjust input').val('');
+    $('#adjust .select').removeClass('active');
+}
+
 function calculateturn(){
     let turn = 1;
         if (parseInt(gamestat.round_prevailing) > 4){
@@ -856,19 +902,23 @@ function uicontrol(){
     });
     $('#settle').on('shown.bs.modal', function(){ //Show settle modal text upon popup
         $('.iset').remove();
-        for (x=1; x<5; x++){
+        for (x=1; x<5; x++){ //Loop for unrealized balance and inject table into modal
             for (y=1; y<5; y++){
                 if(allplayer[x]['sf' + y] > 0){
                     $('#instant_settle table').append('<tr class="iset"><td>' + allplayer[x].name + '<i class="ml-2 mr-2 fas fa-arrow-right"></i>' + allplayer[y].name + '<i class="ml-2 fas fa-hand-holding-usd"></i>' + allplayer[x]['lossto' + y] + '番' + '<i class="ml-2 fas fa-people-arrows"></i>' + '拉' + allplayer[x]['sf' + y] + '次' + '</td><td><a class="button" href="javascript:iset(' + x + ', ' + y + ');">結算此項</a></td></tr>');
                 }
             }
         }
-        if ($('#instant_settle td').length == 0){
+        if ($('#instant_settle td').length == 0){ //Display text if
             $('#instant_settle table').after('<div class="iset" style="font-size: 4vh">暫未有拉踢可結算</div>');
             $('#instant_settle .center_button_container').addClass('none');
         } else {
             $('#instant_settle .center_button_container').removeClass('none');
         }
+    $('#adjust tr:nth(1) td:nth(1)').html(allplayer[1].balance);
+    $('#adjust tr:nth(2) td:nth(1)').html(allplayer[2].balance);
+    $('#adjust tr:nth(3) td:nth(1)').html(allplayer[3].balance);
+    $('#adjust tr:nth(4) td:nth(1)').html(allplayer[4].balance);
     });
 
     $('#north,#east,#south,#west').click(function(event){ //Show quick function menu on clicking blocks
@@ -1032,6 +1082,7 @@ function reload(){
     } else {
         default_setting = JSON.parse(localStorage.getItem('default_setting'));
         applytheme(default_setting.theme);
+        setfont(default_setting.font);
     }
 
     if (localStorage.getItem('data') === null){
