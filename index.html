@@ -70,7 +70,7 @@
                         <div class="corner" id="right-upper_div"></div>
                         <div class="vert-block text-block" id="E-text"></div>
                         <div class="vert-block" id="east"><div class="streak"></div><i class="fas fa-exclamation-circle none" data-toggle="modal" data-target="#break"></i></div>
-                        <div id="center"><i class="fas fa-balance-scale-left none" style="font-size: 5vh; align-self: center"></i></div>
+                        <div id="center"><i class="fas fa-balance-scale-left none" data-toggle="tooltip" data-placement="top" title="番數曾經被手動調整；請參考記錄" style="font-size: 5vh; align-self: center"></i></div>
                         <div class="vert-block" id="west"><div class="streak"></div><i class="fas fa-exclamation-circle none" data-toggle="modal" data-target="#break"></i></div>
                         <div class="vert-block text-block" id="W-text"></div>
                         <div class="corner" id="left-lower_div"></div>
@@ -508,32 +508,32 @@
                                 <tr>
                                     <td class="p1box"></td>
                                     <td></td>
-                                    <td><div class="select_pan adjust_select_pan row"><a class="select" href="javascript:void(0);" title="增加番數"><div class="col"><i class="fas fa-plus-square"></i></div></a><a class="select" href="javascript:void(0);" title="減少番數"><div class="col"><i class="fas fa-minus-square"></i></div></a><a class="select" href="javascript:void(0);" title="設定番數為右方數值"><div class="col"><i class="fas fa-equals"></i></div></a></div></td>
+                                    <td><div class="select_pan adjust_select_pan row"><a class="select add" href="javascript:void(0);" title="增加番數"><div class="col"><i class="fas fa-plus-square"></i></div></a><a class="select minus" href="javascript:void(0);" title="減少番數"><div class="col"><i class="fas fa-minus-square"></i></div></a><a class="select equal" href="javascript:void(0);" title="設定番數為右方數值"><div class="col"><i class="fas fa-equals"></i></div></a></div></td>
                                     <td><input type="number" class="numonly p1_input"></td>
                                 </tr>
                                 <tr>
                                     <td class="p2box"></td>
                                     <td></td>
-                                    <td><div class="select_pan adjust_select_pan row"><a class="select" href="javascript:void(0);" title="增加番數"><div class="col"><i class="fas fa-plus-square"></i></div></a><a class="select" href="javascript:void(0);" title="減少番數"><div class="col"><i class="fas fa-minus-square"></i></div></a><a class="select" href="javascript:void(0);" title="設定番數為右方數值"><div class="col"><i class="fas fa-equals"></i></div></a></div></td>
+                                    <td><div class="select_pan adjust_select_pan row"><a class="select add" href="javascript:void(0);" title="增加番數"><div class="col"><i class="fas fa-plus-square"></i></div></a><a class="select minus" href="javascript:void(0);" title="減少番數"><div class="col"><i class="fas fa-minus-square"></i></div></a><a class="select equal" href="javascript:void(0);" title="設定番數為右方數值"><div class="col"><i class="fas fa-equals"></i></div></a></div></td>
                                     <td><input type="number" class="numonly p2_input"></td>
                                 </tr>
                                 <tr>
                                     <td class="p3box"></td>
                                     <td></td>
-                                    <td><div class="select_pan adjust_select_pan row"><a class="select" href="javascript:void(0);" title="增加番數"><div class="col"><i class="fas fa-plus-square"></i></div></a><a class="select" href="javascript:void(0);" title="減少番數"><div class="col"><i class="fas fa-minus-square"></i></div></a><a class="select" href="javascript:void(0);" title="設定番數為右方數值" ><div class="col"><i class="fas fa-equals"></i></div></a></div></td>
+                                    <td><div class="select_pan adjust_select_pan row"><a class="select add" href="javascript:void(0);" title="增加番數"><div class="col"><i class="fas fa-plus-square"></i></div></a><a class="select minus" href="javascript:void(0);" title="減少番數"><div class="col"><i class="fas fa-minus-square"></i></div></a><a class="select equal" href="javascript:void(0);" title="設定番數為右方數值" ><div class="col"><i class="fas fa-equals"></i></div></a></div></td>
                                     <td><input type="number" class="numonly p3_input"></td>
                                 </tr>
                                 <tr>
                                     <td class="p4box"></td>
                                     <td></td>
-                                    <td><div class="select_pan adjust_select_pan row"><a class="select" href="javascript:void(0);" title="增加番數"><div class="col"><i class="fas fa-plus-square"></i></div></a><a class="select" href="javascript:void(0);" title="減少番數"><div class="col"><i class="fas fa-minus-square"></i></div></a><a class="select" href="javascript:void(0);"title="設定番數為右方數值"><div class="col"><i class="fas fa-equals"></i></div></a></div></td>
+                                    <td><div class="select_pan adjust_select_pan row"><a class="select add" href="javascript:void(0);" title="增加番數"><div class="col"><i class="fas fa-plus-square"></i></div></a><a class="select minus" href="javascript:void(0);" title="減少番數"><div class="col"><i class="fas fa-minus-square"></i></div></a><a class="select equal" href="javascript:void(0);"title="設定番數為右方數值"><div class="col"><i class="fas fa-equals"></i></div></a></div></td>
                                     <td><input type="number" class="numonly p4_input"></td>
                                 </tr>
                                     <td>
                                 </tr>
                             </table>
                             <div class="center_button_container">
-                                <a class="button" href="javascript:void(0);">即時調整</a>
+                                <a class="button" href="javascript:adjust();">即時調整</a>
                             </div>
                         </div>
                     </div>
