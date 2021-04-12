@@ -479,6 +479,9 @@
                         <li class="nav-item">
                             <a class="nav-link nav-custom" data-toggle="pill" href="#adjust_game">調整局數</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link nav-custom" data-toggle="pill" href="#change_seat">換位</a>
+                        </li>
                     </ul>
                     </div>
                     <div class="modal-body">
@@ -534,6 +537,44 @@
                             </table>
                             <div class="center_button_container">
                                 <a class="button" href="javascript:adjust();">即時調整</a>
+                            </div>
+                        </div>
+                        <div class="tab-pane" id="change_seat">
+                            <div class="mt-2">請選擇換位方法：</div>
+                            <div class="mt-2 mb-2 row select_pan" id="change_seat_pan">
+                                <a class="button select col" href="javascript:void(0);">東南對調、西北對調</a>
+                                <a class="button select col" href="javascript:void(0);">自選 </a>
+                            </div>
+                            <div class="player_select row select_pan mt-2 ml-2 none" id="pane1">
+                                東位：
+                                <a class="p1box col" href="javascript:void(0);"></a>
+                                <a class="p2box col" href="javascript:void(0);"></a>
+                                <a class="p3box col" href="javascript:void(0);"></a>
+                                <a class="p4box col" href="javascript:void(0);"></a>
+                            </div>
+                            <div class="player_select row select_pan mt-2 ml-2 none" id="pane2">
+                                南位：
+                                <a class="p1box col" href="javascript:void(0);"></a>
+                                <a class="p2box col" href="javascript:void(0);"></a>
+                                <a class="p3box col" href="javascript:void(0);"></a>
+                                <a class="p4box col" href="javascript:void(0);"></a>
+                            </div>
+                            <div class="player_select row select_pan mt-2 ml-2 none" id="pane3">
+                                西位：
+                                <a class="p1box col" href="javascript:void(0);"></a>
+                                <a class="p2box col" href="javascript:void(0);"></a>
+                                <a class="p3box col" href="javascript:void(0);"></a>
+                                <a class="p4box col" href="javascript:void(0);"></a>
+                            </div>
+                            <div class="player_select row select_pan mt-2 mb-2 ml-2 none" id="pane4">
+                                北位：
+                                <a class="p1box col" href="javascript:void(0);"></a>
+                                <a class="p2box col" href="javascript:void(0);"></a>
+                                <a class="p3box col" href="javascript:void(0);"></a>
+                                <a class="p4box col" href="javascript:void(0);"></a>
+                            </div>
+                            <div class="center_button_container none">
+                                <a class="button" href="javascript:void(0);">換位</a>
                             </div>
                         </div>
                     </div>

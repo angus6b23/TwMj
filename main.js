@@ -846,14 +846,17 @@ function uicontrol(){
         resetinput_ron();
     });
     $('#ron .nav-link:nth(2)').click(function(){ //Display confirm button on selecting draw in ron modal
-        $('.center_button_container').removeClass('none');
+        $('#ron .center_button_container').removeClass('none');
     })
     $('#ron').on('hidden.bs.modal', function(){
         $('#ron span').remove();//Clear ron modal input on modal close
         resetinput_ron();
     });
-    $('.player_select a').click(function(){ //Show confirm button on selecting player
-        $('.center_button_container').removeClass('none');
+    $('#ron .player_select a').click(function(){ //Show confirm button on selecting player
+        $('#ron .center_button_container').removeClass('none');
+    });
+    $('#instant .player_select a').click(function(){ //Show confirm button on selecting player
+        $('#instant .center_button_container').removeClass('none');
     });
     $('#ron .player_select a').click(function(){ //Show input field for ron modal
         $('#ron .signs').remove();
@@ -909,7 +912,7 @@ function uicontrol(){
                 }
             }
         }
-        if ($('#instant_settle td').length == 0){ //Display text if
+        if ($('#instant_settle td').length == 0){ //Display text if there is anything unsettled
             $('#instant_settle table').after('<div class="iset" style="font-size: 4vh">暫未有拉踢可結算</div>');
             $('#instant_settle .center_button_container').addClass('none');
         } else {
@@ -958,9 +961,57 @@ function uicontrol(){
             $('#context').addClass('none');
         }
     });
+    $('#change_seat_pan a:nth(0)').click(function(event){ //Reset custom seat selection upon clicking quick seat change_seat
+        $('#change_seat .center_button_container').removeClass('none');
+        $('#change_seat .player_select a').removeClass('none active');
+        $('#pane1,#pane2,#pane3,#pane4').addClass('none');
+    });
+    $('#change_seat_pan a:nth(1)').click(function(){
+        $('#change_seat .center_button_container').addClass('none');
+        $('#pane1').removeClass('none');
+    });
+    $('#change_seat .player_select a').click(function(){
+        let pane_no = 0;
+        for (x = 1; x < 5; x++){
+            if($(this).parent().is('#pane' + x)){
+                pane_no = x;
+            }
+        }
+        panel_control(pane_no);
+    });
     $('#end a:nth(1)').click(function(){ //Hide end modal when clicking cancel
         $('#end').modal('hide');
     });
+}
+
+function resetinput_change_seat(){
+    $('#change_seat_pan a').removeClass('active');
+    $('#change_seat .player_select a').removeClass('none active');
+    $('#pane1,#pane2,#pane3,#pane4').addClass('none');
+}
+
+function panel_control(pane_no){
+    for (x = pane_no+1;x < 5; x++){ //Loop for remaining panel
+        $('#pane' + x + ' a').removeClass('none');//Reset any hiddened items
+        for (y = pane_no;y > 0;y--){ //Loop for current and previous panels and find for active items
+            for(z = 1;z < 5; z++){
+                if($('#pane' + y + ' .p' + z + 'box').hasClass('active')){
+                    $('#pane' + x + ' .p' + z + 'box').addClass('none');
+                }
+            }
+        }
+        $('#pane' + x + ' a').removeClass('active');
+    }
+    if (pane_no < 4){
+        let y = pane_no + 1;
+        $('#pane' + y).removeClass('none');
+        $('#change_seat .center_button_container').addClass('none');
+        for (y = pane_no+2; y < 5; y++){
+            $('#pane' + y).addClass('none');
+        }
+    } else {
+        $('#change_seat .center_button_container').removeClass('none');
+    }
 }
 
 function getplayernamebyposition(position){
