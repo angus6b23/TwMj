@@ -922,6 +922,10 @@ function uicontrol(){
     $('#adjust tr:nth(2) td:nth(1)').html(allplayer[2].balance);
     $('#adjust tr:nth(3) td:nth(1)').html(allplayer[3].balance);
     $('#adjust tr:nth(4) td:nth(1)').html(allplayer[4].balance);
+    $('#change_name .p1_input').val(allplayer[1].name);
+    $('#change_name .p2_input').val(allplayer[2].name);
+    $('#change_name .p3_input').val(allplayer[3].name);
+    $('#change_name .p4_input').val(allplayer[4].name);
     });
 
     $('#north,#east,#south,#west').click(function(event){ //Show quick function menu on clicking blocks
@@ -1064,8 +1068,7 @@ function change_seat(){
     msg = msg + '北位： ' + getplayernamebyposition('N') + '<br>';
     $('#settle').modal('toggle');
     updatetabledisplay();
-    addhistory(msg)
-
+    addhistory(msg);
 }
 
 function getplayernamebyposition(position){
