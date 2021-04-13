@@ -955,6 +955,10 @@ function uicontrol(){
         $('#context_deal').attr('href', 'javascript:context("deal",' + context_no + ");");
         $('#context_tsumo').attr('href', 'javascript:context("tsumo",' + context_no + ");");
     });
+    $('#settle').on('hide.bs.modal', function(){ // Reset instant settle and change seat upon modal close
+        resetinput_settle();
+        resetinput_change_seat();
+    });
     $(document).click(function(event){ //Hide quick function menu when clicking outside blocks
         if (event.target.parentElement.id == 'context' | event.target.id == 'east' | event.target.id == 'south' | event.target.id == 'west' |event.target.id == 'north'){
         } else {
@@ -1002,7 +1006,7 @@ function panel_control(pane_no){
         }
         $('#pane' + x + ' a').removeClass('active');
     }
-    if (pane_no < 4){
+    if (pane_no < 4){ //Show next panel upon selection
         let y = pane_no + 1;
         $('#pane' + y).removeClass('none');
         $('#change_seat .center_button_container').addClass('none');
@@ -1012,6 +1016,56 @@ function panel_control(pane_no){
     } else {
         $('#change_seat .center_button_container').removeClass('none');
     }
+}
+
+function change_seat(){
+    let msg = '換位：<br>'
+    if ($('#change_seat_pan a:nth(0)').hasClass('active')){
+        allplayer[getplayernumberbyposition('E')].newposition = 'S';
+        allplayer[getplayernumberbyposition('S')].newposition = 'E';
+        allplayer[getplayernumberbyposition('W')].newposition = 'N';
+        allplayer[getplayernumberbyposition('N')].newposition = 'W';
+    } else {
+        for(x = 1; x < 5; x++){ //Loop all panel selection
+            for ( y = 1; y < 5; y++){ //Loop for player selection
+                if (x == 1){
+                    if ($('#pane' + x + ' .p' + y + 'box').hasClass('active')){
+                        allplayer[y].newposition = 'E';
+                    }
+                }
+                if (x == 2){
+                    if ($('#pane' + x + ' .p' + y + 'box').hasClass('active')){
+                        allplayer[y].newposition = 'S';
+                    }
+                }
+                if (x == 3){
+                    if ($('#pane' + x + ' .p' + y + 'box').hasClass('active')){
+                        allplayer[y].newposition = 'W';
+                    }
+                }
+                if (x == 4){
+                    if ($('#pane' + x + ' .p' + y + 'box').hasClass('active')){
+                        allplayer[y].newposition = 'N';
+                    }
+                }
+            }
+        }
+    }
+    for (x = 1; x < 5; x++){
+        if (allplayer[x].newposition == ''){
+            return;
+        }
+        allplayer[x].position = allplayer[x].newposition;
+        allplayer.newposition = '';
+    }
+    msg = msg + '東位： ' + getplayernamebyposition('E') + '<br>';
+    msg = msg + '南位： ' + getplayernamebyposition('S') + '<br>';
+    msg = msg + '西位： ' + getplayernamebyposition('W') + '<br>';
+    msg = msg + '北位： ' + getplayernamebyposition('N') + '<br>';
+    $('#settle').modal('toggle');
+    updatetabledisplay();
+    addhistory(msg)
+
 }
 
 function getplayernamebyposition(position){
