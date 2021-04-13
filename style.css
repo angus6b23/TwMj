@@ -541,7 +541,14 @@ a.p4box.active {
     color: var(--fg-nord);
     text-align: center;
     transition: 0.5s;
+}
+
+#adjust input{
     width: 6vw;
+}
+
+#change_name input{
+    width: 100%;
 }
 
 #settle .p1_input{
