@@ -1,4 +1,4 @@
-let i=1 //used for empty names
+var i=1 //used for empty names
 var allplayer=[NaN]; //Array for all players, such that allplayer[1].name = name of player1
 var gamestat={ //Object for holding game statistics
     round: 1,
@@ -366,6 +366,12 @@ function inputcontrol(){ //only allow positive integers for input .numonly
             tsumo();
         };
     });
+    $('#change_name input').keydown(function(event){
+        if (event.keyCode == 13){
+            change_name();
+            event.preventDefault();
+        }
+    });
 }
 
 function resetinput_instant(){
@@ -472,9 +478,6 @@ function deal(){
         gamestat.total_change -= parseInt(ron_obj.value);
         let ex_draw = parseInt(gamestat.tsumo) + parseInt(gamestat.deal);
         gamestat.avg_yaku = Math.round((ex_draw * parseFloat(gamestat.avg_yaku) - parseInt(ron_obj.value)) * 100 / (ex_draw + 1)) / 100;
-        if (Math.abs(ron_obj.value) > gamestat.max_yaku){
-            gamestat.max_yaku = Math.abs(ron_obj.value);
-        }
         for ( x = 1 ; x < 5 ; x++){ // Loop for all input field then push to an array to represent game summary
             let win_value = $('#deal .p' + x + 'form').val();
             if ( win_value !== '' && win_value > 0 ){
@@ -483,7 +486,12 @@ function deal(){
                 allplayer[x].deal_win = parseInt(allplayer[x].deal_win) + 1;
                 msg = msg + allplayer[ron_obj.selected].name + ' 出銃了 ' + win_value + '番給 ' + allplayer[x].name + '<br>';
                 game.push(parseInt(win_value));
-
+                if (win_value > gamestat.max_yaku){
+                    gamestat.max_yaku = win_value;
+                }
+                if (win_value > allplayer[x].max_yaku){
+                    allplayer[x].max_yaku = win_value;
+                }
                 } else if ( win_value == '' ||  win_value == 0) {
                 allplayer[x].status = 'neutral';
                 game.push(0);
@@ -514,6 +522,14 @@ function tsumo(){
     } else {
         checkundo();
         game = [NaN];
+        for (x = 1; x < 5; x++){
+            let value = $('#tsumo .p' + x + 'form').val();
+            if (value == '' || value == 0){
+                // Add exception if no value input for tsumo
+                game = [NaN];
+                return;
+            }
+        }
         gamestat.total_change += parseInt(ron_obj.value);
         let ex_draw = parseInt(gamestat.tsumo) + parseInt(gamestat.deal);
         gamestat.avg_yaku = Math.round((ex_draw * parseFloat(gamestat.avg_yaku) + Math.floor(parseInt(ron_obj.value)/3)) * 100 / (ex_draw + 1)) / 100;
@@ -526,18 +542,17 @@ function tsumo(){
                 allplayer[x].status = 'win';
                 allplayer[x].win = parseInt(allplayer[x].win) + 1;
                 allplayer[x].tsumo = parseInt(allplayer[x].tsumo) + 1;
+                if (Math.floor(ron_obj.value / 3) > allplayer[x].max_yaku){
+                    allplayer[x].max_yaku = Math.floor(ron_obj.value / 3);
+                }
                 game.push(parseInt(win_value));
-                } else if ( ron_obj.selected !== x ) {
-                    if ( win_value == '' || win_value == 0){
-                        // Add exception if no value input for tsumo
-                        game = [NaN];
-                        return;
-                    }
+                }
+            else if ( ron_obj.selected !== x ) {
                 allplayer[x].status = 'lose';
                 allplayer[x].lose = parseInt(allplayer[x].lose) + 1;
                 game.push(eval(0 - parseInt(win_value)));
+                }
             }
-        }
         msg = msg + allplayer[ron_obj.selected].name + ' 自摸了' + Math.floor(ron_obj.value / 3) + '番[平均]<br>';
         game_record.push(game);
         gamestat.tsumo = parseInt(gamestat.tsumo) + 1;
@@ -903,6 +918,7 @@ function uicontrol(){
         $('#tsumo .p' + ron_obj.selected + 'form').val('+' + tsumo_total);
         ron_obj.value = eval(deal_total + tsumo_total);
     });
+
     $('#settle').on('shown.bs.modal', function(){ //Show settle modal text upon popup
         $('.iset').remove();
         for (x=1; x<5; x++){ //Loop for unrealized balance and inject table into modal
@@ -918,14 +934,10 @@ function uicontrol(){
         } else {
             $('#instant_settle .center_button_container').removeClass('none');
         }
-    $('#adjust tr:nth(1) td:nth(1)').html(allplayer[1].balance);
-    $('#adjust tr:nth(2) td:nth(1)').html(allplayer[2].balance);
-    $('#adjust tr:nth(3) td:nth(1)').html(allplayer[3].balance);
-    $('#adjust tr:nth(4) td:nth(1)').html(allplayer[4].balance);
-    $('#change_name .p1_input').val(allplayer[1].name);
-    $('#change_name .p2_input').val(allplayer[2].name);
-    $('#change_name .p3_input').val(allplayer[3].name);
-    $('#change_name .p4_input').val(allplayer[4].name);
+        for (x = 1; x < 5; x++){
+            $('#adjust tr:nth(' + x + ') td:nth(1)').html(allplayer[x].balance); //Display score on adjust tab
+            $('#change_name .p' + x + '_input').val(allplayer[x].name); //Input player name in change name tab
+        }
     });
 
     $('#north,#east,#south,#west').click(function(event){ //Show quick function menu on clicking blocks
@@ -1071,6 +1083,31 @@ function change_seat(){
     addhistory(msg);
 }
 
+function change_name(){
+    let msg = '改名：<br>';
+    let action = 0;
+    i = 1
+    for (x = 1; x < 5; x++){
+        let newname = $('#change_name .p' + x + '_input').val(); //Loop all input on change name
+        if (newname !== allplayer[x].name){
+            newname = checkname(newname);
+            msg = msg + allplayer[x].name + ' 改名為 ' + newname + '<br>';
+            allplayer[x].name = newname;
+            action += 1;
+        }
+    }
+    if (action > 0){
+        addhistory(msg);
+        for (x = 1;x < 5; x++){
+            $('.p' + x + 'name').html(allplayer[x].name);
+            $('.p' + x + 'box').html(allplayer[x].name);
+        }
+        updatetabledisplay();
+        save();
+    }
+    $('#settle').modal('toggle');
+}
+
 function getplayernamebyposition(position){
     for (x=1; x<5; x++){
         if (allplayer[x].position == position){
@@ -1130,7 +1167,7 @@ function context(action,target){
 }
 
 function save(){
-    data = new Object ();
+    let data = new Object();
     data.allplayer = gatherallplayerdata();
     data.gamestat = gather(gamestat);
     data.game_record = gathergame_record();
@@ -1272,6 +1309,8 @@ function update_stat_table(){
     let rounds = parseInt(gamestat.round) - 1;
     if (rounds == 0){
     } else {
+        playerstat_display_simple('#player_max_yaku', 'max_yaku');
+        playerstat_display_simple('#player_max_streak', 'max_winning_streak');
         if (gamestat.tsumo + gamestat.deal > 0){
             playerstat_display('#player_win', 'win', gamestat.tsumo + gamestat.deal);
             playerstat_display('#player_lose', 'lose', gamestat.tsumo + gamestat.deal);
@@ -1302,6 +1341,13 @@ function playerstat_display(id, property, fraction){
             let temp_display = Math.round(allplayer[y][property] / fraction * 100);
             $(id + ' :nth-child(' + x + ')').html(temp_display + '%');
         }
+    }
+}
+
+function playerstat_display_simple(id, property){
+    for (x = 2; x <= 5; x++){
+        let y = x - 1;
+        $(id + ' :nth-child(' + x + ')').html(allplayer[y][property]);
     }
 }
 
