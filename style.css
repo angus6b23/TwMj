@@ -57,9 +57,49 @@ a {
     text-align: center;
 }
 
-
 input:focus{
     outline: none;
+}
+
+#io textarea{
+    width: 100%;
+    height: 300px;
+    background-color: var(--bg-nord);
+    color: var(--fg-nord);
+    border: 0.5vh solid var(--fg-nord);
+    border-radius: 0.5vh;
+}
+
+#io textarea:focus{
+    border: 0.5vh solid var(--highlight);
+    transition: 0.5s;
+}
+
+textarea:focus{
+    outline: none;
+}
+
+.gs_left{
+    text-align: right;
+}
+
+.gs_right{
+    justify-content: flex-start;
+    text-align: left;
+}
+
+#game_setting input{
+    width: 50%;
+    color: var(--fg-nord);
+    border: solid black 0px;
+    background: var(--bg-nord);
+    border-bottom: solid var(--fg-nord) 0.5vh;
+    text-align: center;
+}
+
+#game_setting input:focus{
+    border-bottom: solid var(--highlight) 0.5vh;
+    transition: 0.5s;
 }
 
 #name_east {
@@ -99,6 +139,30 @@ input:focus{
 
 #name_north:focus {
     background-color: var(--p4-color);
+    transition: 0.5s;
+}
+
+select{
+    appearance: none;
+    background-color: transparent;
+    border: none;
+    border-bottom: 0.5vh solid var(--fg-nord);
+    color: var(--fg-nord);
+    text-align: center;
+    font-family: inherit;
+    font-size: inherit;
+    cursor: inherit;
+    line-height: inherit;
+}
+
+
+
+#theme_setting select{
+    width: 50%;
+}
+
+select:focus{
+    border-bottom: 0.5vh solid var(--highlight);
     transition: 0.5s;
 }
 
@@ -153,6 +217,7 @@ div a:hover {
     background: var(--bg-nord);
     color: var(--fg-nord);
     z-index: 0;
+    overflow-y: hidden;
 }
 
 #turn {
