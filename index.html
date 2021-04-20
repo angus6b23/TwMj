@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <head>
     <meta charset="utf-8">
-    <title>台牌面版</title>
+    <title>港式台牌計分牌</title>
     <!-- Google fonts for Noto Serif and Sans-->
     <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@600&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400&display=swap" rel="stylesheet">
@@ -48,6 +48,7 @@
                 <a class="button select" href="javascript:setfont('Noto Sans TC, sans-serif');" style="font-family: Noto Sans TC, sans-serif">思源黑體</a>
             </div>
             <a class="button mt-1" href="javascript:void(0);" style="width: 100%" data-toggle="modal" data-target="#initial_option"><i class="fas fa-cogs mr-2"></i>選項</a>
+            <a class="button mt-1" href="javascript:void(0);" style="width: 100%" data-toggle="modal" data-target="#about"><i class="fas fa-heart mr-2"></i></i>關於</a>
             <a class="button button-big mt-1" href="javascript:initiate();"><i class="fas fa-gamepad mr-2"></i>開始</a>
         </div>
         <div style="position: absolute; bottom: 0px; right: 0px;">v1.06 alpha</div>
@@ -291,10 +292,64 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header title">
-                選項
+                    <ul class="nav nav-pills" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link nav-custom active" data-toggle="pill" href="#game_setting">游戲設置</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link nav-custom" data-toggle="pill" href="#theme_setting">外觀設置</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link nav-custom" data-toggle="pill" href="#io">匯入/匯出</a>
+                        </li>
+                    </ul>
                 </div>
                 <div class="modal-body">
-                Text here
+                    <div class="tab-content">
+                        <div class="tab-pane show active" id="game_setting">
+                            <div class="row">
+                                <div class="col-6 gs_left"><i class="fas fa-info-circle" title="所有玩家的初始番數&#13;&#10;預設為 0"></i> 底：</div>
+                                <div class="col-6 gs_right"><input class="numonly" type="number"></input></div>
+                                <div class="col-6 gs_left"><i class="fas fa-info-circle" title="每一番代表多少錢&#13;&#10;預設為 1"></i> x元一番：</div>
+                                <div class="col-6 gs_right"><input class="numonly" type="number"></input></div>
+                                <div class="col-6 gs_left"><i class="fas fa-info-circle" title="拉的時侯番數的倍數&#13;&#10;例：設倍數為1.5。第一局，甲勝乙100番。如甲於第二局再勝乙時，甲於第一局所贏的番數會變成150番。&#13;&#10;預設為 1.5，必須大於 1"></i> 拉倍數：</div>
+                                <div class="col-6 gs_right"><input class="numonly" type="number"></input></div>
+                                <div class="col-6 gs_left"><i class="fas fa-info-circle" title="當連續輸給某一玩家x局，輸的玩家可選擇中止拉踢&#13;&#10;預設為 3&#13;&#10;0 代表無限拉"></i> 每x局數可中止拉踢：</div>
+                                <div class="col-6 gs_right"><input class="numonly" type="number"></input></div>
+                                <div class="center_button_container col mt-2">
+                                    <a class="button" href="javascript:get_game_setting()">保存</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane" id="theme_setting">
+                            <div class="row">
+                                <div class="col-6 gs_left">主題</div>
+                                <div class="col-6 gs_right"><select>
+                                    <option value="Nord">北歐</option>
+                                    <option value="Nord_alt">冷色系北歐</option>
+                                    <option value="Dracula">德古拉</option>
+                                    <option value="Gruvbox_light">亮色航空</option>
+                                    <option value="Gruvbox_dark">暗色航空</option>
+                                    <option value="High_contrast">高對比</option>
+                                </select></div>
+                                <div class="col mt-2" style="text-align:center;"><input type="checkbox" id="fullscreen"></input><label for="fullscreen" class="ml-1">開始時自動進入全屏幕</label></div>
+                            </div>
+                            <div class="center_button_container mt-2"><a class="button" href="javascript:get_game_setting()">保存</a></div>
+                        </div>
+                        <div class="tab-pane" id="io">
+                            <div class="row">
+                                <div class="col-6">匯出：</div>
+                                <div class="col-3"><a class="button" href="javascript:void(0);">複制到剪貼簿</a></div>
+                                <div class="col-3"><a class="button" href="javascript:void(0);">另儲為JSON檔</a></div>
+                                <div class="col-12 mt-2"><textarea id="export" readonly></textarea></div>
+                                <div class="col-12 mt-3">匯入：</div>
+                                <div class="col-12 mt-2"><textarea id="import"></textarea></div>
+                                <div class="center_button_container col mt-2">
+                                    <a class="button" href="javascript:void(0);">匯入並開始</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

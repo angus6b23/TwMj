@@ -1079,6 +1079,8 @@ function change_seat(){
     msg = msg + '西位： ' + getplayernamebyposition('W') + '<br>';
     msg = msg + '北位： ' + getplayernamebyposition('N') + '<br>';
     $('#settle').modal('toggle');
+    checkundo();
+    save();
     updatetabledisplay();
     addhistory(msg);
 }
@@ -1103,6 +1105,7 @@ function change_name(){
             $('.p' + x + 'box').html(allplayer[x].name);
         }
         updatetabledisplay();
+        checkundo();
         save();
     }
     $('#settle').modal('toggle');
