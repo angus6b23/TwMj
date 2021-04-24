@@ -20,10 +20,12 @@ var gamestat={ //Object for holding game statistics
 var data = new Object();
 var default_setting={ //Object for holding settings
     font: '',
-    draw_action: 'hold+',
     theme: 'Nord',
     fold: 1.5,
-    break: 3
+    break: 3,
+    base: 0,
+    money: 1,
+    fullscreen: false,
 };
 
 let theme = { //Object for themes
@@ -165,6 +167,8 @@ function initiate_ui(){ //Function for initiating ui
     $('.p4name').html(allplayer[4].name);
     $('.p4box').html(allplayer[4].name);
     $('#turn').html(turn_display);
+    $('#option .nav li:nth(0)').addClass('none');
+    $('#option li:nth-child(2) a').tab('show');
     $('#global').css('font-family', default_setting.font);
     applytheme(default_setting.theme);
     updatetabledisplay();
@@ -174,7 +178,6 @@ function initiate_ui(){ //Function for initiating ui
 
 function applytheme(theme_name){
     let temp_theme = theme[theme_name];
-    default_setting.theme = theme_name;
     for ( properties in temp_theme ){
         document.documentElement.style.setProperty(properties, temp_theme[properties]);
     }
@@ -184,6 +187,8 @@ function applytheme(theme_name){
 function updatetabledisplay(){
     if (gamestat.modified == true){
         $('#center i').removeClass('none');
+    } else {
+        $('#center i').addClass('none');
     }
     for (x = 1; x < 5; x++){ //Loop for all players, fill in name and balance into table
         if (allplayer[x].position == 'E'){
@@ -330,12 +335,30 @@ function settablesize(){ //Control size of table according to window size
     }
 }
 
-function inputcontrol(){ //only allow positive integers for input .numonly
-    $('.numonly').keydown(function(event){
+function inputcontrol(){ //only allow positive integers for input positiveintonly
+    $('.positiveintonly').keydown(function(event){
         if (event.shiftKey == true) {
             event.preventDefault();
         }
         if ((event.keyCode >= 48 && event.keyCode <= 57) || (event.keyCode >= 96 && event.keyCode <= 105) || event.keyCode == 8 || event.keyCode == 9 || event.keyCode == 37 || event.keyCode == 39 || event.keyCode == 46 || event.keyCode == 35 || event.keyCode == 36) {
+        } else {
+            event.preventDefault();
+        };
+    });
+    $('.numonly').keydown(function(event){
+        if (event.shiftKey == true) {
+            event.preventDefault();
+        }
+        if (event.keyCode == 110 || event.keyCode == 190 || (event.keyCode >= 48 && event.keyCode <= 57) || (event.keyCode >= 96 && event.keyCode <= 105) || event.keyCode == 8 || event.keyCode == 9 || event.keyCode == 37 || event.keyCode == 39 || event.keyCode == 46 || event.keyCode == 35 || event.keyCode == 36) {
+        } else {
+            event.preventDefault();
+        };
+    });
+    $('.intonly').keydown(function(event){
+        if (event.shiftKey == true) {
+            event.preventDefault();
+        }
+        if (event.keyCode == 173 || event.keyCode == 109 || (event.keyCode >= 48 && event.keyCode <= 57) || (event.keyCode >= 96 && event.keyCode <= 105) || event.keyCode == 8 || event.keyCode == 9 || event.keyCode == 37 || event.keyCode == 39 || event.keyCode == 46 || event.keyCode == 35 || event.keyCode == 36) {
         } else {
             event.preventDefault();
         };
@@ -919,6 +942,22 @@ function uicontrol(){
         ron_obj.value = eval(deal_total + tsumo_total);
     });
 
+    $('#option').on('shown.bs.modal', function(){ //Fill in default settings into option modal
+        $('#option_base').val(default_setting.base);
+        $('#option_money').val(default_setting.money);
+        $('#option_fold').val(default_setting.fold);
+        $('#option_break').val(default_setting.break);
+        $('#theme_select').val(default_setting.theme);
+    });
+
+    $('#theme_select').change(function(){
+        applytheme($('#theme_select').val());
+    });
+
+    $('#option').on('hide.bs.modal', function(){
+        applytheme(default_setting.theme);
+    })
+
     $('#settle').on('shown.bs.modal', function(){ //Show settle modal text upon popup
         $('.iset').remove();
         for (x=1; x<5; x++){ //Loop for unrealized balance and inject table into modal
@@ -1398,6 +1437,10 @@ function playergraph(){
     }
     let plot_config ={responsive: true};
     Plotly.newPlot('graph', plot_data, plot_layout, plot_config);
+}
+
+function fullscreen(){
+      document.fullScreenElement && null !== document.fullScreenElement || !document.mozFullScreen && !document.webkitIsFullScreen ? document.documentElement.requestFullScreen ? document.documentElement.requestFullScreen() : document.documentElement.mozRequestFullScreen ? document.documentElement.mozRequestFullScreen() : document.documentElement.webkitRequestFullScreen && document.documentElement.webkitRequestFullScreen(Element.ALLOW_KEYBOARD_INPUT) : document.cancelFullScreen ? document.cancelFullScreen() : document.mozCancelFullScreen ? document.mozCancelFullScreen() : document.webkitCancelFullScreen && document.webkitCancelFullScreen();
 }
 
 $(document).ready(function(){
