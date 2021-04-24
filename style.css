@@ -292,6 +292,10 @@ div a:hover {
     background-color: var(--bg-nord);
 }
 
+.modal-header{
+    border-bottom: 1px solid var(--fg-nord) !important;
+}
+
 .modal-content div {
     background: var(--bg-nord);
     color: var(--fg-nord);

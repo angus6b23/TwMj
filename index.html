@@ -47,7 +47,7 @@
                 <a class="button select" href="javascript:setfont('Noto Serif TC, serif');" style="font-family: Noto Serif TC, serif">思源宋體</a>
                 <a class="button select" href="javascript:setfont('Noto Sans TC, sans-serif');" style="font-family: Noto Sans TC, sans-serif">思源黑體</a>
             </div>
-            <a class="button mt-1" href="javascript:void(0);" style="width: 100%" data-toggle="modal" data-target="#initial_option"><i class="fas fa-cogs mr-2"></i>選項</a>
+            <a class="button mt-1" href="javascript:void(0);" style="width: 100%" data-toggle="modal" data-target="#option"><i class="fas fa-cogs mr-2"></i>選項</a>
             <a class="button mt-1" href="javascript:void(0);" style="width: 100%" data-toggle="modal" data-target="#about"><i class="fas fa-heart mr-2"></i></i>關於</a>
             <a class="button button-big mt-1" href="javascript:initiate();"><i class="fas fa-gamepad mr-2"></i>開始</a>
         </div>
@@ -103,11 +103,8 @@
                     <span class="mt-1 mr-2" data-toggle="modal" data-target="#history">
                     <a href="javascript:void(0);" data-toggle="tooltip" data-placement="bottom" title="顯示游戲的記錄"><i class="far fa-clipboard mr-1"></i>記錄</a>
                     </span>
-                    <span class="mt-1 mr-2">
-                    <a href="javascript:void(0);" class="inactive" data-toggle="tooltip" data-placement="bottom" title="游戲設置包括換位、改名、調整游戲相關數值"><i class="fas fa-dice mr-2"></i>游戲設置</a>
-                    </span>
-                    <span class="mt-1 mr-2">
-                    <a href="javascript:void(0);" class="inactive" data-toggle="tooltip" data-placement="bottom" title="選項包括更變主題、儲存及載入進度"><i class="fas fa-cogs mr-1"></i>選項</a>
+                    <span class="mt-1 mr-2" data-toggle="modal" data-target="#option">
+                    <a href="javascript:void(0);" data-toggle="tooltip" data-placement="bottom" title="選項包括更變主題、儲存及載入進度"><i class="fas fa-cogs mr-1"></i>選項</a>
                     </span>
                     <span class="mt-1">
                     <a href="javascript:void(0);" class="inactive" data-toggle="tooltip" data-placement="bottom" title="有關本網頁及助養作者"><i class="fas fa-heart mr-1"></i>喜歡</a>
@@ -287,8 +284,8 @@
         <a class="list-group-item list-group-item-action" id="context_tsumo"><div class="context_wrap">自摸</div></a>
     </div>
     <!-- Modals -->
-    <!-- Initial option modal -->
-    <div class="modal" id="initial_option">
+    <!--Option modal -->
+    <div class="modal" id="option">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header title">
@@ -309,13 +306,13 @@
                         <div class="tab-pane show active" id="game_setting">
                             <div class="row">
                                 <div class="col-6 gs_left"><i class="fas fa-info-circle" title="所有玩家的初始番數&#13;&#10;預設為 0"></i> 底：</div>
-                                <div class="col-6 gs_right"><input class="numonly" type="number"></input></div>
+                                <div class="col-6 gs_right"><input id="option_base" class="positiveintonly" type="number"></input></div>
                                 <div class="col-6 gs_left"><i class="fas fa-info-circle" title="每一番代表多少錢&#13;&#10;預設為 1"></i> x元一番：</div>
-                                <div class="col-6 gs_right"><input class="numonly" type="number"></input></div>
+                                <div class="col-6 gs_right"><input id="option_money" class="numonly" type="number"></input></div>
                                 <div class="col-6 gs_left"><i class="fas fa-info-circle" title="拉的時侯番數的倍數&#13;&#10;例：設倍數為1.5。第一局，甲勝乙100番。如甲於第二局再勝乙時，甲於第一局所贏的番數會變成150番。&#13;&#10;預設為 1.5，必須大於 1"></i> 拉倍數：</div>
-                                <div class="col-6 gs_right"><input class="numonly" type="number"></input></div>
+                                <div class="col-6 gs_right"><input id="option_fold" class="numonly" type="number"></input></div>
                                 <div class="col-6 gs_left"><i class="fas fa-info-circle" title="當連續輸給某一玩家x局，輸的玩家可選擇中止拉踢&#13;&#10;預設為 3&#13;&#10;0 代表無限拉"></i> 每x局數可中止拉踢：</div>
-                                <div class="col-6 gs_right"><input class="numonly" type="number"></input></div>
+                                <div class="col-6 gs_right"><input id="option_break" class="positiveintonly" type="number"></input></div>
                                 <div class="center_button_container col mt-2">
                                     <a class="button" href="javascript:get_game_setting()">保存</a>
                                 </div>
@@ -324,7 +321,7 @@
                         <div class="tab-pane" id="theme_setting">
                             <div class="row">
                                 <div class="col-6 gs_left">主題</div>
-                                <div class="col-6 gs_right"><select>
+                                <div class="col-6 gs_right"><select id="theme_select">
                                     <option value="Nord">北歐</option>
                                     <option value="Nord_alt">冷色系北歐</option>
                                     <option value="Dracula">德古拉</option>
@@ -332,7 +329,8 @@
                                     <option value="Gruvbox_dark">暗色航空</option>
                                     <option value="High_contrast">高對比</option>
                                 </select></div>
-                                <div class="col mt-2" style="text-align:center;"><input type="checkbox" id="fullscreen"></input><label for="fullscreen" class="ml-1">開始時自動進入全屏幕</label></div>
+                                <div class="col-8 mt-2" style="text-align:center;"><input type="checkbox" id="fullscreen"></input><label for="fullscreen" class="ml-1">開始時自動進入全屏幕</label></div>
+                                <div class="col-4 mt-2" style="text-align:center;"><a class="button" href="javascript:fullscreen();">全屏幕</a></div>
                             </div>
                             <div class="center_button_container mt-2"><a class="button" href="javascript:get_game_setting()">保存</a></div>
                         </div>
@@ -385,7 +383,7 @@
                                     <a class="button select col-4" href="javascript:void(0);">3</a>
                                     <a class="button select col-4" href="javascript:void(0);">5</a>
                                     <a class="button select col-4" href="javascript:void(0);">8</a>
-                                    <a class="button select col" href="javascript:void(0);">其他：<input type="number" class="others ml-2 numonly" id="instantget_others"></input></a>
+                                    <a class="button select col" href="javascript:void(0);">其他：<input type="number" class="others ml-2 positiveintonly" id="instantget_others"></input></a>
                                 </div>
                             </div>
                             <div class="mt-2 center_button_container none">
@@ -406,7 +404,7 @@
                                 <div class="select_pan row">
                                     <a class="button select col-6" href="javascript:void(0);">5</a>
                                     <a class="button select col-6" href="javascript:void(0);">10</a>
-                                    <a class="button select col" href="javascript:void(0);">其他：<input type="number" class="others ml-2 numonly" id="instantpay_others"></input></a>
+                                    <a class="button select col" href="javascript:void(0);">其他：<input type="number" class="others ml-2 positiveintonly" id="instantpay_others"></input></a>
                                 </div>
                                 </select>
                             </div>
@@ -443,19 +441,19 @@
                             <div class="mt-1 row player_select select_pan">
                                     <div class="col">
                                         <a class="p1box" href="javascript:void(0);"></a>
-                                        <input type="number" class="numonly p1form none"></input>
+                                        <input type="number" class="positiveintonly p1form none"></input>
                                     </div>
                                     <div class="col">
                                         <a class="p2box" href="javascript:void(0);"></a>
-                                        <input type="number" class="numonly p2form none"></input>
+                                        <input type="number" class="positiveintonly p2form none"></input>
                                     </div>
                                     <div class="col">
                                         <a class="p3box" href="javascript:void(0);"></a>
-                                        <input type="number" class="numonly p3form none"></input>
+                                        <input type="number" class="positiveintonly p3form none"></input>
                                     </div>
                                     <div class="col">
                                         <a class="p4box" href="javascript:void(0);"></a>
-                                        <input type="number" class="numonly p4form none"></input>
+                                        <input type="number" class="positiveintonly p4form none"></input>
                                     </div>
                             </div>
                             <div class="center_button_container none" style="margin-top: 2vh;">
@@ -467,19 +465,19 @@
                             <div class="mt-1 row player_select select_pan">
                                 <div class="col">
                                     <a class="p1box" href="javascript:void(0);"></a>
-                                    <input type="number" class="numonly p1form none"></input>
+                                    <input type="number" class="positiveintonly p1form none"></input>
                                 </div>
                                 <div class="col">
                                     <a class="p2box" href="javascript:void(0);"></a>
-                                    <input type="number" class="numonly p2form none"></input>
+                                    <input type="number" class="positiveintonly p2form none"></input>
                                 </div>
                                 <div class="col">
                                     <a class="p3box" href="javascript:void(0);"></a>
-                                    <input type="number" class="numonly p3form none"></input>
+                                    <input type="number" class="positiveintonly p3form none"></input>
                                 </div>
                                 <div class="col">
                                     <a class="p4box" href="javascript:void(0);"></a>
-                                    <input type="number" class="numonly p4form none"></input>
+                                    <input type="number" class="positiveintonly p4form none"></input>
                                 </div>
                             </div>
                             <div class="center_button_container none" style="margin-top: 2vh;">
@@ -574,25 +572,25 @@
                                     <td class="p1box"></td>
                                     <td></td>
                                     <td><div class="select_pan adjust_select_pan row"><a class="select add" href="javascript:void(0);" title="增加番數"><div class="col"><i class="fas fa-plus-square"></i></div></a><a class="select minus" href="javascript:void(0);" title="減少番數"><div class="col"><i class="fas fa-minus-square"></i></div></a><a class="select equal" href="javascript:void(0);" title="設定番數為右方數值"><div class="col"><i class="fas fa-equals"></i></div></a></div></td>
-                                    <td><input type="number" class="numonly p1_input"></td>
+                                    <td><input type="number" class="intonly p1_input"></td>
                                 </tr>
                                 <tr>
                                     <td class="p2box"></td>
                                     <td></td>
                                     <td><div class="select_pan adjust_select_pan row"><a class="select add" href="javascript:void(0);" title="增加番數"><div class="col"><i class="fas fa-plus-square"></i></div></a><a class="select minus" href="javascript:void(0);" title="減少番數"><div class="col"><i class="fas fa-minus-square"></i></div></a><a class="select equal" href="javascript:void(0);" title="設定番數為右方數值"><div class="col"><i class="fas fa-equals"></i></div></a></div></td>
-                                    <td><input type="number" class="numonly p2_input"></td>
+                                    <td><input type="number" class="intonly p2_input"></td>
                                 </tr>
                                 <tr>
                                     <td class="p3box"></td>
                                     <td></td>
                                     <td><div class="select_pan adjust_select_pan row"><a class="select add" href="javascript:void(0);" title="增加番數"><div class="col"><i class="fas fa-plus-square"></i></div></a><a class="select minus" href="javascript:void(0);" title="減少番數"><div class="col"><i class="fas fa-minus-square"></i></div></a><a class="select equal" href="javascript:void(0);" title="設定番數為右方數值" ><div class="col"><i class="fas fa-equals"></i></div></a></div></td>
-                                    <td><input type="number" class="numonly p3_input"></td>
+                                    <td><input type="number" class="intonly p3_input"></td>
                                 </tr>
                                 <tr>
                                     <td class="p4box"></td>
                                     <td></td>
                                     <td><div class="select_pan adjust_select_pan row"><a class="select add" href="javascript:void(0);" title="增加番數"><div class="col"><i class="fas fa-plus-square"></i></div></a><a class="select minus" href="javascript:void(0);" title="減少番數"><div class="col"><i class="fas fa-minus-square"></i></div></a><a class="select equal" href="javascript:void(0);"title="設定番數為右方數值"><div class="col"><i class="fas fa-equals"></i></div></a></div></td>
-                                    <td><input type="number" class="numonly p4_input"></td>
+                                    <td><input type="number" class="intonly p4_input"></td>
                                 </tr>
                                     <td>
                                 </tr>
