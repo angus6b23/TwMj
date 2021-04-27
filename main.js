@@ -1453,16 +1453,16 @@ window.addEventListener('beforeinstallprompt', (e) => {
   $('#addtohomescreen').removeClass('none');
   // Optionally, send analytics event that PWA install promo was shown.
   console.log(`'beforeinstallprompt' event was fired.`);
-});
 
-$('#addtohomescreen').click(function(){
-    // Show the prompt
-    deferredPrompt.prompt();
-    // Wait for the user to respond to the prompt
-    deferredPrompt.userChoice.then((choiceResult) => {
-        if (choiceResult.outcome === 'accepted') {
-            $('#addtohomescreen').addClass('none');
-        }
+    $('#addtohomescreen').click(function(){
+        // Show the prompt
+        deferredPrompt.prompt();
+        // Wait for the user to respond to the prompt
+        deferredPrompt.userChoice.then((choiceResult) => {
+            if (choiceResult.outcome === 'accepted') {
+                $('#addtohomescreen').addClass('none');
+            }
+        });
     });
 });
 
