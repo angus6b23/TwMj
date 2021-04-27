@@ -1,0 +1,15 @@
+{
+  "background_color": "black",
+  "description": "港式台牌計分版",
+  "display": "fullscreen",
+  "icons": [
+    {
+      "src": "icon.ico",
+      "sizes": "100x100"
+    }
+  ],
+  "name": "港式台牌計分版",
+  "short_name": "TWMJ",
+  "start_url": "index.html",
+  "orientation": "portrait-primary"
+}
