@@ -217,7 +217,7 @@ div a:hover {
     background: var(--bg-nord);
     color: var(--fg-nord);
     z-index: 0;
-    overflow-y: hidden;
+    overflow-y: scroll;
 }
 
 #turn {
