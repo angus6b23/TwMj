@@ -4,8 +4,8 @@
   "display": "fullscreen",
   "icons": [
     {
-      "src": "icon.ico",
-      "sizes": "100x100"
+      "src": "icon192.png",
+      "sizes": "192x192"
     }
   ],
   "name": "港式台牌計分版",
