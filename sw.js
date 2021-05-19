@@ -2,12 +2,12 @@ self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open('v1').then((cache) => {
       return cache.addAll([
-        'TwMj/',
-        'TwMj/index.html',
-        'TwMj/icon.ico',
-        'TwMj/main.js',
-        'TwMj/manifest.webmanifest',
-        'TwMj/style.css',
+        '/',
+        '/index.html',
+        '/icon.ico',
+        '/main.js',
+        '/manifest.webmanifest',
+        '/style.css',
       ]);
     })
   );
