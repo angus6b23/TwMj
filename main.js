@@ -1484,7 +1484,7 @@ $(document).ready(function(){
         // Stash the event so it can be triggered later.
         deferredPrompt = e;
         // Update UI to notify the user they can add to home screen
-        $('#addtohomescreen').remoceClass('none');
+        $('#addtohomescreen').removeClass('none');
     });
     setInterval(function(){
             let dt = new Date();
