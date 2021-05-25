@@ -1,5 +1,5 @@
 var i=1 //used for empty names
-let deferredPrompt; // Initialize deferredPrompt for use later to show browser install prompt
+var deferredPrompt; // Initialize deferredPrompt for use later to show browser install prompt
 var allplayer=[NaN]; //Array for all players, such that allplayer[1].name = name of player1
 var gamestat={ //Object for holding game statistics
     round: 1,
@@ -1482,7 +1482,7 @@ $(document).ready(function(){
         // Prevent Chrome 67 and earlier from automatically showing the prompt
         e.preventDefault();
         // Stash the event so it can be triggered later.
-        var deferredPrompt = e;
+        deferredPrompt = e;
         // Update UI to notify the user they can add to home screen
         $('#addtohomescreen').removeClass('none');
     });
