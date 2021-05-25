@@ -1480,11 +1480,11 @@ $(document).ready(function(){
     $(window).on('beforeinstallprompt', (e) => {
         console.log('Beforeinstallprompt fired');
         // Prevent Chrome 67 and earlier from automatically showing the prompt
-        e.preventDefault();
+        //e.preventDefault();
         // Stash the event so it can be triggered later.
-        deferredPrompt = e;
+        //deferredPrompt = e;
         // Update UI to notify the user they can add to home screen
-        $('#addtohomescreen').removeClass('none');
+        //$('#addtohomescreen').removeClass('none');
     });
     setInterval(function(){
             let dt = new Date();
