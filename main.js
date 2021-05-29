@@ -1453,7 +1453,7 @@ $(document).ready(function(){
         settablesize();
     });
     if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('sw.js').then((reg) => {
+        navigator.serviceWorker.register('sw.js').  then((reg) => {
         // registration worked
             console.log('Registration succeeded.');
         }).catch((error) => {
@@ -1465,7 +1465,7 @@ $(document).ready(function(){
         console.log('Beforeinstallprompt fired');
         // Prevent Chrome 67 and earlier from automatically showing the prompt
         e.preventDefault();
-        // Stash the event so it can be triggered later.
+         // Stash the event so it can be triggered later.
         deferredPrompt = e;
         // Update UI to notify the user they can add to home screen
         $('#addtohomescreen').removeClass('none');
