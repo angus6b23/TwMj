@@ -1465,7 +1465,7 @@ $(document).ready(function(){
         settablesize();
     });
     const addBtn = document.querySelector('#addtohomescreen');
-    $(window).addEventListener('beforeinstallprompt', (e) => {
+    window.addEventListener('beforeinstallprompt', (e) => {
         console.log('Beforeinstallprompt fired');
         // Prevent Chrome 67 and earlier from automatically showing the prompt
         e.preventDefault();
