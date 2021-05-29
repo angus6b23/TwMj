@@ -1461,7 +1461,28 @@ $(document).ready(function(){
             console.log('Registration failed with ' + error);
         });
     }
-
+    window.addEventListener('beforeinstallprompt', (e) => {
+        console.log('Beforeinstallprompt fired');
+        // Prevent Chrome 67 and earlier from automatically showing the prompt
+        e.preventDefault();
+         // Stash the event so it can be triggered later.
+        deferredPrompt = e;
+        // Update UI to notify the user they can add to home screen
+        $('#addtohomescreen').removeClass('none');
+        $('#addtohomescreen').click(function(){
+            deferredPrompt.prompt();
+            // Wait for the user to respond to the prompt
+            deferredPrompt.userChoice.then((choiceResult) => {
+                if (choiceResult.outcome === 'accepted') {
+                console.log('User accepted the A2HS prompt');
+                deferredPrompt = null;
+                $('#addtohomescreen').addClass('none')
+                } else {
+                console.log('User dismissed the A2HS prompt');
+                }
+            });
+        });
+    });
     setInterval(function(){
             let dt = new Date();
             if (dt.getMinutes() < 10){
@@ -1473,27 +1494,4 @@ $(document).ready(function(){
             let time = dt.getHours() + ":" + min;
             $('#time').html(time);
         }, 1000);
-});
-
-window.addEventListener('beforeinstallprompt', (e) => {
-    console.log('Beforeinstallprompt fired');
-    // Prevent Chrome 67 and earlier from automatically showing the prompt
-    e.preventDefault();
-     // Stash the event so it can be triggered later.
-    deferredPrompt = e;
-    // Update UI to notify the user they can add to home screen
-    $('#addtohomescreen').removeClass('none');
-    $('#addtohomescreen').click(function(){
-        deferredPrompt.prompt();
-        // Wait for the user to respond to the prompt
-        deferredPrompt.userChoice.then((choiceResult) => {
-            if (choiceResult.outcome === 'accepted') {
-            console.log('User accepted the A2HS prompt');
-            deferredPrompt = null;
-            $('#addtohomescreen').addClass('none')
-            } else {
-            console.log('User dismissed the A2HS prompt');
-            }
-        });
-    });
 });
