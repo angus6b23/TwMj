@@ -6,7 +6,11 @@
     {
       "src": "icon192.png",
       "sizes": "192x192"
-    }
+  },
+  {
+    "src": "icon512.png",
+    "sizes": "512x512"
+  }
   ],
   "name": "港式台牌計分版",
   "short_name": "TWMJ",
