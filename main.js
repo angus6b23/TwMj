@@ -1461,7 +1461,7 @@ $(document).ready(function(){
             console.log('Registration failed with ' + error);
         });
     }
-    window.addEventListener('beforeinstallprompt', (e) => {
+    $(window).on('beforeinstallprompt', (e) => {
         console.log('Beforeinstallprompt fired');
         // Prevent Chrome 67 and earlier from automatically showing the prompt
         e.preventDefault();
