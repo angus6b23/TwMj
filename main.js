@@ -1444,29 +1444,6 @@ function fullscreen(){
       document.fullScreenElement && null !== document.fullScreenElement || !document.mozFullScreen && !document.webkitIsFullScreen ? document.documentElement.requestFullScreen ? document.documentElement.requestFullScreen() : document.documentElement.mozRequestFullScreen ? document.documentElement.mozRequestFullScreen() : document.documentElement.webkitRequestFullScreen && document.documentElement.webkitRequestFullScreen(Element.ALLOW_KEYBOARD_INPUT) : document.cancelFullScreen ? document.cancelFullScreen() : document.mozCancelFullScreen ? document.mozCancelFullScreen() : document.webkitCancelFullScreen && document.webkitCancelFullScreen();
 }
 
-document.addEventListener('beforeinstallprompt', (e) => {
-    console.log('Beforeinstallprompt fired');
-    // Prevent Chrome 67 and earlier from automatically showing the prompt
-    e.preventDefault();
-     // Stash the event so it can be triggered later.
-    deferredPrompt = e;
-    // Update UI to notify the user they can add to home screen
-    $('#addtohomescreen').removeClass('none');
-    $('#addtohomescreen').click(function(){
-        deferredPrompt.prompt();
-        // Wait for the user to respond to the prompt
-        deferredPrompt.userChoice.then((choiceResult) => {
-            if (choiceResult.outcome === 'accepted') {
-            console.log('User accepted the A2HS prompt');
-            deferredPrompt = null;
-            $('#addtohomescreen').addClass('none')
-            } else {
-            console.log('User dismissed the A2HS prompt');
-            }
-        });
-    });
-});
-
 $(document).ready(function(){
     reload();
     settablesize();
