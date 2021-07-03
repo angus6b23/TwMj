@@ -40,7 +40,7 @@ a {
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 2.5vh;
+    font-size: clamp(16px, 2.5vh, 2.5vh);
     background: var(--bg-nord);
     color: var(--fg-nord);
     z-index: 99;
@@ -159,11 +159,15 @@ select{
 
 #theme_setting select{
     width: 50%;
+    text-align: center;
+    text-align-last: center;
+    -webkit-appearance: none;
 }
 
 select:focus{
     border-bottom: 0.5vh solid var(--highlight);
     transition: 0.5s;
+    outline: none;
 }
 
 .button {
@@ -473,6 +477,10 @@ table {
 }
 
 .tab-content {
+    font-size: clamp(12px, 2.5vh, 40px);
+}
+
+.tab-content .button{
     font-size: clamp(12px, 2.5vh, 40px);
 }
 
