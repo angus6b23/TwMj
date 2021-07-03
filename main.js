@@ -16,6 +16,7 @@ var gamestat={ //Object for holding game statistics
     total_change: 0,
     max_streak: 0,
     modified: false,
+    last_save: ''
 };
 
 var data = new Object();
@@ -949,16 +950,35 @@ function uicontrol(){
         $('#option_fold').val(default_setting.fold);
         $('#option_break').val(default_setting.break);
         $('#theme_select').val(default_setting.theme);
+        if (fulldataJSON.length > 0){
+            checkundo();
+            $('#export').val(fulldataJSON[0]);
+            let download_data = "data:text/json;charset=utf-8," + fulldataJSON[0];
+            $('#download').attr('href', download_data);
+            $('#download').attr('download', 'TWMJ_Data.json');
+            $('#download').click();
+        }
     });
-
     $('#theme_select').change(function(){
         applytheme($('#theme_select').val());
     });
-
     $('#option').on('hide.bs.modal', function(){
         applytheme(default_setting.theme);
-    })
-
+        $('#export').val('');
+        $('#import').val('');
+        $('#import_error_msg').html('');
+    });
+    $('#clipboard').click(function(){
+        navigator.clipboard.writeText($('#export').val());
+        $('#clipboard').html('<i class="fas fa-clipboard-check"></i>已複制');
+        setInterval(function(){$('#clipboard').html('複制到剪貼簿')}, 3000);
+    });
+    $('#import_button').click(function(){
+        import_json();
+    });
+    $('#confirm_import a:nth(1)').click(function(){
+        $('#confirm_import').modal('hide');
+    });
     $('#settle').on('shown.bs.modal', function(){ //Show settle modal text upon popup
         $('.iset').remove();
         for (x=1; x<5; x++){ //Loop for unrealized balance and inject table into modal
@@ -1210,6 +1230,7 @@ function context(action,target){
 }
 
 function save(){
+    gamestat.last_save = new Date();
     let data = new Object();
     data.allplayer = gatherallplayerdata();
     data.gamestat = gather(gamestat);
@@ -1410,6 +1431,53 @@ function breakstreak(fm, to){
 
 function addhistory(msg){
     $('#history_after').after('<tr><td>' + timestamp() + '</td><td>' + msg + '</td></tr>');
+}
+
+function import_json(){
+    let temp_data
+    $('#import_error_msg').html('');
+    $('#import_data_dump').html('');
+    let temp_json = $('#import').val().toString();
+    if(!temp_json){
+        $('#import_error_msg').html('匯入內容為空白');
+        return;
+    }
+    else{
+        try{
+            temp_data = JSON.parse(temp_json);
+        }
+        catch(err){
+            $('#import_error_msg').html('匯入失敗: ' + err);
+            return;
+        }
+    }
+        try{
+            $('#import_data_dump').append('<div>最後更改時間: ' + temp_data.gamestat.last_save + '</div>');
+            $('#import_data_dump').append('<div>總局數: ' + temp_data.gamestat.round + '</div>');
+            for (x=1; x<5; x++){
+                if (temp_data.allplayer[x].unrealized > 0){
+                    $('#import_data_dump').append('<div>' + temp_data.allplayer[x].name + ' : ' + temp_data.allplayer[x].balance + ' (+' + temp_data.allplayer[x].unrealized + ')</div>');
+                }
+                else if (temp_data.allplayer[x].unrealized == 0){
+                    $('#import_data_dump').append('<div>' + temp_data.allplayer[x].name + ' : ' + temp_data.allplayer[x].balance + '</div>');
+                }
+                else if (temp_data.allplayer[x].unrealized < 0){
+                    $('#import_data_dump').append('<div>' + temp_data.allplayer[x].name + ' : ' + temp_data.allplayer[x].balance + ' (' + temp_data.allplayer[x].unrealized + ')</div>');
+                }
+            }
+        }
+        catch(err){
+            $('#import_error_msg').html('輸入的JSON 無效: ' + err);
+            return;
+        }
+    $('#option').modal('hide');
+    $('#confirm_import').modal('show');
+    $('#confirm_import a:nth(0)').click(function(){
+        $('#confirm_import').modal('hide');
+        localStorage.removeItem('data');
+        localStorage.setItem('data', temp_json);
+        reload();
+    });
 }
 
 function playergraph(){
