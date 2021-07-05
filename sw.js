@@ -49,8 +49,6 @@ self.addEventListener('fetch', function(event) {
     );
 });
 
-
-
 self.addEventListener('activate', event => {
   // delete any caches that aren't in expectedCaches
   // which will get rid of static-v1
