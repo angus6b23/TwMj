@@ -4,11 +4,11 @@
   "display": "fullscreen",
   "icons": [
     {
-      "src": "icon192.png",
+      "src": "assets/icon192.png",
       "sizes": "192x192"
   },
   {
-    "src": "icon512.png",
+    "src": "assets/icon512.png",
     "sizes": "512x512"
   }
   ],
