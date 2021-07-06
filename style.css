@@ -555,7 +555,7 @@ a.p4box.active {
 }
 
 #ron input[type=number] {
-    width: 6vh;
+    width: 8vh;
     border: 0px solid black;
     border-bottom: 0.5vh solid var(--fg-nord);
     background: var(--bg-nord);
@@ -569,9 +569,10 @@ a.p4box.active {
 
 #ron input:disabled {
     border: 0px solid black;
-    width: 6vh;
+    width: 10vh;
     background: var(--bg-nord);
     color: var(--fg-nord);
+    text-align: center;
 }
 
 
