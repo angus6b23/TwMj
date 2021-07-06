@@ -574,6 +574,11 @@ a.p4box.active {
     color: var(--fg-nord);
 }
 
+
+input[type=number], textarea{
+    font-size: clamp(16px, 2.5vh, 2.5vh);
+}
+
 #ron a{
     display: flex;
     justify-content: center;
