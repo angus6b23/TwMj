@@ -15,35 +15,16 @@ self.addEventListener('install', (event) => {
   );
 });
 
-
-self.addEventListener('fetch', function(event) {
-  event.respondWith(
-    caches.match(event.request)
-      .then(function(response) {
-        // Cache hit - return response
-        if (response) {
-          console.log(response);
-          return response;
+self.addEventListener('fetch'), function(event){
+    event.respondWith(
+        caches.match(event.request).then(function(response)){
+            console.log('Cache hit');
         }
+    ), function(){
+        console.log('Cache not hit');
+    }
+)};
 
-        return fetch(event.request).then(
-          function(response) {
-              if(response && response.status == 200 && response.type == 'basic') {
-                var responseToCache = response.clone();
-                caches.open(webversion)
-                  .then(function(cache) {
-                    cache.put(event.request, responseToCache);
-                  });
-            }
-            // IMPORTANT: Clone the response. A response is a stream
-            // and because we want the browser to consume the response
-            // as well as the cache consuming the response, we need
-            // to clone it so we have two streams.
-          }
-        );
-      })
-    );
-});
 
 self.addEventListener('activate', event => {
   // delete any caches that aren't in expectedCaches
