@@ -26,11 +26,6 @@ self.addEventListener('fetch', function(event) {
 
         return fetch(event.request).then(
           function(response) {
-            // Check if we received a valid response
-            if(!response) {
-              return response;
-            }
-
             // IMPORTANT: Clone the response. A response is a stream
             // and because we want the browser to consume the response
             // as well as the cache consuming the response, we need
@@ -41,8 +36,6 @@ self.addEventListener('fetch', function(event) {
               .then(function(cache) {
                 cache.put(event.request, responseToCache);
               });
-
-            return response;
           }
         );
       })
