@@ -26,6 +26,10 @@ self.addEventListener('fetch', function(event) {
 
         return fetch(event.request).then(
           function(response) {
+              if(!response || response.status !== 200 || response.type !== basic) {
+              return;
+            }
+
             // IMPORTANT: Clone the response. A response is a stream
             // and because we want the browser to consume the response
             // as well as the cache consuming the response, we need
