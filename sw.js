@@ -7,6 +7,7 @@ self.addEventListener('install', (event) => {
         './index.html',
         'assets/icon192.png',
         'assets/icon512.png',
+        'assets/icon.ico',
         './main.js',
         './manifest.webmanifest',
         './style.css',
@@ -16,8 +17,6 @@ self.addEventListener('install', (event) => {
 });
 
 self.addEventListener('fetch', function(event) {
-    console.log('Handling fetch event for', event.request.url);
-
     event.respondWith(
         caches.match(event.request).then(function(response) {
             if (response) {
