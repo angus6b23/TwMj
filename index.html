@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <head>
     <meta charset="utf-8">
-    <title>港式台牌計分牌</title>
+    <title>港式台牌計分面板</title>
     <!-- Google fonts for Noto Serif and Sans-->
     <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@600&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400&display=swap" rel="stylesheet">
@@ -53,7 +53,7 @@
             <a class="button mt-1" href="javascript:void(0);" style="width: 100%" data-toggle="modal" data-target="#about"><i class="fas fa-heart mr-2"></i></i>關於</a>
             <a class="button button-big mt-1" href="javascript:initiate();"><i class="fas fa-gamepad mr-2"></i>開始</a>
         </div>
-        <div style="position: absolute; bottom: 0px; right: 0px;">v1.09 alpha</div>
+        <div style="position: absolute; bottom: 0px; right: 0px;">v1.10 alpha</div>
     </div>
     <!-- Main screen -->
     <div class="container-fluid" id="main">
@@ -107,8 +107,8 @@
                     <span class="mt-1 mr-2" data-toggle="modal" data-target="#option">
                     <a href="javascript:void(0);" data-toggle="tooltip" data-placement="bottom" title="選項包括更變主題、儲存及載入進度"><i class="fas fa-cogs mr-1"></i>選項</a>
                     </span>
-                    <span class="mt-1">
-                    <a href="javascript:void(0);" class="inactive" data-toggle="tooltip" data-placement="bottom" title="有關本網頁及助養作者"><i class="fas fa-heart mr-1"></i>喜歡</a>
+                    <span class="mt-1" data-toggle="modal" data-target="#about">
+                    <a href="javascript:void(0);" data-toggle="tooltip" data-placement="bottom" title="有關本網頁及助養作者"><i class="fas fa-heart mr-1"></i>關於</a>
                     </span>
                 </div>
                 <div id="record" class="mt-2">
@@ -285,6 +285,61 @@
         <a class="list-group-item list-group-item-action" id="context_tsumo"><div class="context_wrap">自摸</div></a>
     </div>
     <!-- Modals -->
+    <!-- About modal -->
+    <div class="modal" id="about">
+        <div class="modal-dialog modal-diaglog-centered modal-lg modal-diaglog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header title">
+                    <div class="nav nav-pills" role="tablist">
+                        <ul class="nav nav-pills" role="tablist">
+                            <li class="nav-item">
+                                <a class="nav-link nav-custom active" data-toggle="pill" href="#license">授權</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link nav-custom" data-toggle="pill" href="#about_tech">關於</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link nav-custom" data-toggle="pill" href="#support">支持</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="modal-body">
+                    <div class="tab-content">
+                        <div class="tab-pane show active" id="license">
+                            <p>港式台牌計分面板</p>
+                            <p>Copyright (C) 2021  Rippka</p>
+
+                            <p class=mt-2>This program is free software: you can redistribute it and/or modify
+                            it under the terms of the GNU General Public License as published by
+                            the Free Software Foundation, either version 3 of the License, or
+                            (at your option) any later version.</p>
+
+                            <p class=mt-2>This program is distributed in the hope that it will be useful,
+                            but WITHOUT ANY WARRANTY; without even the implied warranty of
+                            MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+                            GNU General Public License for more details.</p>
+
+                            <p class=mt-2>You should have received a copy of the GNU General Public License
+                            along with this program.  If not, see <a href="https://www.gnu.org/licenses/">https://www.gnu.org/licenses/</a>.</p>
+                        </div>
+                        <div class="tab-pane" id="about_tech">
+                            <p>本站使用以下函式庫或字型：</a>
+                                <ul>
+                                    <li>Bootstrap 4.6.0 (MIT)</li>
+                                    <li>JQuery 3.5.1 (MIT)</li>
+                                    <li>Plotly (MIT)</li>
+                                    <li>Font Awesome (MIT, Sil OFL)</li>
+                                    <li>Noto Fonts (Sil OFL)</li>
+                                </ul>
+                        </div>
+                        <div class="tab-pane" id="support">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     <!--Option modal -->
     <div class="modal" id="option">
         <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable">
