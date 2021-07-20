@@ -27,9 +27,9 @@ self.addEventListener('fetch', function(event) {
                 if (response && response.status == 200 && response.type =='basic'){
                     caches.open(webversion).then(function(cache){
                         cache.put(event.request, response.clone());
-                        return response
                     })
                 }
+                return response;
             }).catch(function(error) {
                 console.error('Fetching failed:', error);
 
