@@ -21,16 +21,7 @@ self.addEventListener('fetch'), function(event){
             console.log('Cache hit');
             return response;
         }
-        , return fetch(event.request).then(function(response){
-            console.log('Cahce not hit')
-            if(response && response.status == 200 && response.type == 'basic') {
-                let responseToCache = response.clone();
-                caches.open(webversion)
-                .then(function(cache){
-                    cache.put(event.request, responseToCache);
-                })
-            }
-        });
+
     )
 )};
 
