@@ -1,4 +1,4 @@
-const webversion = '1.09a1';
+const webversion = '1.10a';
 
 self.addEventListener('install', (event) => {
   event.waitUntil(

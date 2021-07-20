@@ -60,6 +60,14 @@ a {
 input:focus{
     outline: none;
 }
+#about textarea{
+    width: 100%;
+    height: 60vh;
+    background-color: var(--bg-nord);
+    color: var(--fg-nord);
+    border: 0.5vh solid var(--fg-nord);
+    border-radius: 0.5vh;
+}
 
 #io textarea{
     width: 100%;
