@@ -19,10 +19,19 @@ self.addEventListener('fetch'), function(event){
     event.respondWith(
         caches.match(event.request).then(function(response)){
             console.log('Cache hit');
+            return response;
         }
-    , function(){
-        console.log('Cache not hit');
-    });
+        , return fetch(event.request).then(function(response){
+            console.log('Cahce not hit')
+            if(response && response.status == 200 && response.type == 'basic') {
+                let responseToCache = response.clone();
+                caches.open(webversion)
+                .then(function(cache){
+                    cache.put(event.request, responseToCache);
+                })
+            }
+        });
+    )
 )};
 
 
