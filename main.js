@@ -971,7 +971,7 @@ function uicontrol(){
     $('#clipboard').click(function(){
         navigator.clipboard.writeText($('#export').val());
         $('#clipboard').html('<i class="fas fa-clipboard-check"></i>已複制');
-        setInterval(function(){$('#clipboard').html('複制到剪貼簿')}, 3000);
+        setTimeout(function(){$('#clipboard').html('複制到剪貼簿')}, 3000);
     });
     $('#import_button').click(function(){
         import_json();
