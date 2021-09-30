@@ -44,22 +44,24 @@
                 <label for="name_north">北位：</label>
                 <input type="text" name="name_north" id="name_north"></input>
             </div>
-            <div class="mt-1 select_pan">字體：
-                <a class="button select active" href="javascript:setfont('');">預設</a>
-                <a class="button select" href="javascript:setfont('Noto Serif TC, serif');" style="font-family: Noto Serif TC, serif">思源宋體</a>
-                <a class="button select" href="javascript:setfont('Noto Sans TC, sans-serif');" style="font-family: Noto Sans TC, sans-serif">思源黑體</a>
+            <div class="row mt-1 select_pan">
+                <div class="col-3">字體：</div>
+                <a class="col-3 button select active" href="javascript:setfont('');">預設</a>
+                <a class="col-3 button select" href="javascript:setfont('Noto Serif TC, serif');" style="font-family: Noto Serif TC, serif">思源宋體</a>
+                <a class="col-3 button select" href="javascript:setfont('Noto Sans TC, sans-serif');" style="font-family: Noto Sans TC, sans-serif">思源黑體</a>
             </div>
             <a class="button col mt-1" href="javascript:void(0);" style="width: 100%" data-toggle="modal" data-target="#option"><i class="fas fa-cogs mr-2"></i>選項</a>
             <a class="button mt-1" href="javascript:void(0);" style="width: 100%" data-toggle="modal" data-target="#about"><i class="fas fa-heart mr-2"></i></i>關於</a>
             <a class="button button-big mt-1" href="javascript:initiate();"><i class="fas fa-gamepad mr-2"></i>開始</a>
         </div>
-        <div style="position: absolute; bottom: 0px; right: 0px;">v1.10 alpha</div>
+        <div style="position: absolute; bottom: 0px; right: 0px;">v1.10 alpha01</div>
     </div>
     <!-- Main screen -->
     <div class="container-fluid" id="main">
         <div class="row">
-            <div class="col-6">
-                <div class="row">                    <div class="title col-4" id="time"></div>
+            <div class="col" id="main_left">
+                <div class="row">
+                    <div class="title col-4" id="time"></div>
                     <div class="title col-8" id="turn"></div>
                 </div>
                 <div id="table_wrap">
@@ -84,13 +86,17 @@
                     </div>
                 </div>
                 <div>
-                    <a class="button button-medium mt-1" href="javascript:void(0);" data-toggle="modal" data-target="#instant"><i class="fas fa-bolt mr-2"></i>即收・即付</a>
-                    <a class="button button-medium right mt-1" href="javascript:void(0);" data-toggle="modal" data-target="#ron"><i class="fas fa-crown mr-2"></i>食糊・流局</a>
-                    <a class="button button-medium mt-2" data-toggle="modal" data-target="#settle" href="javascript:void(0);"><i class="fas fa-calculator mr-2"></i>結算・調整</a>
-                    <a class="button button-medium right mt-2" href="javascript:void(0);" data-toggle="modal" data-target="#end"><i class="far fa-check-circle mr-2"></i>結束</a>
+                    <div class="row mt-2">
+                        <a class="col button button-medium ml-2 mr-1" href="javascript:void(0);" data-toggle="modal" data-target="#instant"><i class="fas fa-bolt mr-2"></i>即收・即付</a>
+                        <a class="col button button-medium mr-2 ml-1" href="javascript:void(0);" data-toggle="modal" data-target="#ron"><i class="fas fa-crown mr-2"></i>食糊・流局</a>
+                    </div>
+                    <div class="row mt-2">
+                        <a class="col button button-medium ml-2 mr-1" data-toggle="modal" data-target="#settle" href="javascript:void(0);"><i class="fas fa-calculator mr-2"></i>結算・調整</a>
+                        <a class="col button button-medium mr-2 ml-1" href="javascript:void(0);" data-toggle="modal" data-target="#end"><i class="far fa-check-circle mr-2"></i>結束</a>
+                    </div>
                 </div>
             </div>
-            <div class="col-6">
+            <div class="col" id="main_right">
                 <div id="rightbuttongroup">
                     <span class="mt-1 mr-2">
                     <a href="javascript:void(0);" class="inactive" data-toggle="tooltip" data-placement="bottom" title="按一下切換數值顯示為番或錢"><i class="fas fa-list-ul mr-1"></i>番</a>

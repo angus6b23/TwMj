@@ -327,13 +327,20 @@ function checkname(name){ //sub name into empty player name string
 function settablesize(){ //Control size of table according to window size
     var height=$(document).height();
     var width=$(document).width();
-    if ( height * 0.7 <= width * 0.48 ){
-        $('#table').css('height', '70vh');
-        $('#table').css('width', '70vh');
-    }
-    else {
-        $('#table').css('height', '48vw');
-        $('#table').css('width', '48vw');
+    if (height < width){
+        $('#main_left').removeClass('none');
+        $('#main_right').removeClass('none');
+        if ( height * 0.7 <= width * 0.48 ){
+            $('#table').css('height', '70vh');
+            $('#table').css('width', '70vh');
+        }
+        else {
+            $('#table').css('height', '48vw');
+            $('#table').css('width', '48vw');
+        }
+    } else {
+        $('#table').css('height', '70vw');
+        $('#table').css('width', '70vw');
     }
 }
 
