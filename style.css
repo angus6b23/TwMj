@@ -251,6 +251,9 @@ div a:hover {
     margin: 0px;
     padding: 0px;
 }
+#table i{
+    font-size: clamp(2vh, 5vh, 5vw);
+}
 
 .right {
     float: right;
@@ -300,8 +303,8 @@ div a:hover {
 }
 
 .dots {
-    height: 2.5vh;
-    width: 2.5vh;
+    height: 2vh;
+    width: 2vh;
     border-radius: 50%;
     background-color: var(--bg-nord);
 }
@@ -460,17 +463,18 @@ table {
 }
 
 #stat_view {
-    height: 42vh;
+    height: 40vh;
     overflow-y: scroll;
 }
 
 #stat_nav {
-    height: 3vh;
+    height: 2.5vh;
     bottom: 1vh;
 }
 
 #stat_nav a{
-    font-size: 1.5vw;
+    font-size: 2.5vh;
+    padding-top: 0.25rem;
 }
 
 #history td {
@@ -484,6 +488,20 @@ table {
 
 #break td {
     border-bottom: solid 0.25vh var(--fg-nord);
+}
+
+#footer_menu {
+    position: fixed;
+    border-top: 1px solid var(--fg-nord);
+    background-color: var(--bg-nord);
+    height: 10vh;
+    width: 100%;
+    left: 0px;
+    bottom: 0px;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    display: none;
 }
 
 .tab-content {
@@ -831,5 +849,14 @@ input[type=number], textarea{
 
     .modal-dialog{
         max-width: 100vw;
+    }
+
+    #footer_menu{
+        display: block;
+
+    }
+
+    #rightbuttongroup{
+        display: none;
     }
 }
