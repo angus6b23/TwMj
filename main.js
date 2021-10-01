@@ -339,8 +339,8 @@ function settablesize(){ //Control size of table according to window size
             $('#table').css('width', '48vw');
         }
     } else {
-        $('#table').css('height', '70vw');
-        $('#table').css('width', '70vw');
+        $('#table').css('height', '75vw');
+        $('#table').css('width', '75vw');
     }
 }
 
