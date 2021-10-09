@@ -1,7 +1,7 @@
 {
   "background_color": "black",
   "description": "港式台牌計分版",
-  "display": "fullscreen",
+  "display": "standalone",
   "icons": [
     {
       "src": "assets/icon192.png",
