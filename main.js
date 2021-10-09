@@ -1093,13 +1093,17 @@ function uicontrol(){
         $('.footer_select:nth(2)').addClass('highlight');
     })
     $('#footer_context a:nth(0)').click(function(){
+    if(!$('#footer_context a:nth(0)').hasClass('inactive')){
+        protraitdefault();
+    }
         undo();
-        protraitdefault();
-    })
+    });
     $('#footer_context a:nth(1)').click(function(){
-        redo();
+    if(!$('#footer_context a:nth(1)').hasClass('inactive')){
         protraitdefault();
-    })
+    }
+        redo();
+    });
 }
 
 function protraitdefault(){
