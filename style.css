@@ -214,7 +214,7 @@ div a:hover {
 
 .none {
     display: none;
-    visibility: hidden;
+    visibility:
 }
 
 .fas.none{
@@ -493,7 +493,9 @@ table {
 #footer_menu {
     position: fixed;
     border-top: 1px solid var(--fg-nord);
-    background-color: var(--bg-nord);
+    background-color: var(--fg-nord);
+    color: var(--bg-nord);
+    font-size: 2vh;
     height: 10vh;
     width: 100%;
     left: 0px;
@@ -502,6 +504,46 @@ table {
     justify-content: center;
     align-items: center;
     display: none;
+}
+
+#footer_menu i{
+    font-size: 4vh;
+}
+
+
+#footer_menu a{
+    color: var(--bg-nord);
+}
+
+#footer_menu .highlight a{
+    color: var(--highlight);
+}
+
+#footer_menu a:hover{
+    color: var(--highlight);
+}
+
+#footer_context{
+    font-size: 5vh;
+}
+
+#footer_context a:hover{
+    color: var(--highlight);
+    transition: 0.5s;
+}
+
+#footer_context a.inactive {
+    opacity: 0.3;
+}
+
+#footer_context a.inactive:hover {
+    opacity: 0.3;
+    color: var(--fg-nord);
+}
+
+#footer_context a.inactive:active {
+    color: var(--fg-nord);
+    opacity: 0.3;
 }
 
 .tab-content {
@@ -832,10 +874,6 @@ input[type=number], textarea{
 @media screen and (orientation: portrait) {
     #initial input{
         width: 60vw;
-    }
-
-    #main_right{
-        display: none;
     }
 
     #table_wrap{
