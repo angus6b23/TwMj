@@ -256,13 +256,17 @@ function updatetabledisplay(){
     $('#turn').html(turn_display);
     if (undo_count == 0){ //Update whether undo or redo button is inactive
         $('#redo').addClass('inactive');
+        $('#footer_context a:nth(1)').addClass('inactive');
     } else {
         $('#redo').removeClass('inactive');
+        $('#footer_context a:nth(1)').removeClass('inactive');
     }
     if (eval(undo_count + 1) >= fulldataJSON.length){
         $('#undo').addClass('inactive');
+        $('#footer_context a:nth(0)').addClass('inactive');
     } else {
         $('#undo').removeClass('inactive');
+        $('#footer_context a:nth(0)').removeClass('inactive');
     }
     $('#table .fa-exclamation-circle').addClass('none');
     $('#center .dots').remove(); // Update streak animation
@@ -327,9 +331,10 @@ function checkname(name){ //sub name into empty player name string
 function settablesize(){ //Control size of table according to window size
     var height=$(document).height();
     var width=$(document).width();
-    if (height < width){
+    if (height < width){ //When landscape
         $('#main_left').removeClass('none');
         $('#main_right').removeClass('none');
+        $('#footer_context').addClass('none');
         if ( height * 0.7 <= width * 0.48 ){
             $('#table').css('height', '70vh');
             $('#table').css('width', '70vh');
@@ -338,7 +343,8 @@ function settablesize(){ //Control size of table according to window size
             $('#table').css('height', '48vw');
             $('#table').css('width', '48vw');
         }
-    } else {
+    } else { //When protrait
+        protraitdefault();
         $('#table').css('height', '75vw');
         $('#table').css('width', '75vw');
     }
@@ -1069,6 +1075,39 @@ function uicontrol(){
     $('#end a:nth(1)').click(function(){ //Hide end modal when clicking cancel
         $('#end').modal('hide');
     });
+    $('.footer_select:nth(0)').click(function(){
+        protraitdefault();
+    })
+    $('.footer_select:nth(1)').click(function(){
+        $('#main_left').addClass('none');
+        $('#main_right').removeClass('none');
+        $('#footer_context').addClass('none');
+        $('#footer_menu div').removeClass('highlight');
+        $('.footer_select:nth(1)').addClass('highlight');
+    })
+    $('.footer_select:nth(2)').click(function(){
+        $('#main_left').addClass('none');
+        $('#main_right').addClass('none');
+        $('#footer_context').removeClass('none');
+        $('#footer_menu div').removeClass('highlight');
+        $('.footer_select:nth(2)').addClass('highlight');
+    })
+    $('#footer_context a:nth(0)').click(function(){
+        undo();
+        protraitdefault();
+    })
+    $('#footer_context a:nth(1)').click(function(){
+        redo();
+        protraitdefault();
+    })
+}
+
+function protraitdefault(){
+    $('#main_left').removeClass('none');
+    $('#main_right').addClass('none');
+    $('#footer_context').addClass('none');
+    $('.footer_select').removeClass('highlight');
+    $('.footer_select:nth(0)').addClass('highlight');
 }
 
 function resetinput_change_seat(){
