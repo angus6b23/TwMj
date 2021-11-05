@@ -974,9 +974,10 @@ function uicontrol(){
     });
     $('#theme_select').change(function(){
         applytheme($('#theme_select').val());
+        default_setting.theme = $('#theme_select').val();
+        save_setting();
     });
     $('#option').on('hide.bs.modal', function(){
-        applytheme(default_setting.theme);
         $('#export').val('');
         $('#import').val('');
         $('#import_error_msg').html('');

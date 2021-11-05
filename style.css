@@ -489,8 +489,8 @@ table {
 
 #footer_menu {
     position: fixed;
-    border-top: 1px solid var(--fg-nord);
-    background-color: var(--fg-nord);
+    border-top: 0.5vh solid var(--fg-nord);
+    background-color: var(--bg-nord);
     color: var(--bg-nord);
     font-size: 2vh;
     height: 10vh;
@@ -509,7 +509,7 @@ table {
 
 
 #footer_menu a{
-    color: var(--bg-nord);
+    color: var(--fg-nord);
 }
 
 #footer_menu .highlight a{
