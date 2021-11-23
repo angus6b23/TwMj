@@ -1111,7 +1111,7 @@ function protraitdefault(){
     $('#main_left').removeClass('none');
     $('#main_right').addClass('none');
     $('#footer_context').addClass('none');
-    $('.footer_select').removeClass('highlight');
+    $('#footer_menu div').removeClass('highlight');
     $('.footer_select:nth(0)').addClass('highlight');
 }
 
