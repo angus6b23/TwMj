@@ -173,6 +173,7 @@ function initiate_ui(){ //Function for initiating ui
     $('#option li:nth-child(2) a').tab('show');
     $('#global').css('font-family', default_setting.font);
     applytheme(default_setting.theme);
+    playergraph();
     updatetabledisplay();
     update_stat_table();
     updatehistorydisplay();
@@ -499,9 +500,11 @@ function instant(get_or_pay){
             addhistory(msg);
         }
         resetinput_instant();
+        push_balance_array();
         save();
         updatetabledisplay();
         update_stat_table();
+        playergraph();
         $('#instant').modal('toggle');
     }
 }
@@ -548,6 +551,7 @@ function deal(){
         updatetabledisplay();
         updatehistorydisplay();
         update_stat_table();
+        playergraph();
         resetinput_ron();
         $('#ron').modal('toggle');
     }
@@ -600,6 +604,7 @@ function tsumo(){
         updatetabledisplay();
         updatehistorydisplay();
         update_stat_table();
+        playergraph();
         resetinput_ron();
         $('#ron').modal('toggle');
     }
@@ -658,6 +663,7 @@ function post_draw(){
     updatetabledisplay();
     updatehistorydisplay();
     update_stat_table();
+    playergraph();
     $('#ron').modal('toggle');
 }
 
@@ -755,7 +761,7 @@ function settle(deal_or_tsumo){
     calculateturn();
 }
 
-function iset(fm, to){ //Function for handlin instant settle
+function iset(fm, to){ //Function for handling instant settle
     checkundo();
     msg = '即時結算：<br>';
     $('#settle').modal('toggle');
@@ -781,6 +787,7 @@ function iset(fm, to){ //Function for handlin instant settle
     update_player_unrealized();
     save();
     updatetabledisplay();
+    playergraph();
     addhistory(msg);
 }
 
@@ -817,6 +824,7 @@ function adjust(){
         save();
     }
     updatetabledisplay();
+    playergraph();
     $('#settle').modal('toggle');
     resetinput_settle();
 }
@@ -1369,6 +1377,7 @@ function undo(){
         calculateturn();
         updatetabledisplay();
         update_stat_table();
+        playergraph();
         updatehistorydisplay();
     }
 }
@@ -1386,6 +1395,7 @@ function redo(){
         calculateturn();
         updatetabledisplay();
         update_stat_table();
+        playergraph();
         updatehistorydisplay();
     }
 }
@@ -1405,6 +1415,12 @@ function update_player_unrealized(){
         allplayer[x].unrealized = unrealized;
         allplayer[x].bal_arr.push(allplayer[x].balance);
         allplayer[x].unr_arr.push(eval(parseInt(allplayer[x].balance) + parseInt(allplayer[x].unrealized)));
+    }
+}
+
+function push_balance_array(){
+    for (x = 1; x < 5; x++){
+        allplayer[x].bal_arr.push(allplayer[x].balance);
     }
 }
 
@@ -1477,6 +1493,7 @@ function breakstreak(fm, to){
     update_player_unrealized();
     save();
     updatetabledisplay();
+    playergraph();
     $('#break').modal('toggle');
 }
 
@@ -1533,21 +1550,52 @@ function import_json(){
 
 function playergraph(){
     let x_arr = new Array();
-    for (x=1; x<=gamestat.round; x++){
-        x_arr.push(x);
-    }
+    let currenttheme = theme[default_setting.theme]
+    let stat_height = $('#stat_view').height() - 50;
+    let stat_width = $('#stat_view').width() - 50;
     let trace1 = {
-        x: x_arr,
         y: allplayer[1].bal_arr,
-        mode: 'lines+markers'
+        mode: 'lines+markers',
+        name: allplayer[1]['name'],
+        line: {
+            color: currenttheme['--p1-color'],
+            shape: 'linear'
+        }
     }
     let trace2 = {
-        x: x_arr,
         y: allplayer[2].bal_arr,
-        mode: 'lines+markers'
+        mode: 'lines+markers',
+        name: allplayer[2]['name'],
+        line: {
+            color: currenttheme['--p2-color'],
+            shape: 'linear'
+        }
     }
-    let plot_data = [trace1, trace2];
+    let trace3 = {
+        y: allplayer[3].bal_arr,
+        mode: 'lines+markers',
+        name: allplayer[3]['name'],
+        line: {
+            color: currenttheme['--p3-color'],
+            shape: 'linear'
+        }
+    }
+    let trace4 = {
+        y: allplayer[4].bal_arr,
+        mode: 'lines+markers',
+        name: allplayer[4]['name'],
+        line: {
+            color: currenttheme['--p4-color'],
+            shape: 'linear'
+        }
+    }
+    let plot_data = [trace1, trace2, trace3, trace4];
     let plot_layout = {
+        width: stat_width,
+        height: stat_height,
+        plot_bgcolor: currenttheme['--bg-nord'],
+        paper_bgcolor: currenttheme['--bg-nord'],
+        showlegend: false,
         margin: {
             l: 0,
             r: 0,
@@ -1555,8 +1603,11 @@ function playergraph(){
             b: 0,
         }
     }
-    let plot_config ={responsive: true};
-    Plotly.newPlot('graph', plot_data, plot_layout, plot_config);
+    let plot_config = {
+        width: stat_width,
+        height: stat_height
+    };
+    Plotly.newPlot('graph_view', plot_data, plot_layout, plot_config);
 }
 
 function fullscreen(){
@@ -1570,6 +1621,7 @@ $(document).ready(function(){
     uicontrol();
     $(window).resize(function(){
         settablesize();
+        playergraph();
     });
     if ('serviceWorker' in navigator) {
         navigator.serviceWorker.register('sw.js').  then((reg) => {
