@@ -183,7 +183,7 @@ select:focus{
     text-align: center;
     width: 10vh;
     background: var(--highlight);
-    color: var(--bg-nord);
+    color: var(--bg-nord); !important;
     transition: 0.5s;
     border-radius: 0.5vh;
     font-size: 2.5vh;
