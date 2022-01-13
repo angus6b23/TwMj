@@ -29,6 +29,9 @@ body{
     background-color: var(--bg-nord);
 }
 
+a {
+    color: var(--fg-nord);
+}
 
 #initial {
     position: absolute;
