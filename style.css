@@ -29,9 +29,6 @@ body{
     background-color: var(--bg-nord);
 }
 
-a {
-    color: var(--fg-nord);
-}
 
 #initial {
     position: absolute;
@@ -183,7 +180,7 @@ select:focus{
     text-align: center;
     width: 10vh;
     background: var(--highlight);
-    color: var(--bg-nord); !important;
+    color: var(--bg-nord);
     transition: 0.5s;
     border-radius: 0.5vh;
     font-size: 2.5vh;
