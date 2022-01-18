@@ -28,6 +28,8 @@ var default_setting={ //Object for holding settings
     base: 0,
     money: 1,
     fullscreen: false,
+    uselocaltime: false,
+    timezone: 'Asia/Hong_Kong'
 };
 
 let theme = { //Object for themes
@@ -1495,6 +1497,30 @@ function breakstreak(fm, to){
     updatetabledisplay();
     playergraph();
     $('#break').modal('toggle');
+}
+
+function gettime(){
+    let now = new Date();
+    if ( !default_setting.uselocaltime ){
+        try{
+            $.ajax({
+                url: 'https://worldtimeapi.org/api/timezone/' + default_setting.timezone,
+                timeout: 5000
+            })
+            .done(function(data){
+                now = Date.parse(data.datetime);
+                console.log(now);
+                return now;
+            });
+        }
+        catch(error){
+            console.log(error);
+            console.log('Unable to fetch time, using local time instead');
+            return now;
+        }
+    } else {
+        return now;
+    }
 }
 
 function addhistory(msg){
