@@ -484,7 +484,7 @@ function instant(get_or_pay){
                 }
             }
             msg = allplayer[instant_obj.selected].name + ' 即收了其他玩家 ' + instant_obj.value + ' 番';
-            addhistory(msg)
+            addlog(msg)
         }
         else if(get_or_pay == 'pay'){
             for ( x = 1; x < 5; x++ ){
@@ -499,7 +499,7 @@ function instant(get_or_pay){
                 }
             }
             msg = allplayer[instant_obj.selected].name + ' 即付了其他玩家 ' + instant_obj.value + ' 番';
-            addhistory(msg);
+            addlog(msg);
         }
         resetinput_instant();
         push_balance_array();
@@ -548,7 +548,7 @@ function deal(){
         game_record.push(game);
         gamestat.deal = parseInt(gamestat.deal) + 1;
         settle('deal');
-        addhistory(msg);
+        addlog(msg);
         save();
         updatetabledisplay();
         updatehistorydisplay();
@@ -601,7 +601,7 @@ function tsumo(){
         game_record.push(game);
         gamestat.tsumo = parseInt(gamestat.tsumo) + 1;
         settle('tsumo');
-        addhistory(msg);
+        addlog(msg);
         save();
         updatetabledisplay();
         updatehistorydisplay();
@@ -656,7 +656,7 @@ function draw(){
 function post_draw(){
     save_setting();
     msg = '第' + gamestat.round + '場：<br>流局';
-    addhistory(msg);
+    addlog(msg);
     gamestat.round = parseInt(gamestat.round) + 1;
     gamestat.tie = parseInt(gamestat.tie) + 1;
     game_record.push(['流局']);
@@ -790,7 +790,7 @@ function iset(fm, to){ //Function for handling instant settle
     save();
     updatetabledisplay();
     playergraph();
-    addhistory(msg);
+    addlog(msg);
 }
 
 function adjust(){
@@ -822,7 +822,7 @@ function adjust(){
     }
     if (action !== 0){
         gamestat.modified = true;
-        addhistory(msg);
+        addlog(msg);
         save();
     }
     updatetabledisplay();
@@ -1203,7 +1203,7 @@ function change_seat(){
     checkundo();
     save();
     updatetabledisplay();
-    addhistory(msg);
+    addlog(msg);
 }
 
 function change_name(){
@@ -1220,7 +1220,7 @@ function change_name(){
         }
     }
     if (action > 0){
-        addhistory(msg);
+        addlog(msg);
         for (x = 1;x < 5; x++){
             $('.p' + x + 'name').html(allplayer[x].name);
             $('.p' + x + 'box').html(allplayer[x].name);
@@ -1375,7 +1375,7 @@ function undo(){
         allplayer = temp_JSON.allplayer;
         gamestat = temp_JSON.gamestat;
         game_record = temp_JSON.game_record;
-        $('#history tr:nth-child(' + eval(parseInt(undo_count) + 2) + ')').addClass('removed');
+        $('#log tr:nth-child(' + eval(parseInt(undo_count) + 2) + ')').addClass('removed');
         calculateturn();
         updatetabledisplay();
         update_stat_table();
@@ -1387,7 +1387,7 @@ function undo(){
 function redo(){
     if ($('#redo').hasClass('inactive')){
     } else {
-        $('#history tr:nth-child(' + eval(parseInt(undo_count) + 2) + ')').removeClass('removed');
+        $('#log tr:nth-child(' + eval(parseInt(undo_count) + 2) + ')').removeClass('removed');
         undo_count = parseInt(undo_count) - 1;
         let temp_JSON = JSON.parse(fulldataJSON[parseInt(undo_count)
         ]);
@@ -1487,7 +1487,7 @@ function playerstat_display_simple(id, property){
 function breakstreak(fm, to){
     checkundo();
     msg = allplayer[fm].name + ' 終止了拉踢：<br>' + allplayer[fm].name + ' 付了 ' + allplayer[fm]['lossto' + to] + '番給 ' + allplayer[to].name;
-    addhistory(msg);
+    addlog(msg);
     allplayer[fm].balance -= parseInt(allplayer[fm]['lossto' + to]);
     allplayer[to].balance += parseInt(allplayer[fm]['lossto' + to]);
     allplayer[fm]['sf' + to] = 0;
@@ -1499,32 +1499,10 @@ function breakstreak(fm, to){
     $('#break').modal('toggle');
 }
 
-function gettime(){
-    let now = new Date();
-    if ( !default_setting.uselocaltime ){
-        try{
-            $.ajax({
-                url: 'https://worldtimeapi.org/api/timezone/' + default_setting.timezone,
-                timeout: 5000
-            })
-            .done(function(data){
-                now = Date.parse(data.datetime);
-                console.log(now);
-                return now;
-            });
-        }
-        catch(error){
-            console.log(error);
-            console.log('Unable to fetch time, using local time instead');
-            return now;
-        }
-    } else {
-        return now;
-    }
-}
 
-function addhistory(msg){
-    $('#history_after').after('<tr><td>' + timestamp() + '</td><td>' + msg + '</td></tr>');
+
+function addlog(msg){
+    $('#log_after').after('<tr><td>' + timestamp() + '</td><td>' + msg + '</td></tr>');
 }
 
 function import_json(){

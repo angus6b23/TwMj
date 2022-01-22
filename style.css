@@ -475,12 +475,12 @@ table {
     padding-top: 0.25rem;
 }
 
-#history td {
+#log td {
     border-bottom: solid 0.25vh var(--fg-nord);
     font-size: 2vh;
 }
 
-#history tr.removed {
+#log tr.removed {
     text-decoration: line-through;
 }
 
