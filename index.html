@@ -107,7 +107,7 @@
                     <span class="mt-1 mr-2">
                     <a id="redo" href="javascript:redo();" data-toggle="tooltip" data-placement="bottom" title="按一下重做上一次數值更變"><i class="fas fa-redo mr-1"></i>重做</a>
                     </span>
-                    <span class="mt-1 mr-2" data-toggle="modal" data-target="#history">
+                    <span class="mt-1 mr-2" data-toggle="modal" data-target="#log">
                     <a href="javascript:void(0);" data-toggle="tooltip" data-placement="bottom" title="顯示游戲的記錄"><i class="far fa-clipboard mr-1"></i>記錄</a>
                     </span>
                     <span class="mt-1 mr-2" data-toggle="modal" data-target="#option">
@@ -294,7 +294,7 @@
                     </div>
                     <div class="col-6">
                         <a href="javascript:void(0)">
-                            <div data-toggle="modal" data-target="#history"><i class="fas fa-clipboard mr-3"></i>紀錄</div>
+                            <div data-toggle="modal" data-target="#log"><i class="fas fa-clipboard mr-3"></i>紀錄</div>
                         </a>
                     </div>
                     <div class="col-6">
@@ -634,18 +634,18 @@
             </div>
         </div>
     </div>
-    <!-- History Modal -->
-    <div class="modal" id="history">
+    <!-- Log Modal -->
+    <div class="modal" id="log">
         <div class="modal-dialog modal-lg modal-dialog-scrollable mh-75">
             <div class="modal-content">
                 <div class="modal-body">
                     <div class="title">記錄</div>
-                        <table id="history_table">
+                        <table id="log_table">
                             <tr style="font-size: 2.5vh">
                                 <th style="width: 25%; border-bottom: solid 0.5vh var(--highlight)">時間</th>
                                 <th style="width: 75%; border-bottom: solid 0.5vh var(--highlight)">事件</th>
                             </tr>
-                            <tr id="history_after"></tr>
+                            <tr id="log_after"></tr>
                         </table>
                     </div>
                 </div>
