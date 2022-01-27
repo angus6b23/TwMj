@@ -1,5 +1,4 @@
 var i=1 //used for empty names
-var deferredPrompt; // Initialize deferredPrompt for use later to show browser install prompt
 var allplayer=[NaN]; //Array for all players, such that allplayer[1].name = name of player1
 var gamestat={ //Object for holding game statistics
     round: 1,
@@ -19,7 +18,6 @@ var gamestat={ //Object for holding game statistics
     last_save: ''
 };
 
-var data = new Object();
 var default_setting={ //Object for holding settings
     font: '',
     theme: 'Nord',
@@ -92,6 +90,7 @@ let theme = { //Object for themes
 var game_record=[NaN]; //Array for record of game, such that game_record[1] = Results of first game
 var game = new Array; // Array for record of game, such that [30, 0, 0 , -30] = Player 4 loses 30 yaku to Player 1 at that game
 var fulldataJSON = new Array; // Array for undo and redo, saves most of the data
+var gamelog = new Array;
 let msg = '';
 let turn_display = '第1局‧東圈東';
 var undo_count = 0;
@@ -1299,6 +1298,7 @@ function save(){
     let temp_JSON = JSON.stringify(data);
     fulldataJSON.unshift(temp_JSON);
     localStorage.setItem('data', JSON.stringify(data));
+    localStorage.setItem('log', JSON.stringify(gamelog));
 }
 
 function checkundo(){
@@ -1344,6 +1344,7 @@ function gather(obj){
 
 function end(){
     localStorage.removeItem('data');
+    localStorage.removeItem('log');
     location.reload();
 }
 
@@ -1363,8 +1364,12 @@ function reload(){
         game_record = data.game_record;
         calculateturn();
         initiate_ui();
-        save();
         }
+    if (localStorage.getItem('log') === null){
+    } else {
+        gamelog = JSON.parse(localStorage.getItem('log'));
+        update_log_table();
+    }
 }
 
 function undo(){
@@ -1502,7 +1507,24 @@ function breakstreak(fm, to){
 
 
 function addlog(msg){
-    $('#log_after').after('<tr><td>' + timestamp() + '</td><td>' + msg + '</td></tr>');
+    let tempmsg = {
+        time: timestamp(),
+        message: msg,
+        reverted: false
+    }
+    gamelog.unshift(tempmsg);
+    update_log_table();
+}
+
+function update_log_table(){
+    $('#logafter tr').remove();
+    for (x = gamelog.length - 1; x >= 0; x--){
+        if (gamelog[x]['reverted']){
+            $('#log_after').after('<tr class="removed"><td>' + gamelog[x].time + '</td><td>' + gamelog[x].message + '</td></tr>');
+        } else {
+            $('#log_after').after('<tr><td>' + gamelog[x].time + '</td><td>' + gamelog[x].message + '</td></tr>');
+        }
+    }
 }
 
 function import_json(){
