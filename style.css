@@ -400,6 +400,9 @@ div a:hover {
     transition: 0s;
 }
 
+#rightbuttongroup a.inactive {
+    opacity: 0.3;
+}
 
 #rightbuttongroup a.inactive:hover {
     opacity: 0.3;
@@ -530,8 +533,8 @@ table {
     transition: 0.5s;
 }
 
-a.inactive {
-    opacity: 0.3;
+#footer_context a.inactive {
+    opacity: 0.3; !important
 }
 
 #footer_context a.inactive:hover {

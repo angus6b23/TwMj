@@ -468,7 +468,6 @@ function validateinstant(get_or_pay){
 }
 
 function instant(get_or_pay){
-    checkundo();
     if (validateinstant(get_or_pay) == 0){
         if(get_or_pay == 'get'){
             for ( x = 1; x < 5; x++ ){
@@ -502,7 +501,7 @@ function instant(get_or_pay){
         }
         resetinput_instant();
         push_balance_array();
-        save();
+        checkundo();
         updatetabledisplay();
         update_stat_table();
         playergraph();
@@ -515,7 +514,6 @@ function deal(){
     if ( ron_obj.value == 0 | ron_obj.value == '' | typeof(ron_obj.value) == 'undefined'){
         //Add warning for empty input
     } else {
-        checkundo();
         game = [NaN];
         gamestat.total_change -= parseInt(ron_obj.value);
         let ex_draw = parseInt(gamestat.tsumo) + parseInt(gamestat.deal);
@@ -548,7 +546,7 @@ function deal(){
         gamestat.deal = parseInt(gamestat.deal) + 1;
         settle('deal');
         addlog(msg);
-        save();
+        checkundo();
         updatetabledisplay();
         updatehistorydisplay();
         update_stat_table();
@@ -563,7 +561,6 @@ function tsumo(){
     if ( ron_obj.value == 0 | typeof(ron_obj.value) == 'undefined'){
         //Add warning for empty input
     } else {
-        checkundo();
         game = [NaN];
         for (x = 1; x < 5; x++){
             let value = $('#tsumo .p' + x + 'form').val();
@@ -601,7 +598,7 @@ function tsumo(){
         gamestat.tsumo = parseInt(gamestat.tsumo) + 1;
         settle('tsumo');
         addlog(msg);
-        save();
+        checkundo();
         updatetabledisplay();
         updatehistorydisplay();
         update_stat_table();
@@ -614,7 +611,6 @@ function tsumo(){
 function draw(){
     if($('#holdplus').hasClass('active')){
         default_setting.draw_action = 'hold+';
-        checkundo();
         gamestat.streak = parseInt(gamestat.streak) + 1;
         if (gamestat.streak > gamestat.max_streak){
                 gamestat.max_streak = gamestat.streak;
@@ -630,11 +626,9 @@ function draw(){
         post_draw();
     } else if($('#hold').hasClass('active')){
         default_setting.draw_action = 'hold';
-        checkundo();
         post_draw();
     } else if($('#pass').hasClass('active')){
         default_setting.draw_action = 'pass';
-        checkundo();
         gamestat.streak = 0;
         if (gamestat.banker == 'E'){
             gamestat.banker = 'S';
@@ -660,7 +654,7 @@ function post_draw(){
     gamestat.tie = parseInt(gamestat.tie) + 1;
     game_record.push(['流局']);
     calculateturn();
-    save();
+    checkundo();
     updatetabledisplay();
     updatehistorydisplay();
     update_stat_table();
@@ -763,7 +757,6 @@ function settle(deal_or_tsumo){
 }
 
 function iset(fm, to){ //Function for handling instant settle
-    checkundo();
     msg = '即時結算：<br>';
     $('#settle').modal('toggle');
     if(fm == 'all'){
@@ -786,7 +779,7 @@ function iset(fm, to){ //Function for handling instant settle
         allplayer[fm]['lossto' + to] = 0;
     }
     update_player_unrealized();
-    save();
+    checkundo();
     updatetabledisplay();
     playergraph();
     addlog(msg);
@@ -822,7 +815,7 @@ function adjust(){
     if (action !== 0){
         gamestat.modified = true;
         addlog(msg);
-        save();
+        checkundo();
     }
     updatetabledisplay();
     playergraph();
@@ -965,7 +958,9 @@ function uicontrol(){
         $('#tsumo .p' + ron_obj.selected + 'form').val('+' + tsumo_total);
         ron_obj.value = eval(deal_total + tsumo_total);
     });
-
+    $('#log').on('shown.bs.modal', function(){
+        update_log_table();
+    });
     $('#option').on('shown.bs.modal', function(){ //Fill in default settings into option modal
         $('#option_base').val(default_setting.base);
         $('#option_money').val(default_setting.money);
@@ -1200,7 +1195,6 @@ function change_seat(){
     msg = msg + '北位： ' + getplayernamebyposition('N') + '<br>';
     $('#settle').modal('toggle');
     checkundo();
-    save();
     updatetabledisplay();
     addlog(msg);
 }
@@ -1226,7 +1220,6 @@ function change_name(){
         }
         updatetabledisplay();
         checkundo();
-        save();
     }
     $('#settle').modal('toggle');
 }
@@ -1303,8 +1296,15 @@ function save(){
 
 function checkundo(){
     if(undo_count >= 1){
-        fulldataJSON = [];
+        for (x=0; x<gamelog.length; x++){
+            if(gamelog[x].reverted == true && gamelog[x].removed == false){
+                gamelog[x].removed = true;
+            }
+        }
+        fulldataJSON = fulldataJSON.slice(parseInt(undo_count));
         undo_count = 0;
+        save();
+    } else {
         save();
     }
 }
@@ -1358,18 +1358,19 @@ function reload(){
 
     if (localStorage.getItem('data') === null){
     } else {
+        if (localStorage.getItem('log') === null){
+        } else {
+            gamelog = JSON.parse(localStorage.getItem('log'));
+            update_log_table();
+        }
         data = JSON.parse(localStorage.getItem('data'));
         allplayer = data.allplayer;
         gamestat = data.gamestat;
         game_record = data.game_record;
         calculateturn();
         initiate_ui();
+        save();
         }
-    if (localStorage.getItem('log') === null){
-    } else {
-        gamelog = JSON.parse(localStorage.getItem('log'));
-        update_log_table();
-    }
 }
 
 function undo(){
@@ -1380,7 +1381,12 @@ function undo(){
         allplayer = temp_JSON.allplayer;
         gamestat = temp_JSON.gamestat;
         game_record = temp_JSON.game_record;
-        $('#log tr:nth-child(' + eval(parseInt(undo_count) + 2) + ')').addClass('removed');
+        for (x=0; x<gamelog.length; x++){
+                if(gamelog[x].reverted == false && gamelog[x].removed == false){
+                    gamelog[x].reverted = true;
+                    break;
+                }
+        }
         calculateturn();
         updatetabledisplay();
         update_stat_table();
@@ -1392,7 +1398,12 @@ function undo(){
 function redo(){
     if ($('#redo').hasClass('inactive')){
     } else {
-        $('#log tr:nth-child(' + eval(parseInt(undo_count) + 2) + ')').removeClass('removed');
+        for (x=gamelog.length-1; x>=0; x--){
+            if(gamelog[x].reverted == true && gamelog[x].removed == false){
+                gamelog[x].reverted = false;
+                break;
+            }
+        }
         undo_count = parseInt(undo_count) - 1;
         let temp_JSON = JSON.parse(fulldataJSON[parseInt(undo_count)
         ]);
@@ -1490,7 +1501,6 @@ function playerstat_display_simple(id, property){
 }
 
 function breakstreak(fm, to){
-    checkundo();
     msg = allplayer[fm].name + ' 終止了拉踢：<br>' + allplayer[fm].name + ' 付了 ' + allplayer[fm]['lossto' + to] + '番給 ' + allplayer[to].name;
     addlog(msg);
     allplayer[fm].balance -= parseInt(allplayer[fm]['lossto' + to]);
@@ -1498,7 +1508,7 @@ function breakstreak(fm, to){
     allplayer[fm]['sf' + to] = 0;
     allplayer[fm]['lossto' + to] = 0;
     update_player_unrealized();
-    save();
+    checkundo();
     updatetabledisplay();
     playergraph();
     $('#break').modal('toggle');
@@ -1510,19 +1520,19 @@ function addlog(msg){
     let tempmsg = {
         time: timestamp(),
         message: msg,
-        reverted: false
+        reverted: false,
+        removed: false
     }
     gamelog.unshift(tempmsg);
-    update_log_table();
 }
 
 function update_log_table(){
-    $('#logafter tr').remove();
+    $('.dump_log').remove();
     for (x = gamelog.length - 1; x >= 0; x--){
         if (gamelog[x]['reverted']){
-            $('#log_after').after('<tr class="removed"><td>' + gamelog[x].time + '</td><td>' + gamelog[x].message + '</td></tr>');
+            $('#log_after').after('<tr class="removed dump_log"><td>' + gamelog[x].time + '</td><td>' + gamelog[x].message + '</td></tr>');
         } else {
-            $('#log_after').after('<tr><td>' + gamelog[x].time + '</td><td>' + gamelog[x].message + '</td></tr>');
+            $('#log_after').after('<tr class="dump_log"><td>' + gamelog[x].time + '</td><td>' + gamelog[x].message + '</td></tr>');
         }
     }
 }
