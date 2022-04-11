@@ -747,10 +747,10 @@ input[type=number], textarea{
 
 #table .banker{
     animation-name: banker_ani;
-    animation-duration: 0.5s;
-    animation-iteration-count: 6;
+    animation-duration: 3s;
+    animation-iteration-count: infinite;
     animation-direction: alternate;
-    animation-timing-function: ease;
+    animation-timing-function: ease-in;
 }
 
 @keyframes E_to_S{
@@ -872,6 +872,7 @@ input[type=number], textarea{
     animation-delay: 1.5s;
 }
 
+/* CSS different orientation */
 @media screen and (orientation: portrait) {
     #initial input{
         width: 60vw;

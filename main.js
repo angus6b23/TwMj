@@ -1,33 +1,28 @@
-var i=1 //used for empty names
 var allplayer=[NaN]; //Array for all players, such that allplayer[1].name = name of player1
 var gamestat={ //Object for holding game statistics
     round: 1,
     round_prevailing: 1,
-    streak: 0,
-    banker: 'E',
-    tie: 0,
-    deal: 0,
-    tsumo: 0,
-    avg_yaku: 0,
-    max_yaku: 0,
-    instantget: 0,
-    instantpay: 0,
-    total_change: 0,
-    max_streak: 0,
-    modified: false,
-    last_save: ''
+    streak: 0, //Record current steak of banker(連莊)
+    banker: 'E', //Record current position of banker(莊位)
+    tie: 0, //Record how many ties in current game(流局)
+    deal: 0, //Record how many deals in current game(出統)
+    tsumo: 0, //Record how many tsumos in current game(自摸)
+    avg_yaku: 0, //Record average yaku in current game(平均番數)
+    max_yaku: 0, //Record maximum yaku in current game(最大番數)
+    instantget: 0, //Record sum of amount of instant get(即收總和)
+    instantpay: 0, //Record sum of amount of instant pay(即付總和)
+    total_change: 0, //Record sum of movement of yaku (總番數流動)
+    max_streak: 0, //Record maximum steak of banker(最大連莊)
+    modified: false, //State if the results are modified (檢查番數有否被修改)
+    last_save: '' //Record last save time
 };
-
 var default_setting={ //Object for holding settings
     font: '',
     theme: 'Nord',
-    fold: 1.5,
-    break: 3,
-    base: 0,
-    money: 1,
-    fullscreen: false,
-    uselocaltime: false,
-    timezone: 'Asia/Hong_Kong'
+    fold: 1.5, //Mutiplier for each consecutive win
+    break: 3, //Loser can choose to stop consecutive after 3 loses
+    base: 0, //Base Money
+    money: 1, //Multiplier (Money = yaku x money multiplier)
 };
 
 let theme = { //Object for themes
@@ -89,15 +84,18 @@ let theme = { //Object for themes
 
 var game_record=[NaN]; //Array for record of game, such that game_record[1] = Results of first game
 var game = new Array; // Array for record of game, such that [30, 0, 0 , -30] = Player 4 loses 30 yaku to Player 1 at that game
-var fulldataJSON = new Array; // Array for undo and redo, saves most of the data
-var gamelog = new Array;
-let msg = '';
+var fulldata_JSON = new Array; // Array for undo and redo, saves most of the data
+var game_log = new Array;
+let msg = ''; //Message used for game log
 let turn_display = '第1局‧東圈東';
+let instant_obj = new Object(); // Object for instant pay or get_or_pay
+let ron_obj = new Object(); // Object for ron
 var undo_count = 0;
-function nameobject(name, position){ //Function for creating player, edit the variables for player here
+let mapped = new Object(); //Object for mapping players to different position
+function create_player(name, position){ //Function for creating player, edit the variables for player here
     let player={
-        balance: 0,
-        unrealized: 0,
+        balance: 0,//Current balance
+        unrealized: 0,//Unrealized gains or loses(未結算)
         lossto1: 0,
         lossto2: 0,
         lossto3: 0,
@@ -125,40 +123,49 @@ function nameobject(name, position){ //Function for creating player, edit the va
     return player
 }
 
-let objforname = {
-    name_east: "E",
-    name_south: "S",
-    name_west: "W",
-    name_north: "N",
-}
-
-let instant_obj = new Object(); // Object for instant pay or get_or_pay
-let ron_obj = new Object(); // Object for ron
-
-function setfont(fontfamily){ //Function for changing font
+function set_font(fontfamily){ //Function for changing font
     $('#global').css('font-family', fontfamily);
     $('.modal').css('font-family', fontfamily);
     default_setting.font = fontfamily;
 }
 
 function initiate(){ //Function for iniating new game
-    getname();
+    get_player_names();
     save_setting();
     save();
     initiate_ui();
 }
 
-function updatecssdirectioncolor(){ //change player colors when changing theme
+function update_streak_ball_color(){ //change player ball colors when changing theme / seat
     for ( x = 1; x < 5; x++){
-        let temp_color=getComputedStyle(document.documentElement).getPropertyValue('--p' + x + '-color');
+        let temp_color=getComputedStyle(document.documentElement).getPropertyValue('--p' + x + '-color'); //Get Color of each player
         if (allplayer.length > 2){
-            document.documentElement.style.setProperty('--' + allplayer[x].position, temp_color);
+            document.documentElement.style.setProperty('--' + allplayer[x].position, temp_color); //Apply color to each position
         }
     }
 }
 
+function map_players(){
+    for (x=1; x<5; x++){
+        if (allplayer[x].position == 'E'){
+            mapped.E = parseInt(x);
+        }
+        else if (allplayer[x].position == 'S'){
+            mapped.S = parseInt(x);
+        }
+        else if (allplayer[x].position == 'W'){
+            mapped.W = parseInt(x);
+        }
+        else if (allplayer[x].position == 'N'){
+            mapped.N = parseInt(x);
+        }
+    }
+}
+
+
 function initiate_ui(){ //Function for initiating ui
-    updatecssdirectioncolor();
+    update_streak_ball_color();
+    map_players();
     $('#initial').addClass('none');
     $('#initial').css('display', 'none');
     $('.p1name').html(allplayer[1].name);
@@ -173,73 +180,42 @@ function initiate_ui(){ //Function for initiating ui
     $('#option .nav li:nth(0)').addClass('none');
     $('#option li:nth-child(2) a').tab('show');
     $('#global').css('font-family', default_setting.font);
-    applytheme(default_setting.theme);
+    apply_theme(default_setting.theme);
     playergraph();
-    updatetabledisplay();
+    update_main_table();
     update_stat_table();
-    updatehistorydisplay();
+    update_history_table();
 }
 
-function applytheme(theme_name){
+function apply_theme(theme_name){
     let temp_theme = theme[theme_name];
     for ( properties in temp_theme ){
         document.documentElement.style.setProperty(properties, temp_theme[properties]);
     }
-    updatecssdirectioncolor();
+    update_streak_ball_color();
 }
 
-function updatetabledisplay(){
+function update_main_table(){
     if (gamestat.modified == true){
         $('#center i').removeClass('none');
     } else {
         $('#center i').addClass('none');
     }
-    for (x = 1; x < 5; x++){ //Loop for all players, fill in name and balance into table
-        if (allplayer[x].position == 'E'){
-            if (allplayer[x].unrealized > 0){
-                $('#E-text').html(allplayer[x].name + '<br>' + allplayer[x].balance + '(+' + allplayer[x].unrealized + ')');
-            } else if (allplayer[x].unrealized < 0){
-                $('#E-text').html(allplayer[x].name + '<br>' + allplayer[x].balance + '(' + allplayer[x].unrealized + ')');
-            }
-            else {
-                $('#E-text').html(allplayer[x].name + '<br>' + allplayer[x].balance);
-            }
-            $('#east').css('background-color' , 'var(--p'+ x +'-color)');
+    for (x = 1; x < 5; x++){ //Loop for all players, fill in name and balance into main table
+        let display_string
+        if (allplayer[x].unrealized > 0){
+            display_string = allplayer[x].name + '<br>' + allplayer[x].balance + '(+' + allplayer[x].unrealized + ')'
+        } else if (allplayer[x].unrealized < 0){
+            display_string = allplayer[x].name + '<br>' + allplayer[x].balance + '(' + allplayer[x].unrealized + ')'
+        } else {
+            display_string = allplayer[x].name + '<br>' + allplayer[x].balance;
         }
-        if (allplayer[x].position == 'S'){
-            if (allplayer[x].unrealized > 0){
-                $('#S-text').html(allplayer[x].name + '<br>' + allplayer[x].balance + '(+' + allplayer[x].unrealized + ')');
-            } else if (allplayer[x].unrealized < 0){
-                $('#S-text').html(allplayer[x].name + '<br>' + allplayer[x].balance + '(' + allplayer[x].unrealized + ')');
-            }
-            else {
-                $('#S-text').html(allplayer[x].name + '<br>' + allplayer[x].balance);
-            }
-            $('#south').css('background-color' , 'var(--p'+ x +'-color)');
-        }
-        if (allplayer[x].position == 'W'){
-            if (allplayer[x].unrealized > 0){
-                $('#W-text').html(allplayer[x].name + '<br>' + allplayer[x].balance + '(+' + allplayer[x].unrealized + ')');
-            } else if (allplayer[x].unrealized < 0){
-                $('#W-text').html(allplayer[x].name + '<br>' + allplayer[x].balance + '(' + allplayer[x].unrealized + ')');
-            }
-            else {
-                $('#W-text').html(allplayer[x].name + '<br>' + allplayer[x].balance);
-            }
-            $('#west').css('background-color' , 'var(--p'+ x +'-color)');
-        }
-        if (allplayer[x].position == 'N'){
-            if (allplayer[x].unrealized > 0){
-                $('#N-text').html(allplayer[x].name + '<br>' + allplayer[x].balance + '(+' + allplayer[x].unrealized + ')');
-            } else if (allplayer[x].unrealized < 0){
-                $('#N-text').html(allplayer[x].name + '<br>' + allplayer[x].balance + '(' + allplayer[x].unrealized + ')');
-            }
-            else {
-                $('#N-text').html(allplayer[x].name + '<br>' + allplayer[x].balance);
-            }
-            $('#north').css('background-color' , 'var(--p'+ x +'-color)');
-        }
+        $('#' + allplayer[x].position + '-text').html(display_string);
     }
+    $('#east').css('background-color', 'var(--p' + mapped.E + '-color');
+    $('#south').css('background-color', 'var(--p' + mapped.S + '-color');
+    $('#west').css('background-color', 'var(--p' + mapped.W + '-color');
+    $('#north').css('background-color', 'var(--p' + mapped.N + '-color');
     $('.streak').html('');
     if (gamestat.streak > 0){ // Fill in streak in the color box
         if(gamestat.banker == 'E'){
@@ -263,7 +239,7 @@ function updatetabledisplay(){
         $('#redo').removeClass('inactive');
         $('#footer_context a:nth(1)').removeClass('inactive');
     }
-    if (eval(undo_count + 1) >= fulldataJSON.length){
+    if (eval(undo_count + 1) >= fulldata_JSON.length){
         $('#undo').addClass('inactive');
         $('#footer_context a:nth(0)').addClass('inactive');
     } else {
@@ -271,12 +247,15 @@ function updatetabledisplay(){
         $('#footer_context a:nth(0)').removeClass('inactive');
     }
     $('#table .fa-exclamation-circle').addClass('none');
-    $('#center .dots').remove(); // Update streak animation
-    $('.breakmsg').remove();
-    for ( x = 1; x < 5; x++){
-        for ( y = 1; y < 5; y++){
+    $('#center .dots').remove(); // Clear all streak animations before creating new animations
+    $('.break_prompt').remove(); //Remove messages from modal 'Breaking consecutive wins'
+    for ( x = 1; x < 5; x++){//Loop for allplayer
+        for ( y = 1; y < 5; y++){ //allplayer[1].sf2 = 3 => Player 1 loses to player 2 consecutively for 3 times
             if (allplayer[x]['sf' + y] !== 0 && allplayer[x]['sf' + y] % parseInt(default_setting.break) == 0){
-                breakmsg(x, y);
+                $('#break table').append('<tr class="break_prompt mt-2"><td>'+
+                 allplayer[x].name + ' 已被 ' + allplayer[y].name + ' 拉了' + allplayer[x]['sf' + y] + '次<br>總番數為' +
+                 allplayer[x]['lossto' + y] + '</td><td><a class="button" href="javascript:breakstreak(' + x + ',' + y + ');">終止此拉踢</a></td></tr>');
+                 //Create prompt for break modal
                 if (allplayer[x].position == 'E'){
                     $('#east i').removeClass('none');
                 }
@@ -291,7 +270,7 @@ function updatetabledisplay(){
                 }
             }
             if (allplayer[x]['sf' + y] > 0){
-                for ( z = 0; z < allplayer[x]['sf' + y]; z++){
+                for ( z = 0; z < allplayer[x]['sf' + y]; z++){ //Create streak balls
                     $('#center').append('<div class="dots ' + allplayer[x].position + allplayer[y].position + ' delay_' + z + '"></div>');
                 }
             }
@@ -299,7 +278,7 @@ function updatetabledisplay(){
     }
 }
 
-function updatehistorydisplay(){ //Update the display of record table
+function update_history_table(){ //Update the display of record table
     $('.record_items').remove();
     for (x = 1 ; x < game_record.length ; x++){
         if (game_record[x].length == 1){
@@ -310,23 +289,21 @@ function updatehistorydisplay(){ //Update the display of record table
     }
 }
 
-function getname(){ //Function for getting name from initial div
-    for (x in objforname) {
-        name = $('#' + x).val();
-        name = checkname(name);
-        player = nameobject(name, objforname[x]);
-        allplayer.push(player);
+function get_player_names(){ //Function for getting name from initial div
+    let i=1//Used for empty names
+    let position_obj = { //Used for creating new players
+        name_east: "E",
+        name_south: "S",
+        name_west: "W",
+        name_north: "N",
     }
-}
-
-function checkname(name){ //sub name into empty player name string
-    if (name === ''){
-        name = '玩家' + i;
-        i++;
-        return name;
-    }
-    else {
-        return name;
+    for (x in position_obj) {
+        name = $('#' + x).val();//Get Value from each element
+        if (name === ''){//Check for empty names
+            name = '玩家' + i;
+            i++;
+        }
+        allplayer.push(create_player(name, position_obj[x]));
     }
 }
 
@@ -502,7 +479,7 @@ function instant(get_or_pay){
         resetinput_instant();
         push_balance_array();
         checkundo();
-        updatetabledisplay();
+        update_main_table();
         update_stat_table();
         playergraph();
         $('#instant').modal('toggle');
@@ -547,8 +524,8 @@ function deal(){
         settle('deal');
         addlog(msg);
         checkundo();
-        updatetabledisplay();
-        updatehistorydisplay();
+        update_main_table();
+        update_history_table();
         update_stat_table();
         playergraph();
         resetinput_ron();
@@ -599,8 +576,8 @@ function tsumo(){
         settle('tsumo');
         addlog(msg);
         checkundo();
-        updatetabledisplay();
-        updatehistorydisplay();
+        update_main_table();
+        update_history_table();
         update_stat_table();
         playergraph();
         resetinput_ron();
@@ -655,8 +632,8 @@ function post_draw(){
     game_record.push(['流局']);
     calculateturn();
     checkundo();
-    updatetabledisplay();
-    updatehistorydisplay();
+    update_main_table();
+    update_history_table();
     update_stat_table();
     playergraph();
     $('#ron').modal('toggle');
@@ -780,7 +757,7 @@ function iset(fm, to){ //Function for handling instant settle
     }
     update_player_unrealized();
     checkundo();
-    updatetabledisplay();
+    update_main_table();
     playergraph();
     addlog(msg);
 }
@@ -817,7 +794,7 @@ function adjust(){
         addlog(msg);
         checkundo();
     }
-    updatetabledisplay();
+    update_main_table();
     playergraph();
     $('#settle').modal('toggle');
     resetinput_settle();
@@ -967,17 +944,17 @@ function uicontrol(){
         $('#option_fold').val(default_setting.fold);
         $('#option_break').val(default_setting.break);
         $('#theme_select').val(default_setting.theme);
-        if (fulldataJSON.length > 0){
+        if (fulldata_JSON.length > 0){
             checkundo();
-            $('#export').val(fulldataJSON[0]);
-            let download_data = "data:text/json;charset=utf-8," + fulldataJSON[0];
+            $('#export').val(fulldata_JSON[0]);
+            let download_data = "data:text/json;charset=utf-8," + fulldata_JSON[0];
             $('#download').attr('href', download_data);
             $('#download').attr('download', 'TWMJ_Data.json');
             $('#download').click();
         }
     });
     $('#theme_select').change(function(){
-        applytheme($('#theme_select').val());
+        apply_theme($('#theme_select').val());
         default_setting.theme = $('#theme_select').val();
         save_setting();
     });
@@ -1195,7 +1172,9 @@ function change_seat(){
     msg = msg + '北位： ' + getplayernamebyposition('N') + '<br>';
     $('#settle').modal('toggle');
     checkundo();
-    updatetabledisplay();
+    update_streak_ball_color();
+    map_players();
+    update_main_table();
     addlog(msg);
 }
 
@@ -1218,7 +1197,7 @@ function change_name(){
             $('.p' + x + 'name').html(allplayer[x].name);
             $('.p' + x + 'box').html(allplayer[x].name);
         }
-        updatetabledisplay();
+        update_main_table();
         checkundo();
     }
     $('#settle').modal('toggle');
@@ -1289,19 +1268,19 @@ function save(){
     data.gamestat = gather(gamestat);
     data.game_record = gathergame_record();
     let temp_JSON = JSON.stringify(data);
-    fulldataJSON.unshift(temp_JSON);
+    fulldata_JSON.unshift(temp_JSON);
     localStorage.setItem('data', JSON.stringify(data));
-    localStorage.setItem('log', JSON.stringify(gamelog));
+    localStorage.setItem('log', JSON.stringify(game_log));
 }
 
 function checkundo(){
     if(undo_count >= 1){
-        for (x=0; x<gamelog.length; x++){
-            if(gamelog[x].reverted == true && gamelog[x].removed == false){
-                gamelog[x].removed = true;
+        for (x=0; x<game_log.length; x++){
+            if(game_log[x].reverted == true && game_log[x].removed == false){
+                game_log[x].removed = true;
             }
         }
-        fulldataJSON = fulldataJSON.slice(parseInt(undo_count));
+        fulldata_JSON = fulldata_JSON.slice(parseInt(undo_count));
         undo_count = 0;
         save();
     } else {
@@ -1352,15 +1331,15 @@ function reload(){
     if (localStorage.getItem('default_setting') === null){
     } else {
         default_setting = JSON.parse(localStorage.getItem('default_setting'));
-        applytheme(default_setting.theme);
-        setfont(default_setting.font);
+        apply_theme(default_setting.theme);
+        set_font(default_setting.font);
     }
 
     if (localStorage.getItem('data') === null){
     } else {
         if (localStorage.getItem('log') === null){
         } else {
-            gamelog = JSON.parse(localStorage.getItem('log'));
+            game_log = JSON.parse(localStorage.getItem('log'));
             update_log_table();
         }
         data = JSON.parse(localStorage.getItem('data'));
@@ -1377,50 +1356,45 @@ function undo(){
     if ($('#undo').hasClass('inactive')){
     } else {
         undo_count = parseInt(undo_count) + 1;
-        let temp_JSON = JSON.parse(fulldataJSON[parseInt(undo_count)]);
+        let temp_JSON = JSON.parse(fulldata_JSON[parseInt(undo_count)]);
         allplayer = temp_JSON.allplayer;
         gamestat = temp_JSON.gamestat;
         game_record = temp_JSON.game_record;
-        for (x=0; x<gamelog.length; x++){
-                if(gamelog[x].reverted == false && gamelog[x].removed == false){
-                    gamelog[x].reverted = true;
+        for (x=0; x<game_log.length; x++){
+                if(game_log[x].reverted == false && game_log[x].removed == false){
+                    game_log[x].reverted = true;
                     break;
                 }
         }
         calculateturn();
-        updatetabledisplay();
+        update_main_table();
         update_stat_table();
         playergraph();
-        updatehistorydisplay();
+        update_history_table();
     }
 }
 
 function redo(){
     if ($('#redo').hasClass('inactive')){
     } else {
-        for (x=gamelog.length-1; x>=0; x--){
-            if(gamelog[x].reverted == true && gamelog[x].removed == false){
-                gamelog[x].reverted = false;
+        for (x=game_log.length-1; x>=0; x--){
+            if(game_log[x].reverted == true && game_log[x].removed == false){
+                game_log[x].reverted = false;
                 break;
             }
         }
         undo_count = parseInt(undo_count) - 1;
-        let temp_JSON = JSON.parse(fulldataJSON[parseInt(undo_count)
+        let temp_JSON = JSON.parse(fulldata_JSON[parseInt(undo_count)
         ]);
         allplayer = temp_JSON.allplayer;
         gamestat = temp_JSON.gamestat;
         game_record = temp_JSON.game_record;
         calculateturn();
-        updatetabledisplay();
+        update_main_table();
         update_stat_table();
         playergraph();
-        updatehistorydisplay();
+        update_history_table();
     }
-}
-
-function breakmsg(fm, to){
-    let fan = allplayer[fm]['lossto' + to];
-    $('#break table').append('<tr class="breakmsg mt-2"><td>' + allplayer[fm].name + ' 已被 ' + allplayer[to].name + ' 拉了' + allplayer[fm]['sf' + to] + '次<br>總番數為' + fan + '</td><td><a class="button" href="javascript:breakstreak(' + fm + ',' + to + ');">終止此拉踢</a></td></tr>');
 }
 
 function update_player_unrealized(){
@@ -1509,7 +1483,7 @@ function breakstreak(fm, to){
     allplayer[fm]['lossto' + to] = 0;
     update_player_unrealized();
     checkundo();
-    updatetabledisplay();
+    update_main_table();
     playergraph();
     $('#break').modal('toggle');
 }
@@ -1523,16 +1497,16 @@ function addlog(msg){
         reverted: false,
         removed: false
     }
-    gamelog.unshift(tempmsg);
+    game_log.unshift(tempmsg);
 }
 
 function update_log_table(){
     $('.dump_log').remove();
-    for (x = gamelog.length - 1; x >= 0; x--){
-        if (gamelog[x]['reverted']){
-            $('#log_after').after('<tr class="removed dump_log"><td>' + gamelog[x].time + '</td><td>' + gamelog[x].message + '</td></tr>');
+    for (x = game_log.length - 1; x >= 0; x--){
+        if (game_log[x]['reverted']){
+            $('#log_after').after('<tr class="removed dump_log"><td>' + game_log[x].time + '</td><td>' + game_log[x].message + '</td></tr>');
         } else {
-            $('#log_after').after('<tr class="dump_log"><td>' + gamelog[x].time + '</td><td>' + gamelog[x].message + '</td></tr>');
+            $('#log_after').after('<tr class="dump_log"><td>' + game_log[x].time + '</td><td>' + game_log[x].message + '</td></tr>');
         }
     }
 }
