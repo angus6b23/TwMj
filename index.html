@@ -54,11 +54,12 @@
             <a class="button mt-1" href="javascript:void(0);" style="width: 100%" data-toggle="modal" data-target="#about"><i class="fas fa-heart mr-2"></i></i>關於</a>
             <a class="button button-big mt-1" href="javascript:initiate();"><i class="fas fa-gamepad mr-2"></i>開始</a>
         </div>
-        <div style="position: absolute; bottom: 0px; right: 0px;">v1.10 alpha</div>
+        <div style="position: absolute; bottom: 0px; right: 0px;">20220412 Nightly</div>
     </div>
     <!-- Main screen -->
     <div class="container-fluid" id="main">
         <div class="row">
+
             <div class="col" id="main_left">
                 <div class="row">
                     <div class="title col-4" id="time"></div>
@@ -639,6 +640,9 @@
         <div class="modal-dialog modal-lg modal-dialog-scrollable mh-75">
             <div class="modal-content">
                 <div class="modal-body">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true" style='color:var(--fg-nord)'>&times;</span>
+                    </button>
                     <div class="title">記錄</div>
                         <table id="log_table">
                             <tr style="font-size: 2.5vh">
@@ -830,5 +834,12 @@
                 </div>
             </div>
         </div>
+    </div>
+    <!--Alert-->
+    <div class="alert alert-warning mt-3 none" role="alert" id="alert">
+        <span id="alert_message"></span>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
     </div>
 </div>

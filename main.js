@@ -137,9 +137,9 @@ function initiate(){ //Function for iniating new game
 }
 
 function update_streak_ball_color(){ //change player ball colors when changing theme / seat
-    for ( x = 1; x < 5; x++){
-        let temp_color=getComputedStyle(document.documentElement).getPropertyValue('--p' + x + '-color'); //Get Color of each player
-        if (allplayer.length > 2){
+    if (allplayer.length > 2){ //Check for initiation, do nothing if not yet initialized
+        for ( x = 1; x < 5; x++){
+            let temp_color=getComputedStyle(document.documentElement).getPropertyValue('--p' + x + '-color'); //Get Color of each player
             document.documentElement.style.setProperty('--' + allplayer[x].position, temp_color); //Apply color to each position
         }
     }
@@ -399,13 +399,15 @@ function resetinput_instant(){
 }
 
 function resetinput_ron(){
+    ron_obj.value = null;
+    ron_obj.selected = null;
     $('.player_select a').removeClass('active')
     $('#ron input').val('');
     $('#ron input').addClass('none');
     $('#ron .center_button_container').addClass('none');
 }
 
-function validateinstant(get_or_pay){
+function validate_instant(get_or_pay){
     instant_obj.selected = null;
     instant_obj.value = null;
     for (x=1; x < 5; x++){
@@ -435,50 +437,55 @@ function validateinstant(get_or_pay){
     else if (get_or_pay == 'pay' && $('#instant' + get_or_pay + ' .select_pan:nth-child(2) a:nth-child(3)').hasClass('active') && $('#instantpay_others').val() != ''){
         instant_obj.value = $('#instantpay_others').val();
     }
+    instant_obj.value = parseInt(instant_obj.value);
     if (instant_obj.selected != null){
-        if (instant_obj.value != null){
+        if (instant_obj.value > 0){
             return 0;
         }
-        else {} // Add visual for invalid value input
+        else{
+            show_alert('輸入數值無效')
+        }
     }
-    else {} //Add visual for invalid player input
+    else{
+        show_alert('請先選擇玩家，然後選擇番數')
+    } //visual warning for invalid player input
 }
 
 function instant(get_or_pay){
-    if (validateinstant(get_or_pay) == 0){
+    if (validate_instant(get_or_pay) == 0){
         if(get_or_pay == 'get'){
-            for ( x = 1; x < 5; x++ ){
-                if ( x == instant_obj.selected ){
+            for ( x = 1; x < 5; x++ ){ //Loop for all players
+                if ( x == instant_obj.selected ){ //Add balance and stat for selected player
                     allplayer[x].balance += parseInt(instant_obj.value) * 3;
                     allplayer[x].instantget += parseInt(instant_obj.value) * 3;
-                    gamestat.instantget += parseInt(instant_obj.value) * 3;
-                    gamestat.total_change += parseInt(instant_obj.value) * 3;
                 }
-                else {
+                else { //Reduce balance for unselected player
                     allplayer[x].balance -= parseInt(instant_obj.value);
                 }
             }
+            //Add game statistics and log afterwards
+            gamestat.instantget += parseInt(instant_obj.value) * 3;
+            gamestat.total_change += parseInt(instant_obj.value) * 3;
             msg = allplayer[instant_obj.selected].name + ' 即收了其他玩家 ' + instant_obj.value + ' 番';
-            addlog(msg)
         }
         else if(get_or_pay == 'pay'){
             for ( x = 1; x < 5; x++ ){
                 if ( x == instant_obj.selected ){
                     allplayer[x].balance -= parseInt(instant_obj.value) * 3;
                     allplayer[x].instantpay += parseInt(instant_obj.value) * 3;
-                    gamestat.instantpay += parseInt(instant_obj.value) * 3;
-                    gamestat.total_change += parseInt(instant_obj.value) * 3;
                 }
                 else {
                     allplayer[x].balance += parseInt(instant_obj.value);
                 }
             }
+            gamestat.instantpay += parseInt(instant_obj.value) * 3;
+            gamestat.total_change += parseInt(instant_obj.value) * 3;
             msg = allplayer[instant_obj.selected].name + ' 即付了其他玩家 ' + instant_obj.value + ' 番';
-            addlog(msg);
         }
+        addlog(msg);
         resetinput_instant();
         push_balance_array();
-        checkundo();
+        check_undo();
         update_main_table();
         update_stat_table();
         playergraph();
@@ -488,31 +495,31 @@ function instant(get_or_pay){
 
 function deal(){
     msg = '第' + gamestat.round + '場：<br>';
-    if ( ron_obj.value == 0 | ron_obj.value == '' | typeof(ron_obj.value) == 'undefined'){
-        //Add warning for empty input
+    if ( ron_obj.value == 0 | ron_obj.value == '' | typeof(ron_obj.value) == 'undefined'){ //Check for empty or invalid input for ron_obj
+        show_alert('輪入數值無效')//Warning for empty input
     } else {
         game = [NaN];
         gamestat.total_change -= parseInt(ron_obj.value);
-        let ex_draw = parseInt(gamestat.tsumo) + parseInt(gamestat.deal);
-        gamestat.avg_yaku = Math.round((ex_draw * parseFloat(gamestat.avg_yaku) - parseInt(ron_obj.value)) * 100 / (ex_draw + 1)) / 100;
+        let ex_draw = parseInt(gamestat.tsumo) + parseInt(gamestat.deal); //For calculating average yakus for game stats
+        gamestat.avg_yaku = Math.round((ex_draw * parseFloat(gamestat.avg_yaku) - parseInt(ron_obj.value)) * 100 / (ex_draw + 1)) / 100; //Calculate average yakus and round to 2 decimal places
         for ( x = 1 ; x < 5 ; x++){ // Loop for all input field then push to an array to represent game summary
             let win_value = $('#deal .p' + x + 'form').val();
-            if ( win_value !== '' && win_value > 0 ){
+            if ( win_value !== '' && win_value > 0 ){ //For winning player: Set status, add statistics, add log
                 allplayer[x].status = 'win';
                 allplayer[x].win = parseInt(allplayer[x].win) + 1;
                 allplayer[x].deal_win = parseInt(allplayer[x].deal_win) + 1;
                 msg = msg + allplayer[ron_obj.selected].name + ' 出銃了 ' + win_value + '番給 ' + allplayer[x].name + '<br>';
                 game.push(parseInt(win_value));
-                if (win_value > gamestat.max_yaku){
+                if (win_value > gamestat.max_yaku){ //Check for any update for game statistics for maximum win yaku
                     gamestat.max_yaku = win_value;
                 }
-                if (win_value > allplayer[x].max_yaku){
+                if (win_value > allplayer[x].max_yaku){ //Check for any update for player statistics for maximum win yaku
                     allplayer[x].max_yaku = win_value;
                 }
-                } else if ( win_value == '' ||  win_value == 0) {
+            } else if ( win_value == '' ||  win_value == 0) {//For neutral player set status and add statistics
                 allplayer[x].status = 'neutral';
                 game.push(0);
-                } else if ( win_value < 0) {
+            } else if ( win_value < 0) {
                 allplayer[x].status = 'lose';
                 allplayer[x].lose = parseInt(allplayer[x].lose) + 1;
                 allplayer[x].deal_lose = parseInt(allplayer[x].deal_lose) + 1;
@@ -523,7 +530,7 @@ function deal(){
         gamestat.deal = parseInt(gamestat.deal) + 1;
         settle('deal');
         addlog(msg);
-        checkundo();
+        check_undo();
         update_main_table();
         update_history_table();
         update_stat_table();
@@ -536,12 +543,14 @@ function deal(){
 function tsumo(){
     msg = '第' + gamestat.round + '場：<br>';
     if ( ron_obj.value == 0 | typeof(ron_obj.value) == 'undefined'){
+        show_alert('請先選擇自摸玩家，然後輸入番數')
         //Add warning for empty input
     } else {
         game = [NaN];
         for (x = 1; x < 5; x++){
             let value = $('#tsumo .p' + x + 'form').val();
             if (value == '' || value == 0){
+                show_alert('玩家自摸時，需輸入所有其他的番數')
                 // Add exception if no value input for tsumo
                 game = [NaN];
                 return;
@@ -575,7 +584,7 @@ function tsumo(){
         gamestat.tsumo = parseInt(gamestat.tsumo) + 1;
         settle('tsumo');
         addlog(msg);
-        checkundo();
+        check_undo();
         update_main_table();
         update_history_table();
         update_stat_table();
@@ -619,7 +628,7 @@ function draw(){
         }
         post_draw();
     } else {
-        //Add error of no selection
+        show_alert('請輸入流局處理方式。')
     }
 }
 
@@ -630,8 +639,8 @@ function post_draw(){
     gamestat.round = parseInt(gamestat.round) + 1;
     gamestat.tie = parseInt(gamestat.tie) + 1;
     game_record.push(['流局']);
-    calculateturn();
-    checkundo();
+    generate_turn_display();
+    check_undo();
     update_main_table();
     update_history_table();
     update_stat_table();
@@ -641,10 +650,10 @@ function post_draw(){
 
 function settle(deal_or_tsumo){
     for ( x = 1; x < 5 ; x++){ //loop for all player and search for status of current match
-        if ( allplayer[x].status == 'lose' ){
-            for ( y = 1; y < 5; y++){
-                if( allplayer[y].status == 'win'){ //Lose play add value to 'streak from' and 'loss to' winning player
-                    if ( parseInt(allplayer[x]['sf' + y]) > 0){
+        if ( allplayer[x].status == 'lose' ){ //Select the losing player x
+            for ( y = 1; y < 5; y++){ //Select player y
+                if( allplayer[y].status == 'win'){ //If player y wins,add value to 'streak from' and 'loss to' on player x
+                    if ( parseInt(allplayer[x]['sf' + y]) > 0){ //Calculate the amount of losing value if the player is already losing
                         allplayer[x]['sf' + y] += 1;
                         if (deal_or_tsumo == 'tsumo'){
                             allplayer[x]['lossto' + y] = Math.ceil(parseInt(allplayer[x]['lossto' + y]) * parseFloat(default_setting.fold)) - parseInt(game[x]); // Pick the value from losing player of last match if the match ends with tsumo
@@ -652,7 +661,7 @@ function settle(deal_or_tsumo){
                             allplayer[x]['lossto' + y] = Math.ceil(parseInt(allplayer[x]['lossto' + y]) * parseFloat(default_setting.fold)) + parseInt(game[y]);// Pick the value from winning player of last match if the match ends with deal
                         }
                     }
-                    else {
+                    else { //Simply set the value if not on streak
                         allplayer[x]['sf' + y] += 1;
                         if (deal_or_tsumo == 'tsumo'){
                             allplayer[x]['lossto' + y] -= parseInt(game[x]);
@@ -661,7 +670,7 @@ function settle(deal_or_tsumo){
                         }
                     }
                 } else if ( allplayer[y].status == 'neutral' || allplayer[y].status == 'lose' ){
-                    if ( parseInt(allplayer[x]['lossto' + y]) > 0){
+                    if ( parseInt(allplayer[x]['lossto' + y]) > 0){ //Settle the value from the game before if player y is not winning again
                         allplayer[x].balance -= parseInt(allplayer[x]['lossto' + y]);
                         allplayer[y].balance += parseInt(allplayer[x]['lossto' + y]);
                         msg = msg + allplayer[x].name + ' 付了 ' + allplayer[x]['lossto' + y] + '番給 ' + allplayer[y].name + '<br>';
@@ -670,9 +679,9 @@ function settle(deal_or_tsumo){
                     }
                 }
             }
-        } else if ( allplayer[x].status == 'neutral'){
+        } else if ( allplayer[x].status == 'neutral'){//Select neutral player x
             for ( y = 1; y < 5; y++){
-                if (parseInt(allplayer[x]['sf' + y]) > 0 && allplayer[y].status !== 'win'){
+                if (parseInt(allplayer[x]['sf' + y]) > 0 && allplayer[y].status !== 'win'){ //Settle value if player y is not winning again
                     allplayer[x].balance -= parseInt(allplayer[x]['lossto' + y]);
                     allplayer[y].balance += parseInt(allplayer[x]['lossto' + y]);
                     msg = msg + allplayer[x].name + ' 付了 ' + allplayer[x]['lossto' + y] + '番給 ' + allplayer[y].name + '<br>';
@@ -730,7 +739,7 @@ function settle(deal_or_tsumo){
             }
         }
     }
-    calculateturn();
+    generate_turn_display();
 }
 
 function iset(fm, to){ //Function for handling instant settle
@@ -756,7 +765,7 @@ function iset(fm, to){ //Function for handling instant settle
         allplayer[fm]['lossto' + to] = 0;
     }
     update_player_unrealized();
-    checkundo();
+    check_undo();
     update_main_table();
     playergraph();
     addlog(msg);
@@ -784,7 +793,7 @@ function adjust(){
                 action += 1;
                 msg = msg + allplayer[x].name + ' 的番數設定為 ' + adj_value +'番<br>'
             } else {
-                //Add visual feedback for no operation
+                show_alert(allplayer[x].name + ' 的數值因未選擇調整操作項而未被處理')
                 return;
             }
         }
@@ -792,7 +801,7 @@ function adjust(){
     if (action !== 0){
         gamestat.modified = true;
         addlog(msg);
-        checkundo();
+        check_undo();
     }
     update_main_table();
     playergraph();
@@ -805,7 +814,7 @@ function resetinput_settle(){
     $('#adjust .select').removeClass('active');
 }
 
-function calculateturn(){
+function generate_turn_display(){
     let turn = 1;
         if (parseInt(gamestat.round_prevailing) > 4){
             turn = Math.ceil(parseInt(gamestat.round_prevailing) / 4);
@@ -944,14 +953,10 @@ function uicontrol(){
         $('#option_fold').val(default_setting.fold);
         $('#option_break').val(default_setting.break);
         $('#theme_select').val(default_setting.theme);
-        if (fulldata_JSON.length > 0){
-            checkundo();
-            $('#export').val(fulldata_JSON[0]);
-            let download_data = "data:text/json;charset=utf-8," + fulldata_JSON[0];
-            $('#download').attr('href', download_data);
-            $('#download').attr('download', 'TWMJ_Data.json');
-            $('#download').click();
-        }
+        $('#export').val(fulldata_JSON[undo_count]);
+        let download_data = "data:text/json;charset=utf-8," + fulldata_JSON[undo_count];
+        $('#download').attr('href', download_data);
+        $('#download').attr('download', 'TWMJ_Data.json');
     });
     $('#theme_select').change(function(){
         apply_theme($('#theme_select').val());
@@ -1171,7 +1176,7 @@ function change_seat(){
     msg = msg + '西位： ' + getplayernamebyposition('W') + '<br>';
     msg = msg + '北位： ' + getplayernamebyposition('N') + '<br>';
     $('#settle').modal('toggle');
-    checkundo();
+    check_undo();
     update_streak_ball_color();
     map_players();
     update_main_table();
@@ -1198,7 +1203,7 @@ function change_name(){
             $('.p' + x + 'box').html(allplayer[x].name);
         }
         update_main_table();
-        checkundo();
+        check_undo();
     }
     $('#settle').modal('toggle');
 }
@@ -1273,7 +1278,7 @@ function save(){
     localStorage.setItem('log', JSON.stringify(game_log));
 }
 
-function checkundo(){
+function check_undo(){
     if(undo_count >= 1){
         for (x=0; x<game_log.length; x++){
             if(game_log[x].reverted == true && game_log[x].removed == false){
@@ -1346,7 +1351,7 @@ function reload(){
         allplayer = data.allplayer;
         gamestat = data.gamestat;
         game_record = data.game_record;
-        calculateturn();
+        generate_turn_display();
         initiate_ui();
         save();
         }
@@ -1366,7 +1371,7 @@ function undo(){
                     break;
                 }
         }
-        calculateturn();
+        generate_turn_display();
         update_main_table();
         update_stat_table();
         playergraph();
@@ -1389,7 +1394,7 @@ function redo(){
         allplayer = temp_JSON.allplayer;
         gamestat = temp_JSON.gamestat;
         game_record = temp_JSON.game_record;
-        calculateturn();
+        generate_turn_display();
         update_main_table();
         update_stat_table();
         playergraph();
@@ -1482,7 +1487,7 @@ function breakstreak(fm, to){
     allplayer[fm]['sf' + to] = 0;
     allplayer[fm]['lossto' + to] = 0;
     update_player_unrealized();
-    checkundo();
+    check_undo();
     update_main_table();
     playergraph();
     $('#break').modal('toggle');
@@ -1556,6 +1561,14 @@ function import_json(){
         localStorage.setItem('data', temp_json);
         reload();
     });
+}
+
+function show_alert(alert_message){
+    $('#alert_message').html(alert_message)
+    $('#alert').removeClass('none');
+    setTimeout(function(){
+        $('#alert').addClass('none')
+    }, 3000)
 }
 
 function playergraph(){
