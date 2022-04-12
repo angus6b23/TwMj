@@ -163,8 +163,6 @@ select{
     line-height: inherit;
 }
 
-
-
 #theme_setting select{
     width: 50%;
     text-align: center;
@@ -230,6 +228,13 @@ div a:hover {
     color: var(--fg-nord);
     z-index: 0;
     overflow-y: scroll;
+}
+
+#alert {
+    position: absolute;
+    left: 20%;
+    width: 60%;
+    font-size: 2.5vh;
 }
 
 #turn {
