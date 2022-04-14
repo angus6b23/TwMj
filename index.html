@@ -3,12 +3,11 @@
     <meta charset="utf-8">
     <title>港式台牌計分面板</title>
     <!-- Google fonts for Noto Serif and Sans-->
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@600&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400&display=swap" rel="stylesheet">
+    <link href="assets/noto_fonts/import_font.css" rel="stylesheet">
     <!-- Bootstrap, jQuery and JS bundle w/ Popper.js -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="assets/bootstrap.4.6.0.min.css">
+    <script src="assets/jquery-3.5.1.slim.min.js"></script>
+    <script src="assets/bootstrap.bundle.4.6.0.min.js"></script>
     <!-- Ploty -->
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
     <!-- Main javascript -->
@@ -46,11 +45,11 @@
             </div>
             <div class="row mt-1 select_pan">
                 <div class="col-3">字體：</div>
-                <a class="col-3 button select active" href="javascript:setfont('');">預設</a>
-                <a class="col-3 button select" href="javascript:setfont('Noto Serif TC, serif');" style="font-family: Noto Serif TC, serif">思源宋體</a>
-                <a class="col-3 button select" href="javascript:setfont('Noto Sans TC, sans-serif');" style="font-family: Noto Sans TC, sans-serif">思源黑體</a>
+                <a class="col-3 button select active" href="javascript:set_font('');">預設</a>
+                <a class="col-3 button select" href="javascript:set_font('Noto Serif TC, serif');" style="font-family: Noto Serif TC, serif">思源宋體</a>
+                <a class="col-3 button select" href="javascript:set_font('Noto Sans TC, sans-serif');" style="font-family: Noto Sans TC, sans-serif">思源黑體</a>
             </div>
-            <a class="button col mt-1" href="javascript:void(0);" style="width: 100%" data-toggle="modal" data-target="#option"><i class="fas fa-cogs mr-2"></i>選項</a>
+            <a class="button mt-1" href="javascript:void(0);" style="width: 100%" data-toggle="modal" data-target="#option"><i class="fas fa-cogs mr-2"></i>選項</a>
             <a class="button mt-1" href="javascript:void(0);" style="width: 100%" data-toggle="modal" data-target="#about"><i class="fas fa-heart mr-2"></i></i>關於</a>
             <a class="button button-big mt-1" href="javascript:initiate();"><i class="fas fa-gamepad mr-2"></i>開始</a>
         </div>
@@ -420,17 +419,19 @@
                     <div class="tab-content">
                         <div class="tab-pane show active" id="game_setting">
                             <div class="row">
-                                <div class="col-6 gs_left"><i class="fas fa-info-circle" title="所有玩家的初始番數&#13;&#10;預設為 0"></i> 底：</div>
+                                <div class="col-6 gs_left"><i class="fas fa-info-circle" title="所有玩家的初始番數&#13;&#10;預設為 0"></i> 底（番數）：</div>
                                 <div class="col-6 gs_right"><input id="option_base" class="positiveintonly" type="number"></input></div>
-                                <div class="col-6 gs_left"><i class="fas fa-info-circle" title="每一番代表多少錢&#13;&#10;預設為 1"></i> x元一番：</div>
+                                <div class="col-6 gs_left"><i class="fas fa-info-circle" title="每一番代表多少錢&#13;&#10;只用於顯示&#13;&#10;預設為 1"></i> 番數對金錢：</div>
                                 <div class="col-6 gs_right"><input id="option_money" class="numonly" type="number"></input></div>
-                                <div class="col-6 gs_left"><i class="fas fa-info-circle" title="拉的時侯番數的倍數&#13;&#10;例：設倍數為1.5。第一局，甲勝乙100番。如甲於第二局再勝乙時，甲於第一局所贏的番數會變成150番。&#13;&#10;預設為 1.5，必須大於 1"></i> 拉倍數：</div>
+                                <div class="col-6 gs_left"><i class="fas fa-info-circle" title="拉的時侯番數的倍數&#13;&#10;例：設倍數為1.5。第一局，甲勝乙100番。如甲於第二局再勝乙時，甲於第一局所贏的番數會變成150番。&#13;&#10;預設為 1.5，必須大於 1"></i> 連勝倍數：</div>
                                 <div class="col-6 gs_right"><input id="option_fold" class="numonly" type="number"></input></div>
-                                <div class="col-6 gs_left"><i class="fas fa-info-circle" title="當連續輸給某一玩家x局，輸的玩家可選擇中止拉踢&#13;&#10;預設為 3&#13;&#10;0 代表無限拉"></i> 每x局數可中止拉踢：</div>
+                                <div class="col-6 gs_left"><i class="fas fa-info-circle" title="當連續輸給某一玩家x局，輸的玩家可選擇中止拉踢&#13;&#10;預設為 3&#13;&#10;0 代表無限拉"></i>中止拉踢局數：</div>
                                 <div class="col-6 gs_right"><input id="option_break" class="positiveintonly" type="number"></input></div>
-                                <div class="center_button_container col mt-2">
-                                    <a class="button" href="javascript:get_game_setting()">保存</a>
-                                </div>
+                                <div class="col mt-2" id="setting_error" style="text-align:center"></div>
+                            </div>
+                            <div class="center_button_container col mt-2">
+                                <a class="button mr-2" href="javascript:fill_default()">預設</a>
+                                <a class="button" href="javascript:get_game_setting()">保存</a>
                             </div>
                         </div>
                         <div class="tab-pane" id="theme_setting">
@@ -446,24 +447,26 @@
                                 </select></div>
                                 <div class="mt-1 col-4 gs_left">字體</div>
                                 <div class="mt-1 col-8 gs_right select_pan">
-                                    <a class="button select active" href="javascript:setfont('');">預設</a>
-                                    <a class="button select" href="javascript:setfont('Noto Serif TC, serif');" style="font-family: Noto Serif TC, serif">思源宋體</a>
-                                    <a class="button select" href="javascript:setfont('Noto Sans TC, sans-serif');" style="font-family: Noto Sans TC, sans-serif">思源黑體</a>
+                                    <a class="button select active" href="javascript:set_font('');">預設</a>
+                                    <a class="button select" href="javascript:set_font('Noto Serif TC, serif');" style="font-family: Noto Serif TC, serif">思源宋體</a>
+                                    <a class="button select" href="javascript:set_font('Noto Sans TC, sans-serif');" style="font-family: Noto Sans TC, sans-serif">思源黑體</a>
                                 </div>
-                                <div class="col-8 mt-2" style="text-align:center;"><input type="checkbox" id="fullscreen"></input><label for="fullscreen" class="ml-1">開始時自動進入全屏幕</label></div>
-                                <div class="col-4 mt-2" style="text-align:center;"><a class="button" href="javascript:fullscreen();">全屏幕</a></div>
+                                <div class="col mt-2" style="text-align:center;"><a class="button" href="javascript:fullscreen();">全屏幕</a></div>
                             </div>
                         </div>
                         <div class="tab-pane" id="io">
                             <div class="row mr-1 ml-1">
                                 <div class="col-4">匯出：</div>
-                                <div class="col-8" style="display: flex; justify-content: flex-end;"><a class="button mr-2" style="width: 12vw" id="download">另儲為JSON檔</a><a class="button" style="width: 12vw" id="clipboard" href="javascript:void(0);">複制到剪貼簿</a></div>
+                                <div class="col-8" style="display: flex; justify-content: flex-end;">
+                                    <a class="button mr-2" style="width: 25vh" id="download">另儲為JSON檔</a>
+                                    <a class="button" style="width: 25vh" id="clipboard" href="javascript:void(0);">複制到剪貼簿</a>
+                                </div>
                                 <div class="col-12 mt-2"><textarea id="export" readonly></textarea></div>
                                 <div class="col-12 mt-3">匯入：</div>
                                 <div class="col-12 mt-2"><textarea id="import"></textarea></div>
                                 <div class="col-12 mt-1" id="import_error_msg"></div>
                                 <div class="center_button_container col mt-2">
-                                    <a class="button" id="import_button" href="javascript:void(0);">匯入並開始</a>
+                                    <a class="button" id="import_button" href="javascript:void(0);" style="width: 16vh">匯入並開始</a>
                                 </div>
                             </div>
                         </div>
@@ -641,7 +644,7 @@
             <div class="modal-content">
                 <div class="modal-body">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true" style='color:var(--fg-nord)'>&times;</span>
+                        <span aria-hidden="true" style="color:var(--fg-nord); font-size:2.5vh">&times;</span>
                     </button>
                     <div class="title">記錄</div>
                         <table id="log_table">
@@ -839,7 +842,7 @@
     <div class="alert alert-warning mt-3 none" role="alert" id="alert">
         <span id="alert_message"></span>
         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
+            <span aria-hidden="true" style="font-size:2.5vh">&times;</span>
         </button>
     </div>
 </div>
