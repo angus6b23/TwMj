@@ -254,7 +254,7 @@ function update_main_table(){
             if (allplayer[x]['sf' + y] !== 0 && allplayer[x]['sf' + y] % parseInt(default_setting.break) == 0){
                 $('#break table').append('<tr class="break_prompt mt-2"><td>'+
                  allplayer[x].name + ' 已被 ' + allplayer[y].name + ' 拉了' + allplayer[x]['sf' + y] + '次<br>總番數為' +
-                 allplayer[x]['lossto' + y] + '</td><td><a class="button" href="javascript:breakstreak(' + x + ',' + y + ');">終止此拉踢</a></td></tr>');
+                 allplayer[x]['lossto' + y] + '</td><td><a class="button" href="javascript:breakstreak(' + x + ',' + y + ');">中止</a></td></tr>');
                  //Create prompt for break modal
                 if (allplayer[x].position == 'E'){
                     $('#east i').removeClass('none');
@@ -307,7 +307,7 @@ function get_player_names(){ //Function for getting name from initial div
     }
 }
 
-function settablesize(){ //Control size of table according to window size
+function adjust_main_display_size(){ //Control size of table according to window size
     var height=$(document).height();
     var width=$(document).width();
     if (height < width){ //When landscape
@@ -1093,6 +1093,37 @@ function uicontrol(){
     });
 }
 
+function get_game_setting(){
+    if ($('#option_base').val() == '' | $('#option_base').val() < 0 | isNaN(parseFloat($('#option_base').val()))) {
+        $('#setting_error').html('無法更改設定：底必須為零或正數');
+        return;
+    }
+    if ($('#option_money').val() == '' | parseFloat($('#option_money').val()) <= 0 | isNaN(parseFloat($('#option_money').val()))) {
+        $('#setting_error').html('無法更改設定：金錢倍數必須為正數');
+        return;
+    }
+    if ($('#option_fold').val() == '' | parseFloat($('#option_fold').val()) < 1 | isNaN(parseFloat($('#option_fold').val()))) {
+        $('#setting_error').html('無法更改設定：拉的倍數必須大於 1');
+        return;
+    }
+    if ($('#option_break').val() == '' | parseFloat($('#option_break').val()) < 0 | isNaN(parseInt($('#option_fold').val()))) {
+        $('#setting_error').html('無法更改設定：中止拉踢局數必須為零或正數');
+        return;
+    }
+    default_setting.base = parseFloat($('#option_base').val());
+    default_setting.money = parseFloat($('#option_money').val());
+    default_setting.fold = parseFloat($('#option_fold').val());
+    default_setting.break = parseInt($('#option_break').val());
+    $('#option').modal('toggle');
+}
+
+function fill_default(){
+    $('#option_base').val(0);
+    $('#option_money').val(1);
+    $('#option_fold').val(1.5);
+    $('#option_break').val(3);
+}
+
 function protraitdefault(){
     $('#main_left').removeClass('none');
     $('#main_right').addClass('none');
@@ -1572,6 +1603,9 @@ function show_alert(alert_message){
 }
 
 function playergraph(){
+    if (allplayer.length < 2){ //Do not activate if not yet initialized
+        return;
+    }
     let x_arr = new Array();
     let currenttheme = theme[default_setting.theme]
     let stat_height = $('#stat_view').height() - 50;
@@ -1639,11 +1673,11 @@ function fullscreen(){
 
 $(document).ready(function(){
     reload();
-    settablesize();
+    adjust_main_display_size();
     inputcontrol();
     uicontrol();
     $(window).resize(function(){
-        settablesize();
+        adjust_main_display_size();
         playergraph();
     });
     if ('serviceWorker' in navigator) {
