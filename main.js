@@ -81,7 +81,7 @@ let theme = { //Object for themes
         '--highlight': '#ff00ff'
     },
 };
-
+let display_money=false
 var game_record=[NaN]; //Array for record of game, such that game_record[1] = Results of first game
 var game = new Array; // Array for record of game, such that [30, 0, 0 , -30] = Player 4 loses 30 yaku to Player 1 at that game
 var fulldata_JSON = new Array; // Array for undo and redo, saves most of the data
@@ -130,7 +130,27 @@ function set_font(fontfamily){ //Function for changing font
 }
 
 function initiate(){ //Function for iniating new game
-    get_player_names();
+    //Get player names and create players
+    let i=1//Used for empty names
+    let position_obj = { //Used for creating new players
+        name_east: "E",
+        name_south: "S",
+        name_west: "W",
+        name_north: "N",
+    }
+    for (x in position_obj) {
+        name = $('#' + x).val();//Get Value from each element
+        if (name === ''){//Check for empty names
+            name = '玩家' + i;
+            i++;
+        }
+        allplayer.push(create_player(name, position_obj[x]));
+    }
+    for (x=1; x<5; x++){
+        allplayer[x].balance = parseFloat(default_setting.base);
+        allplayer[x].bal_arr.push(allplayer[x].balance);
+        allplayer[x].unr_arr.push(allplayer[x].balance);
+    }
     save_setting();
     save();
     initiate_ui();
@@ -195,22 +215,47 @@ function apply_theme(theme_name){
     update_streak_ball_color();
 }
 
+function toggle_money_display(){
+    display_money=!display_money;
+    if (display_money){
+        $('.toggle_money_display').html('錢');
+    } else {
+        $('.toggle_money_display').html('番')
+    }
+    update_main_table();
+}
+
+
 function update_main_table(){
     if (gamestat.modified == true){
         $('#center i').removeClass('none');
     } else {
         $('#center i').addClass('none');
     }
-    for (x = 1; x < 5; x++){ //Loop for all players, fill in name and balance into main table
-        let display_string
-        if (allplayer[x].unrealized > 0){
-            display_string = allplayer[x].name + '<br>' + allplayer[x].balance + '(+' + allplayer[x].unrealized + ')'
-        } else if (allplayer[x].unrealized < 0){
-            display_string = allplayer[x].name + '<br>' + allplayer[x].balance + '(' + allplayer[x].unrealized + ')'
-        } else {
-            display_string = allplayer[x].name + '<br>' + allplayer[x].balance;
+    if (display_money){
+        for (x = 1; x < 5; x++){ //Loop for all players, fill in name and balance into main table
+            let display_string
+            if (allplayer[x].unrealized > 0){
+                display_string = allplayer[x].name + '<br>$' + Math.round(allplayer[x].balance*default_setting.money*100)/100 + '(+' + Math.round(allplayer[x].unrealized*default_setting.money*100)/100 + ')'
+            } else if (allplayer[x].unrealized < 0){
+                display_string = allplayer[x].name + '<br>$' + Math.round(allplayer[x].balance*default_setting.money*100)/100 + '(' + Math.round(allplayer[x].unrealized*default_setting.money*100)/100 + ')'
+            } else {
+                display_string = allplayer[x].name + '<br>$' + Math.round(allplayer[x].balance*default_setting.money*100)/100;
+            }
+            $('#' + allplayer[x].position + '-text').html(display_string);
         }
-        $('#' + allplayer[x].position + '-text').html(display_string);
+    }else{
+        for (x = 1; x < 5; x++){ //Loop for all players, fill in name and balance into main table
+            let display_string
+            if (allplayer[x].unrealized > 0){
+                display_string = allplayer[x].name + '<br>' + allplayer[x].balance + '(+' + allplayer[x].unrealized + ')'
+            } else if (allplayer[x].unrealized < 0){
+                display_string = allplayer[x].name + '<br>' + allplayer[x].balance + '(' + allplayer[x].unrealized + ')'
+            } else {
+                display_string = allplayer[x].name + '<br>' + allplayer[x].balance;
+            }
+            $('#' + allplayer[x].position + '-text').html(display_string);
+        }
     }
     $('#east').css('background-color', 'var(--p' + mapped.E + '-color');
     $('#south').css('background-color', 'var(--p' + mapped.S + '-color');
@@ -286,24 +331,6 @@ function update_history_table(){ //Update the display of record table
         } else {
             $('#record_add').after('<tr class="record_items"><td>' + x + '</td><td>' + game_record[x][1] + '</td><td>' + game_record[x][2] + '</td><td>' + game_record[x][3] + '</td><td>' + game_record[x][4] + '</td></tr>');
         }
-    }
-}
-
-function get_player_names(){ //Function for getting name from initial div
-    let i=1//Used for empty names
-    let position_obj = { //Used for creating new players
-        name_east: "E",
-        name_south: "S",
-        name_west: "W",
-        name_north: "N",
-    }
-    for (x in position_obj) {
-        name = $('#' + x).val();//Get Value from each element
-        if (name === ''){//Check for empty names
-            name = '玩家' + i;
-            i++;
-        }
-        allplayer.push(create_player(name, position_obj[x]));
     }
 }
 
@@ -989,7 +1016,7 @@ function uicontrol(){
             }
         }
         if ($('#instant_settle td').length == 0){ //Display text if there is anything unsettled
-            $('#instant_settle table').after('<div class="iset" style="font-size: 4vh">暫未有拉踢可結算</div>');
+            $('#instant_settle table').after('<div class="iset" style="font-size: 2.5vh">暫未有拉踢可結算</div>');
             $('#instant_settle .center_button_container').addClass('none');
         } else {
             $('#instant_settle .center_button_container').removeClass('none');
