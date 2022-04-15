@@ -9,14 +9,14 @@
     <script src="assets/jquery-3.5.1.slim.min.js"></script>
     <script src="assets/bootstrap.bundle.4.6.0.min.js"></script>
     <!-- Ploty -->
-    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="assets/plotly-1.58.5.min.js"></script>
     <!-- Main javascript -->
     <script src="main.js"></script>
     <link rel="stylesheet" type="text/css" href="style.css">
     <!-- Icon -->
     <link rel="icon" href="assets/icon.ico" />
     <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" integrity="sha512-+4zCK9k+qNFUR5X+cKL9EIR+ZOhtIloNl9GIKS57V1MyNsYpYcUrUeQc9vNfzsWfV28IaLL3i96P9sdNyeRssA==" crossorigin="anonymous" />
+    <link rel="stylesheet" href="assets/font_awesome/all.css" />
     <!-- Progressive webapp-->
     <link rel="manifest" href="manifest.webmanifest">
 </head>
@@ -53,12 +53,11 @@
             <a class="button mt-1" href="javascript:void(0);" style="width: 100%" data-toggle="modal" data-target="#about"><i class="fas fa-heart mr-2"></i></i>關於</a>
             <a class="button button-big mt-1" href="javascript:initiate();"><i class="fas fa-gamepad mr-2"></i>開始</a>
         </div>
-        <div style="position: absolute; bottom: 0px; right: 0px;">20220412 Nightly</div>
+        <div style="position: absolute; bottom: 0px; right: 0px;">20220415 Nightly</div>
     </div>
     <!-- Main screen -->
     <div class="container-fluid" id="main">
         <div class="row">
-
             <div class="col" id="main_left">
                 <div class="row">
                     <div class="title col-4" id="time"></div>
@@ -92,14 +91,14 @@
                     </div>
                     <div class="row mt-2">
                         <a class="col button button-medium ml-2 mr-1" data-toggle="modal" data-target="#settle" href="javascript:void(0);"><i class="fas fa-calculator mr-2"></i>結算・調整</a>
-                        <a class="col button button-medium mr-2 ml-1" href="javascript:void(0);" data-toggle="modal" data-target="#end"><i class="far fa-check-circle mr-2"></i>結束</a>
+                        <a class="col button button-medium mr-2 ml-1" href="javascript:void(0);" data-toggle="modal" data-target="#end"><i class="far fa-pause-circle mr-2"></i>暫停・結束</a>
                     </div>
                 </div>
             </div>
             <div class="col" id="main_right">
                 <div id="rightbuttongroup">
                     <span class="mt-1 mr-2">
-                    <a href="javascript:void(0);" class="inactive" data-toggle="tooltip" data-placement="bottom" title="按一下切換數值顯示為番或錢"><i class="fas fa-list-ul mr-1"></i>番</a>
+                    <a href="javascript:toggle_money_display();" data-toggle="tooltip" data-placement="bottom" title="按一下切換數值顯示為番或錢"><i class="fas fa-list-ul mr-1"></i><span class="toggle_money_display">番</span></a>
                     </span>
                     <span class="mt-1 mr-2">
                     <a id="undo" href="javascript:undo();" data-toggle="tooltip" data-placement="bottom" title="按一下取消上一次數值更變"><i class="fas fa-undo mr-1"></i>還原</a>
@@ -293,6 +292,11 @@
                         </a>
                     </div>
                     <div class="col-6">
+                        <a href="javascript:toggle_money_display()">
+                            <div><i class="fas fa-list-ul mr-1"></i><span class="toggle_money_display">番</span></div>
+                        </a>
+                    </div>
+                    <div class="col-6">
                         <a href="javascript:void(0)">
                             <div data-toggle="modal" data-target="#log"><i class="fas fa-clipboard mr-3"></i>紀錄</div>
                         </a>
@@ -306,8 +310,18 @@
             </div>
         </div>
     </div>
+    <!-- Pause Screen -->
+    <div class="fluid-container" id="pause_screen">
+        <div class="row">
+            <div class="col-sm" id="overview">
+            </div>
+            <div class="col-sm" id="game_stats">
+            </div>
+        </div>
+    </div>
+    <!-- Footer Menu -->
     <div id="footer_menu">
-        <div class="row align-items-center" style="height:100%">
+        <div class="row align-items-center" id="normal_footer" style="height:100%">
             <div class="col highlight footer_select">
                 <a href="javascript:void(0)">
                     <div>
@@ -326,6 +340,22 @@
                 <a href="javascript:void(0)">
                     <div>
                         <i class="fas fa-ellipsis-v"></i><br>其他
+                    </div>
+                </a>
+            </div>
+        </div>
+        <div class="row align-items-center none" id="pause_footer" style="height:100%">
+            <div class="col footer_select">
+                <a href="javascript:void(0)">
+                    <div>
+                        <i class="fas fa-play"></i><br>繼續
+                    </div>
+                </a>
+            </div>
+            <div class="col footer_select">
+                <a href="javascript:void(0)">
+                    <div>
+                        <i class="far fa-check-circle"></i><br>結束
                     </div>
                 </a>
             </div>
@@ -693,8 +723,9 @@
                             </div>
                         </div>
                         <div class="tab-pane" id="adjust">
-                            <div class="mt-2" style="font-size: 4vh">
-                            所有調整皆不會影響現時的拉踢：
+                            <div class="mt-2" style="font-size: 2.5vh">
+                                <i class="fas fa-exclamation-triangle"></i>
+                                所有調整皆不會影響現時的拉踢：
                             </div>
                             <table style="width: 100%">
                                 <tr>
