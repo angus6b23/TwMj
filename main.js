@@ -1036,20 +1036,20 @@ function uicontrol(){
         $('#context').css('top', cursor_y + 'px');
         $('#context').css('left', cursor_x + 'px');
         if(event.target.id == 'east'){
-            context_name=getplayernamebyposition('E');
-            context_no=getplayernumberbyposition('E');
+            context_name=allplayer[mapped.E].name;
+            context_no=mapped.E;
         }
         else if(event.target.id == 'south'){
-            context_name=getplayernamebyposition('S');
-            context_no=getplayernumberbyposition('S');
+            context_name=allplayer[mapped.S].name;
+            context_no=mapped.S;
         }
         else if(event.target.id == 'west'){
-            context_name=getplayernamebyposition('W');
-            context_no=getplayernumberbyposition('W');
+            context_name=allplayer[mapped.W].name;
+            context_no=mapped.W;
         }
         else if(event.target.id == 'north'){
-            context_name=getplayernamebyposition('N')
-            context_no=getplayernumberbyposition('N');
+            context_name=allplayer[mapped.N].name;
+            context_no=mapped.N;
         };
         $('#context_name div').html(context_name);
         $('#context_name').css('background-color', 'var(--p' + context_no + '-color)');
@@ -1063,6 +1063,9 @@ function uicontrol(){
         resetinput_change_seat();
     });
     $(document).click(function(event){ //Hide quick function menu when clicking outside blocks
+        if (event.target.parentElement === null){
+            return;
+        }
         if (event.target.parentElement.id == 'context' | event.target.id == 'east' | event.target.id == 'south' | event.target.id == 'west' |event.target.id == 'north'){
         } else {
             $('#context').addClass('none');
@@ -1118,6 +1121,62 @@ function uicontrol(){
     }
         redo();
     });
+}
+
+function display_pause_screen(option){
+    if (option){
+        $('#main').addClass('none');
+        $('#pause_screen').removeClass('none');
+        $('#normal_footer').addClass('none');
+        $('#pause_footer').removeClass('none');
+        // Fill ranking of pause Screen
+        let ranking = new Array;
+        for (x=1; x<5; x++){
+            let player_obj = new Object
+            player_obj.index = x;
+            player_obj.name = allplayer[x].name;
+            player_obj.deal_lose = allplayer[x].deal_lose;
+            player_obj.tsumo = allplayer[x].tsumo;
+            player_obj.instantpay = allplayer[x].instantpay;
+            player_obj.instantget = allplayer[x].instantget;
+            player_obj.max_yaku = allplayer[x].max_yaku;
+            player_obj.streak = allplayer[x].max_winning_streak;
+            player_obj.yaku = parseInt(allplayer[x].balance) + parseInt(allplayer[x].unrealized);
+            ranking.push(player_obj);
+        }
+        ranking.sort((b,a)=>a.yaku - b.yaku);
+        for (x=0; x<4; x++){
+            $('#ranking tr:nth(' + x + ') td:nth(1)').html(ranking[x].name);
+            $('#ranking tr:nth(' + x + ') td:nth(1)').css('border-left', '1vh solid var(--p' + ranking[x].index + '-color');
+            $('#ranking tr:nth(' + x + ') td:nth(2)').html(ranking[x].yaku);
+        }
+        ranking.sort((b,a)=>a.max_yaku-b.max_yaku);
+        console.log(ranking)
+        $('.milestone:nth(0)').css('color', 'var(--p' + ranking[0].index + '-color');
+        $('.milestone:nth(0) span').html(ranking[0].name);
+        ranking.sort((b,a)=>a.tsumo-b.max_tsumo); //Need other methods to get values!!
+        console.log(ranking)
+        $('.milestone:nth(1)').css('color', 'var(--p' + ranking[0].index + '-color');
+        $('.milestone:nth(1) span').html(ranking[0].name);
+        ranking.sort((a,b)=>a.deal_lose-b.max_deal_lose);
+        console.log("max_lose" + ranking)
+        $('.milestone:nth(2)').css('color', 'var(--p' + ranking[0].index + '-color');
+        $('.milestone:nth(2) span').html(ranking[0].name);
+        ranking.sort((b,a)=>a.instantget-b.max_instantget);
+        $('.milestone:nth(3)').css('color', 'var(--p' + ranking[0].index + '-color');
+        $('.milestone:nth(3) span').html(ranking[0].name);
+        ranking.sort((b,a)=>a.streak-b.streak);
+        $('.milestone:nth(4)').css('color', 'var(--p' + ranking[0].index + '-color');
+        $('.milestone:nth(4) span').html(ranking[0].name);
+        ranking.sort((b,a)=>a.instantpay-b.instantpay);
+        $('.milestone:nth(5)').css('color', 'var(--p' + ranking[0].index + '-color');
+        $('.milestone:nth(5) span').html(ranking[0].name);
+    } else {
+        $('#main').removeClass('none');
+        $('#pause_screen').addClass('none');
+        $('#normal_footer').removeClass('none');
+        $('#pause_footer').addClass('none');
+    }
 }
 
 function get_game_setting(){
@@ -1192,10 +1251,10 @@ function panel_control(pane_no){
 function change_seat(){
     let msg = '換位：<br>'
     if ($('#change_seat_pan a:nth(0)').hasClass('active')){
-        allplayer[getplayernumberbyposition('E')].newposition = 'S';
-        allplayer[getplayernumberbyposition('S')].newposition = 'E';
-        allplayer[getplayernumberbyposition('W')].newposition = 'N';
-        allplayer[getplayernumberbyposition('N')].newposition = 'W';
+        allplayer[mapped.E].newposition = 'S';
+        allplayer[mapped.S].newposition = 'E';
+        allplayer[mapped.W].newposition = 'N';
+        allplayer[mapped.N].newposition = 'W';
     } else {
         for(x = 1; x < 5; x++){ //Loop all panel selection
             for ( y = 1; y < 5; y++){ //Loop for player selection
@@ -1229,10 +1288,10 @@ function change_seat(){
         allplayer[x].position = allplayer[x].newposition;
         allplayer.newposition = '';
     }
-    msg = msg + '東位： ' + getplayernamebyposition('E') + '<br>';
-    msg = msg + '南位： ' + getplayernamebyposition('S') + '<br>';
-    msg = msg + '西位： ' + getplayernamebyposition('W') + '<br>';
-    msg = msg + '北位： ' + getplayernamebyposition('N') + '<br>';
+    msg = msg + '東位： ' + allplayer[mapped.E].name + '<br>';
+    msg = msg + '南位： ' + allplayer[mapped.S].name + '<br>';
+    msg = msg + '西位： ' + allplayer[mapped.W].name + '<br>';
+    msg = msg + '北位： ' + allplayer[mapped.N].name + '<br>';
     $('#settle').modal('toggle');
     check_undo();
     update_streak_ball_color();
@@ -1266,23 +1325,6 @@ function change_name(){
     $('#settle').modal('toggle');
 }
 
-function getplayernamebyposition(position){
-    for (x=1; x<5; x++){
-        if (allplayer[x].position == position){
-            return allplayer[x].name
-            break;
-        }
-    }
-}
-
-function getplayernumberbyposition(position){
-    for (x=1; x<5; x++){
-        if (allplayer[x].position == position){
-            return x
-            break;
-        }
-    }
-}
 
 function context(action,target){
     $('#context').addClass('none');
