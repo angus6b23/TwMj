@@ -230,6 +230,15 @@ div a:hover {
     overflow-y: scroll;
 }
 
+#pause_screen {
+    position: absolute;
+    font-size: clamp(12px, 3.5vh, 2vw);
+    background: var(--bg-nord);
+    color: var(--fg-nord);
+    z-index: 0;
+    overflow-y: visible;
+}
+
 #alert {
     position: absolute;
     left: 20%;
@@ -517,7 +526,6 @@ table {
     font-size: 4vh;
 }
 
-
 #footer_menu a{
     color: var(--fg-nord);
 }
@@ -745,6 +753,21 @@ input[type=number], textarea{
     transition: 0.5s;
 }
 
+.pause_div{
+    height: 45vh;
+    overflow: visible
+}
+
+#ranking td{
+    height: 8.5vh;
+}
+
+.milestone{
+    width: 18vw;
+    height: 10vh;
+    line-height: 10vh;
+    text-align: center;
+}
 /* CSS animations */
 /* animation for blinking block of banker */
 @keyframes banker_ani {
@@ -908,8 +931,15 @@ input[type=number], textarea{
     #stat_view{
         max-width: 95vw;
     }
-
-    .col-sm{
+    #pause_screen{
+        font-size: clamp(12px, 3.5vh, 5vw)
+    }
+    #pause_screen .col-5{
         width:100%;
+        flex: fit-content;
+        max-width: 100%
+    }
+    .milestone{
+        width: 45vw;
     }
 }
