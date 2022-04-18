@@ -753,6 +753,10 @@ input[type=number], textarea{
     transition: 0.5s;
 }
 
+#pause_screen h1{
+    font-size: 4vh;
+}
+
 .pause_div{
     height: 45vh;
     overflow: visible
@@ -760,10 +764,11 @@ input[type=number], textarea{
 
 #ranking td{
     height: 8.5vh;
+    font-size: 3.5vh;
 }
 
 .milestone{
-    width: 18vw;
+    width: 45%;
     height: 10vh;
     line-height: 10vh;
     text-align: center;
@@ -938,8 +943,5 @@ input[type=number], textarea{
         width:100%;
         flex: fit-content;
         max-width: 100%
-    }
-    .milestone{
-        width: 45vw;
     }
 }
