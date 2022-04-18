@@ -1130,6 +1130,7 @@ function display_pause_screen(option){
         $('#normal_footer').addClass('none');
         $('#pause_footer').removeClass('none');
         // Fill ranking of pause Screen
+        // Create ranking arr and sort
         let ranking = new Array;
         for (x=1; x<5; x++){
             let player_obj = new Object
@@ -1145,32 +1146,47 @@ function display_pause_screen(option){
             ranking.push(player_obj);
         }
         ranking.sort((b,a)=>a.yaku - b.yaku);
+        //Fill html with results
         for (x=0; x<4; x++){
             $('#ranking tr:nth(' + x + ') td:nth(1)').html(ranking[x].name);
             $('#ranking tr:nth(' + x + ') td:nth(1)').css('border-left', '1vh solid var(--p' + ranking[x].index + '-color');
             $('#ranking tr:nth(' + x + ') td:nth(2)').html(ranking[x].yaku);
         }
-        ranking.sort((b,a)=>a.max_yaku-b.max_yaku);
-        console.log(ranking)
-        $('.milestone:nth(0)').css('color', 'var(--p' + ranking[0].index + '-color');
-        $('.milestone:nth(0) span').html(ranking[0].name);
-        ranking.sort((b,a)=>a.tsumo-b.max_tsumo); //Need other methods to get values!!
-        console.log(ranking)
-        $('.milestone:nth(1)').css('color', 'var(--p' + ranking[0].index + '-color');
-        $('.milestone:nth(1) span').html(ranking[0].name);
-        ranking.sort((a,b)=>a.deal_lose-b.max_deal_lose);
-        console.log("max_lose" + ranking)
-        $('.milestone:nth(2)').css('color', 'var(--p' + ranking[0].index + '-color');
-        $('.milestone:nth(2) span').html(ranking[0].name);
-        ranking.sort((b,a)=>a.instantget-b.max_instantget);
-        $('.milestone:nth(3)').css('color', 'var(--p' + ranking[0].index + '-color');
-        $('.milestone:nth(3) span').html(ranking[0].name);
-        ranking.sort((b,a)=>a.streak-b.streak);
-        $('.milestone:nth(4)').css('color', 'var(--p' + ranking[0].index + '-color');
-        $('.milestone:nth(4) span').html(ranking[0].name);
-        ranking.sort((b,a)=>a.instantpay-b.instantpay);
-        $('.milestone:nth(5)').css('color', 'var(--p' + ranking[0].index + '-color');
-        $('.milestone:nth(5) span').html(ranking[0].name);
+        function get_greatest(arr, property, option){
+            let index = 0;
+            if(option){
+                for(x=0; x<arr.length; x++){
+                    if(arr[x][property] >= arr[index][property]){
+                        index = x;
+                    }
+                }
+            }else{
+                for(x=0; x<arr.length; x++){
+                    if(arr[x][property] <= arr[index][property]){
+                        index = x;
+                    }
+                }
+            }
+            return index;
+        }
+        let milestone_maxyaku = get_greatest(ranking, 'max_yaku', true);
+        $('.milestone:nth(0)').css('color', 'var(--p' + ranking[milestone_maxyaku].index + '-color');
+        $('.milestone:nth(0) span').html(ranking[milestone_maxyaku].name);
+        let milestone_tsumo = get_greatest(ranking, 'tsumo', true);
+        $('.milestone:nth(1)').css('color', 'var(--p' + ranking[milestone_tsumo].index + '-color');
+        $('.milestone:nth(1) span').html(ranking[milestone_tsumo].name);
+        let milestone_deal_lose = get_greatest(ranking, 'deal_lose', false);
+        $('.milestone:nth(2)').css('color', 'var(--p' + ranking[milestone_deal_lose].index + '-color');
+        $('.milestone:nth(2) span').html(ranking[milestone_deal_lose].name);
+        let milestone_instantget = get_greatest(ranking, 'instantget', true)
+        $('.milestone:nth(3)').css('color', 'var(--p' + ranking[milestone_instantget].index + '-color');
+        $('.milestone:nth(3) span').html(ranking[milestone_instantget].name);
+        let milestone_streak = get_greatest(ranking, 'streak', true)
+        $('.milestone:nth(4)').css('color', 'var(--p' + ranking[milestone_streak].index + '-color');
+        $('.milestone:nth(4) span').html(ranking[milestone_streak].name);
+        let milestone_instantpay = get_greatest(ranking, 'instantpay', true);
+        $('.milestone:nth(5)').css('color', 'var(--p' + ranking[milestone_instantpay].index + '-color');
+        $('.milestone:nth(5) span').html(ranking[milestone_instantpay].name);
     } else {
         $('#main').removeClass('none');
         $('#pause_screen').addClass('none');
