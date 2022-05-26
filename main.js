@@ -1756,6 +1756,11 @@ function fullscreen(){
       document.fullScreenElement && null !== document.fullScreenElement || !document.mozFullScreen && !document.webkitIsFullScreen ? document.documentElement.requestFullScreen ? document.documentElement.requestFullScreen() : document.documentElement.mozRequestFullScreen ? document.documentElement.mozRequestFullScreen() : document.documentElement.webkitRequestFullScreen && document.documentElement.webkitRequestFullScreen(Element.ALLOW_KEYBOARD_INPUT) : document.cancelFullScreen ? document.cancelFullScreen() : document.mozCancelFullScreen ? document.mozCancelFullScreen() : document.webkitCancelFullScreen && document.webkitCancelFullScreen();
 }
 
+navigator.serviceWorker.ready.then(()=>{
+    console.log('service worker ready!');
+    // At this point, a Service Worker is controlling the current page
+});
+
 $(document).ready(function(){
     reload();
     adjust_main_display_size();
@@ -1766,7 +1771,7 @@ $(document).ready(function(){
         playergraph();
     });
     if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('sw.js').  then((reg) => {
+        navigator.serviceWorker.register('sw.js').then((reg) => {
         // registration worked
             console.log('Registration succeeded.');
         }).catch((error) => {
