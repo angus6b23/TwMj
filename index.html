@@ -114,7 +114,7 @@ broadcast.onmessage = event => {
     loading_text.innerHTML=event.data;
 }
 function redirect(){
-    setTimeout(function(){window.location.replace('/main.html')}, 500);
+    setTimeout(function(){window.location.replace('main.html')}, 500);
 }
 async function register_sw(){
     if ('serviceWorker' in navigator){
