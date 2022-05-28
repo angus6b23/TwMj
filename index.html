@@ -108,14 +108,31 @@ button{
 }
 </style>
 <script>
+const broadcast = new BroadcastChannel('msg-channel');
 let loading_text=document.getElementById('loading_text');
-async function check_sw(){
-    let current_sw = await navigator.serviceWorker.getRegistrations();
-    if(current_sw.length == 0){
-        loading_text.innerHTML='Installing Service Worker';
+broadcast.onmessage = event => {
+    loading_text.innerHTML=event.data;
+}
+function redirect(){
+    setTimeout(function(){window.location.replace('/main.html')}, 500);
+}
+async function register_sw(){
+    if ('serviceWorker' in navigator){
+        try{
+            let sw_status = await navigator.serviceWorker.register('sw.js');
+        } catch (err){
+            loading_text.innerHTML='Error: ' + err + '<br>Redirecting without service worker.';
+            redirect();
+        }
     } else {
-        loading_text.innerHTML='SW detected';
+        loading_text.innerHTML='Browser do not support service worker, redirecting...'
+        redirect();
     }
 }
-check_sw()
+register_sw()
+navigator.serviceWorker.ready.then(()=>{
+    console.log('service worker ready!');
+    loading_text.innerHTML='Service Worker Ready!!'
+    redirect();
+});
 </script>
