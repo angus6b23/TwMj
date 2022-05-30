@@ -42,12 +42,11 @@ self.addEventListener('activate', event => {
 
 self.addEventListener('fetch', function(event) {
     if (check_active_files(event.request.url)){
-        event.respondWith(
+    event.respondWith(
             caches.open(webversion).then(function(cache){
-                fetch(event.request)
-                .then(function (response){
-                    console.log('Hit:' + event.request.url);
-                    cache.put(event.response, response.clone());
+                return fetch(event.request)
+                .then(function(response){
+                    cache.put(event.request, response.clone());
                     return response;
                 })
                 .catch(function(){
