@@ -42,20 +42,7 @@ self.addEventListener('activate', event => {
 
 self.addEventListener('fetch', function(event) {
     if (check_active_files(event.request.url)){
-    event.respondWith(
-            caches.open(webversion).then(function(cache){
-                return fetch(event.request)
-                .then(function(response){
-                    cache.put(event.request, response.clone());
-                    return response;
-                })
-                .catch(function(){
-                    caches.match(event.request).then(function(response){
-                        return response;
-                    })
-                })
-            })
-        )
+        event.respondWith(get_active_files(event.request))
     } else {
         event.respondWith(
             caches.match(event.request).then(function(response){
@@ -64,3 +51,22 @@ self.addEventListener('fetch', function(event) {
         );
     }
 });
+
+async function get_active_files(request){
+    try{
+        const response = await fetch(request);
+        if(response.ok){
+            const responseToCache = response.clone();
+            const cache = await caches.open(webversion);
+            await cache.put(request, responseToCache)
+            console.log(responseToCache + 'Cached');
+            return response
+        }
+    }
+    catch{
+        const cachedResponse = await caches.match(request);
+        if (cachedResponse){
+            return cachedResponse;
+        }
+    }
+}
