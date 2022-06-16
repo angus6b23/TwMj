@@ -762,6 +762,16 @@ input[type=number], textarea{
     overflow: visible
 }
 
+#pause_controls{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+}
+#capture{
+    background-color: var(--bg-nord);
+}
+
 #ranking td{
     height: 8.5vh;
     font-size: 3.5vh;
@@ -772,6 +782,11 @@ input[type=number], textarea{
     height: 10vh;
     line-height: 10vh;
     text-align: center;
+}
+
+#graph_container{
+    width: 40vw;
+    height: 40vh
 }
 /* CSS animations */
 /* animation for blinking block of banker */
@@ -939,9 +954,15 @@ input[type=number], textarea{
     #pause_screen{
         font-size: clamp(12px, 3.5vh, 5vw)
     }
-    #pause_screen .col-5{
+    .pause_div{
         width:100%;
         flex: fit-content;
         max-width: 100%
+    }
+    #pause_controls{
+        display: none;
+    }
+    #graph_container{
+        width:90vw;
     }
 }

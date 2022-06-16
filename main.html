@@ -8,8 +8,10 @@
     <link rel="stylesheet" href="assets/bootstrap.4.6.0.min.css">
     <script src="assets/jquery-3.5.1.slim.min.js"></script>
     <script src="assets/bootstrap.bundle.4.6.0.min.js"></script>
-    <!-- Ploty -->
-    <script src="assets/plotly-1.58.5.min.js"></script>
+    <!-- Chart.js -->
+    <script src="assets/chart.min.js"></script>
+    <!-- html2canvas.js -->
+    <script src="assets/html2canvas.min.js"></script>
     <!-- Main javascript -->
     <script src="main.js"></script>
     <link rel="stylesheet" type="text/css" href="style.css">
@@ -262,6 +264,9 @@
                             </table>
                         </div>
                         <div class="tab-pane fade" id="graph_view">
+                            <div id="graph_container">
+                                <canvas id="balance_chart"></canvas>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -274,7 +279,7 @@
                             <a class="nav-link nav-stat" data-toggle="pill" href="#player_stat_view">玩家數據</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link nav-stat" data-toggle="pill" href="#graph_view">趨勢(已結算)</a>
+                            <a class="nav-link nav-stat" data-toggle="pill" href="#graph_view">圖表</a>
                         </li>
                     </ul>
                 </div>
@@ -313,61 +318,75 @@
     <!-- Pause Screen -->
     <div class="container-fluid none" id="pause_screen">
         <div class="row">
-            <div class="col-5 pause_div mt-2" id="ranking">
-                <h1><i class="fas fa-trophy"></i>排名</h1>
-                <div class="d-flex justify-content-center">
-                    <table id="ranking" style="width: 80%">
-                        <tr>
-                            <td align="right"><i class="fas fa-crown"></i></td>
-                            <td align="middle"></td>
-                            <td align="left"></td>
-                        </tr>
-                        <tr >
-                            <td align="right"></td>
-                            <td align="middle"></td>
-                            <td align="left"></td>
-                        </tr>
-                        <tr class='mt-2'>
-                            <td align="right"></td>
-                            <td align="middle"></td>
-                            <td align="left"></td>
-                        </tr>
-                        <tr class='mt-2'>
-                            <td align="right"></td>
-                            <td align="middle"></td>
-                            <td align="left"></td>
-                        </tr>
-                    </table>
+            <div class="row col" id="capture">
+                <div class="col-6 pause_div mt-2" id="ranking">
+                    <h1><i class="fas fa-trophy mr-2"></i>排名</h1>
+                    <div class="d-flex justify-content-center">
+                        <table id="ranking" style="width: 80%">
+                            <tr>
+                                <td align="right"><i class="fas fa-crown mr-2"></i></td>
+                                <td align="middle"></td>
+                                <td align="left"></td>
+                            </tr>
+                            <tr >
+                                <td align="right"></td>
+                                <td align="middle"></td>
+                                <td align="left"></td>
+                            </tr>
+                            <tr class='mt-2'>
+                                <td align="right"></td>
+                                <td align="middle"></td>
+                                <td align="left"></td>
+                            </tr>
+                            <tr class='mt-2'>
+                                <td align="right"></td>
+                                <td align="middle"></td>
+                                <td align="left"></td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+                <div class="col-6 pause_div mt-2" id="game_stats">
+                    <h1><i class="fas fa-award mr-2"></i>里程碑</h1>
+                    <div class="d-flex flex-wrap justify-content-center">
+                        <div class="milestone">
+                            <i class="fas fa-bomb mr-2"></i>炸彈級
+                            <span class="ml-2"></span>
+                        </div>
+                        <div class="milestone">
+                            <i class="fas fa-hand-holding-usd mr-2"></i>好摸手
+                            <span class="ml-2"></span>
+                        </div>
+                        <div class="milestone">
+                            <i class="fas fa-shield-alt mr-2"></i>守衛
+                            <span class="ml-2"></span>
+                        </div>
+                        <div class="milestone">
+                            <i class="fas fa-wallet mr-2"></i>袋袋平安
+                            <span class="ml-2"></span>
+                        </div>
+                        <div class="milestone">
+                            <i class="fas fa-laugh mr-2"></i>長莊
+                            <span class="ml-2"></span>
+                        </div>
+                        <div class="milestone">
+                            <i class="fas fa-heart-broken"></i>心已碎
+                            <span class="ml-2"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-12 pause_div" id="pause_chart">
+                    <h1><i class="fas fa-chart-line mr-2"></i>圖表</h1>
+                    <div style="width: 95%; height: 95%">
+                        <canvas id="balance_chart2"></canvas>
+                    </div>
                 </div>
             </div>
-            <div class="col-5 pause_div mt-2" id="game_stats">
-                <h1><i class="fas fa-award"></i>里程碑</h1>
-                <div class="d-flex flex-wrap justify-content-center">
-                    <div class="milestone">
-                        <i class="fas fa-bomb"></i>炸彈級
-                        <span class="ml-2"></span>
-                    </div>
-                    <div class="milestone">
-                        <i class="fas fa-hand-holding-usd"></i>好摸手
-                        <span class="ml-2"></span>
-                    </div>
-                    <div class="milestone">
-                        <i class="fas fa-shield-alt"></i>守衛
-                        <span class="ml-2"></span>
-                    </div>
-                    <div class="milestone">
-                        <i class="fas fa-wallet"></i>袋袋平安
-                        <span class="ml-2"></span>
-                    </div>
-                    <div class="milestone">
-                        <i class="fas fa-laugh"></i>長莊
-                        <span class="ml-2"></span>
-                    </div>
-                    <div class="milestone">
-                        <i class="fas fa-heart-broken"></i>心已碎
-                        <span class="ml-2"></span>
-                    </div>
-                </div>
+            <div class="col-2" style="height:98vh" id="pause_controls">
+                <a class="button button-big" href="javascript:display_pause_screen(false);"><div><i class="fas fa-play mr-3"></i>繼續</div></a>
+                <a class="button button-big" href="javascript:capture_screen();" download="capture_screen.png"><div><i class="fas fa-camera-retro mr-3"></i>截圖</div></a>
+                <a class="button button-big" href="javascript:display_pause_screen(false);"><div><i class="fas fa-check-circle mr-3"></i>結束</div></a>
             </div>
         </div>
     </div>
@@ -398,9 +417,16 @@
         </div>
         <div class="row align-items-center none" id="pause_footer" style="height:100%">
             <div class="col footer_select">
-                <a href="javascript:display_pause_screen(false)">
+                <a href="javascript:display_pause_screen(false);">
                     <div>
                         <i class="fas fa-play"></i><br>繼續
+                    </div>
+                </a>
+            </div>
+            <div class="col footer_select">
+                <a href="javascript:capture_screen();">
+                    <div>
+                        <i class="fas fa-camera-retro"></i><br>截圖
                     </div>
                 </a>
             </div>

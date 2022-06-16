@@ -201,10 +201,10 @@ function initiate_ui(){ //Function for initiating ui
     $('#option li:nth-child(2) a').tab('show');
     $('#global').css('font-family', default_setting.font);
     apply_theme(default_setting.theme);
-    playergraph();
     update_main_table();
     update_stat_table();
     update_history_table();
+    window.balance_chart = create_chart();
 }
 
 function apply_theme(theme_name){
@@ -224,7 +224,6 @@ function toggle_money_display(){
     }
     update_main_table();
 }
-
 
 function update_main_table(){
     if (gamestat.modified == true){
@@ -515,7 +514,7 @@ function instant(get_or_pay){
         check_undo();
         update_main_table();
         update_stat_table();
-        playergraph();
+        update_chart();
         $('#instant').modal('toggle');
     }
 }
@@ -561,7 +560,7 @@ function deal(){
         update_main_table();
         update_history_table();
         update_stat_table();
-        playergraph();
+        update_chart();
         resetinput_ron();
         $('#ron').modal('toggle');
     }
@@ -615,7 +614,7 @@ function tsumo(){
         update_main_table();
         update_history_table();
         update_stat_table();
-        playergraph();
+        update_chart();
         resetinput_ron();
         $('#ron').modal('toggle');
     }
@@ -660,7 +659,6 @@ function draw(){
 }
 
 function post_draw(){
-    save_setting();
     msg = '第' + gamestat.round + '場：<br>流局';
     addlog(msg);
     gamestat.round = parseInt(gamestat.round) + 1;
@@ -671,7 +669,6 @@ function post_draw(){
     update_main_table();
     update_history_table();
     update_stat_table();
-    playergraph();
     $('#ron').modal('toggle');
 }
 
@@ -794,7 +791,7 @@ function iset(fm, to){ //Function for handling instant settle
     update_player_unrealized();
     check_undo();
     update_main_table();
-    playergraph();
+    update_chart();
     addlog(msg);
 }
 
@@ -831,7 +828,7 @@ function adjust(){
         check_undo();
     }
     update_main_table();
-    playergraph();
+    update_chart();
     $('#settle').modal('toggle');
     resetinput_settle();
 }
@@ -1149,7 +1146,7 @@ function display_pause_screen(option){
         //Fill html with results
         for (x=0; x<4; x++){
             $('#ranking tr:nth(' + x + ') td:nth(1)').html(ranking[x].name);
-            $('#ranking tr:nth(' + x + ') td:nth(1)').css('border-left', '1vh solid var(--p' + ranking[x].index + '-color');
+            $('#ranking tr:nth(' + x + ') td:nth(1)').css('border-left', '5px solid var(--p' + ranking[x].index + '-color');
             $('#ranking tr:nth(' + x + ') td:nth(2)').html(ranking[x].yaku);
         }
         function get_greatest(arr, property, option){
@@ -1192,6 +1189,16 @@ function display_pause_screen(option){
         $('#pause_screen').addClass('none');
         $('#normal_footer').removeClass('none');
         $('#pause_footer').addClass('none');
+    }
+    try {
+        balance_chart2.data = generate_chart_config().data
+        balance_chart2.update();
+    } catch {
+        const balance_chart = new Chart (
+            document.getElementById('balance_chart2'),
+            generate_chart_config()
+        )
+        window.balance_chart2 = balance_chart;
     }
 }
 
@@ -1336,6 +1343,7 @@ function change_name(){
             $('.p' + x + 'box').html(allplayer[x].name);
         }
         update_main_table();
+        update_chart();
         check_undo();
     }
     $('#settle').modal('toggle');
@@ -1490,8 +1498,8 @@ function undo(){
         generate_turn_display();
         update_main_table();
         update_stat_table();
-        playergraph();
         update_history_table();
+        update_chart();
     }
 }
 
@@ -1513,8 +1521,8 @@ function redo(){
         generate_turn_display();
         update_main_table();
         update_stat_table();
-        playergraph();
         update_history_table();
+        update_chart();
     }
 }
 
@@ -1605,11 +1613,9 @@ function breakstreak(fm, to){
     update_player_unrealized();
     check_undo();
     update_main_table();
-    playergraph();
+    update_chart();
     $('#break').modal('toggle');
 }
-
-
 
 function addlog(msg){
     let tempmsg = {
@@ -1687,79 +1693,91 @@ function show_alert(alert_message){
     }, 3000)
 }
 
-function playergraph(){
-    if (allplayer.length < 2){ //Do not activate if not yet initialized
-        return;
+
+//Functions and variables for chart.js
+function create_chart(){
+    const balance_chart = new Chart (
+        document.getElementById('balance_chart'),
+        generate_chart_config()
+    )
+    return balance_chart;
+}
+function update_chart(){
+    balance_chart.data = generate_chart_config().data
+    balance_chart.update('none');
+}
+
+function generate_chart_config(){
+    let chart_config = {
+        type: 'line',
+        data: {
+            labels: generate_psudolabels(),
+            datasets: generate_chart_dataset()
+        },
+        options: {
+            maintainAspectRatio: false,
+            plugins:{
+                legend:{
+                    display: false
+                }
+            }
+        },
+        defaults: {
+            global: {
+                defaultFontColor: theme[default_setting.theme]['--fg-nord']
+            }
+        }
     }
-    let x_arr = new Array();
+    return chart_config;
+}
+
+function generate_psudolabels(){
+    let psudo_array = [' '];
+    if (!allplayer[1]){
+        return psudo_array;
+    }
+    for (x=1; x<allplayer[1].bal_arr.length; x++){
+        psudo_array.push(' ');
+    }
+    return psudo_array;
+}
+
+function generate_chart_dataset(){
+    let dataset_array = [];
     let currenttheme = theme[default_setting.theme]
-    let stat_height = $('#stat_view').height() - 50;
-    let stat_width = $('#stat_view').width() - 50;
-    let trace1 = {
-        y: allplayer[1].bal_arr,
-        mode: 'lines+markers',
-        name: allplayer[1]['name'],
-        line: {
-            color: currenttheme['--p1-color'],
-            shape: 'linear'
+    for (x=1; x<5; x++){
+        let data_object = {
+            fill: false,
+            tension: 0.25
         }
-    }
-    let trace2 = {
-        y: allplayer[2].bal_arr,
-        mode: 'lines+markers',
-        name: allplayer[2]['name'],
-        line: {
-            color: currenttheme['--p2-color'],
-            shape: 'linear'
+        if (allplayer[x].name){
+            data_object.label = allplayer[x].name;
+            data_object.data = allplayer[x].bal_arr;
+        } else {
+            data_object.label = 'Placeholder';
+            data_object.data = [0];
         }
+        let color_string = '--p' + x + '-color';
+        data_object.borderColor = currenttheme[color_string];
+        dataset_array.push(data_object);
     }
-    let trace3 = {
-        y: allplayer[3].bal_arr,
-        mode: 'lines+markers',
-        name: allplayer[3]['name'],
-        line: {
-            color: currenttheme['--p3-color'],
-            shape: 'linear'
-        }
-    }
-    let trace4 = {
-        y: allplayer[4].bal_arr,
-        mode: 'lines+markers',
-        name: allplayer[4]['name'],
-        line: {
-            color: currenttheme['--p4-color'],
-            shape: 'linear'
-        }
-    }
-    let plot_data = [trace1, trace2, trace3, trace4];
-    let plot_layout = {
-        width: stat_width,
-        height: stat_height,
-        plot_bgcolor: currenttheme['--bg-nord'],
-        paper_bgcolor: currenttheme['--bg-nord'],
-        showlegend: false,
-        margin: {
-            l: 0,
-            r: 0,
-            t: 0,
-            b: 0,
-        }
-    }
-    let plot_config = {
-        width: stat_width,
-        height: stat_height
-    };
-    Plotly.newPlot('graph_view', plot_data, plot_layout, plot_config);
+    return dataset_array;
+}
+
+async function capture_screen(){
+    const captured = await html2canvas(document.querySelector("#capture"));
+    let href = captured.toDataURL();
+    const anchor = document.createElement('a');
+    anchor.style.display = 'none';
+    anchor.href = href;
+    anchor.download = 'Captured.png';
+    document.body.appendChild(anchor);
+    anchor.click();
 }
 
 function fullscreen(){
       document.fullScreenElement && null !== document.fullScreenElement || !document.mozFullScreen && !document.webkitIsFullScreen ? document.documentElement.requestFullScreen ? document.documentElement.requestFullScreen() : document.documentElement.mozRequestFullScreen ? document.documentElement.mozRequestFullScreen() : document.documentElement.webkitRequestFullScreen && document.documentElement.webkitRequestFullScreen(Element.ALLOW_KEYBOARD_INPUT) : document.cancelFullScreen ? document.cancelFullScreen() : document.mozCancelFullScreen ? document.mozCancelFullScreen() : document.webkitCancelFullScreen && document.webkitCancelFullScreen();
 }
-
-navigator.serviceWorker.ready.then(()=>{
-    console.log('service worker ready!');
-    // At this point, a Service Worker is controlling the current page
-});
 
 $(document).ready(function(){
     reload();
@@ -1768,17 +1786,7 @@ $(document).ready(function(){
     uicontrol();
     $(window).resize(function(){
         adjust_main_display_size();
-        playergraph();
     });
-    if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('sw.js').then((reg) => {
-        // registration worked
-            console.log('Registration succeeded.');
-        }).catch((error) => {
-        // registration failed
-            console.log('Registration failed with ' + error);
-        });
-    }
     setInterval(function(){
             let dt = new Date();
             if (dt.getMinutes() < 10){
