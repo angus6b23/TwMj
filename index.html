@@ -10,9 +10,8 @@
             <div id="loading_square_bg"></div>
             <div id="loading_square_fg"></div>
         </div>
-        <div id="loading_text"></div>
+        <div id="loading_text" style="font-size: 1rem;"></div>
         <noscript><div>Please enable javascript to continue.</div></noscript>
-        <div><button>Disable Service Worker</button></div>
 </div>
 </body>
 <style>
@@ -108,10 +107,10 @@ button{
 }
 </style>
 <script>
-const broadcast = new BroadcastChannel('msg-channel');
+const broadcast = new BroadcastChannel('msg-channel'); //Create broadcast channel
 let loading_text=document.getElementById('loading_text');
 broadcast.onmessage = event => {
-    loading_text.innerHTML=event.data;
+    loading_text.innerHTML=event.data; //Show broadcast message from service worker
 }
 function redirect(){
     setTimeout(function(){window.location.replace('main.html')}, 500);
@@ -119,20 +118,20 @@ function redirect(){
 async function register_sw(){
     if ('serviceWorker' in navigator){
         try{
-            let sw_status = await navigator.serviceWorker.register('sw.js');
+            let sw_status = await navigator.serviceWorker.register('sw.js'); //Try register service worker
         } catch (err){
             loading_text.innerHTML='Error: ' + err + '<br>Redirecting without service worker.';
-            redirect();
+            redirect(); //Redirect if any error
         }
     } else {
         loading_text.innerHTML='Browser do not support service worker, redirecting...'
-        redirect();
+        redirect(); //Redirect if not supported
     }
 }
 register_sw()
 navigator.serviceWorker.ready.then(()=>{
-    console.log('service worker ready!');
+    console.log('Service Worker ready!');
     loading_text.innerHTML='Service Worker Ready!!'
-    redirect();
+    redirect(); //Redirect when ready
 });
 </script>
