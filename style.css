@@ -641,6 +641,16 @@ a.p4box.active {
     align-items: center;
 }
 
+.multi_button_container {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.tooltip-inner {
+    font-size: 2vh !important;
+}
+
 #ron input[type=number] {
     width: 8vh;
     border: 0px solid black;
@@ -781,8 +791,10 @@ input[type=number], textarea{
 
 .milestone{
     width: 45%;
-    height: 10vh;
-    line-height: 10vh;
+    height: 6vh;
+    margin-top: 2vh;
+    margin-bottom: 2vh;
+    line-height: 6vh;
     text-align: center;
 }
 
