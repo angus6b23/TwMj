@@ -2,26 +2,10 @@
 <head>
     <meta charset="utf-8">
     <title>港式台牌計分面板</title>
-    <!-- Google fonts for Noto Serif and Sans-->
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@600&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400&display=swap" rel="stylesheet">
-    <!-- Bootstrap, jQuery and JS bundle w/ Popper.js -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns" crossorigin="anonymous"></script>
-    <!-- Ploty -->
-    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-    <!-- Main javascript -->
-    <script src="main.js"></script>
-    <link rel="stylesheet" type="text/css" href="style.css">
-    <!-- Icon -->
-    <link rel="icon" href="assets/icon.ico" />
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" integrity="sha512-+4zCK9k+qNFUR5X+cKL9EIR+ZOhtIloNl9GIKS57V1MyNsYpYcUrUeQc9vNfzsWfV28IaLL3i96P9sdNyeRssA==" crossorigin="anonymous" />
-    <!-- Progressive webapp-->
     <link rel="manifest" href="manifest.webmanifest">
 </head>
 <body>
+<<<<<<< HEAD
 
     <!-- Initial settings -->
 <div id="global">
@@ -543,292 +527,135 @@
                     </div>
                 </div>
             </div>
+=======
+<div id="container">
+        <div id="loading_squares">
+            <div id="loading_square_bg"></div>
+            <div id="loading_square_fg"></div>
+>>>>>>> Nightly
         </div>
-    </div>
-    <!-- Ron modal -->
-    <div class="modal" id="ron">
-        <div class="modal-dialog modal-lg modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <ul class="nav nav-pills" role="tablist">
-                        <li class="nav-item">
-                            <a class="nav-link nav-custom active" data-toggle="pill" href="#deal">出銃</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link nav-custom" data-toggle="pill" href="#tsumo">自摸</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link nav-custom" data-toggle="pill" href="#draw">流局</a>
-                        </li>
-                    </ul>
-                    </div>
-                    <div class="modal-body">
-                    <div class="tab-content">
-                        <div class="tab-pane show active" id="deal">
-                            <div class="mt-2">請先選擇出銃玩家，並輸入勝利玩家的番數：</div>
-                            <div class="mt-1 row player_select select_pan">
-                                    <div class="col">
-                                        <a class="p1box" href="javascript:void(0);"></a>
-                                        <input type="number" class="positiveintonly p1form none"></input>
-                                    </div>
-                                    <div class="col">
-                                        <a class="p2box" href="javascript:void(0);"></a>
-                                        <input type="number" class="positiveintonly p2form none"></input>
-                                    </div>
-                                    <div class="col">
-                                        <a class="p3box" href="javascript:void(0);"></a>
-                                        <input type="number" class="positiveintonly p3form none"></input>
-                                    </div>
-                                    <div class="col">
-                                        <a class="p4box" href="javascript:void(0);"></a>
-                                        <input type="number" class="positiveintonly p4form none"></input>
-                                    </div>
-                            </div>
-                            <div class="center_button_container none" style="margin-top: 2vh;">
-                                <a class="button" href="javascript:deal();">確定</a>
-                            </div>
-                        </div>
-                        <div class="tab-pane" id="tsumo">
-                            <div class="mt-2">請先選擇自摸玩家，並輸入其他玩家的番數：</div>
-                            <div class="mt-1 row player_select select_pan">
-                                <div class="col">
-                                    <a class="p1box" href="javascript:void(0);"></a>
-                                    <input type="number" class="positiveintonly p1form none"></input>
-                                </div>
-                                <div class="col">
-                                    <a class="p2box" href="javascript:void(0);"></a>
-                                    <input type="number" class="positiveintonly p2form none"></input>
-                                </div>
-                                <div class="col">
-                                    <a class="p3box" href="javascript:void(0);"></a>
-                                    <input type="number" class="positiveintonly p3form none"></input>
-                                </div>
-                                <div class="col">
-                                    <a class="p4box" href="javascript:void(0);"></a>
-                                    <input type="number" class="positiveintonly p4form none"></input>
-                                </div>
-                            </div>
-                            <div class="center_button_container none" style="margin-top: 2vh;">
-                                <a class="button" href="javascript:tsumo();">確定</a>
-                            </div>
-                        </div>
-                        <div class="tab-pane" id="draw">
-                            <div class="mt-2">請選擇流局方式：</div>
-                            <div class="row draw_select mt-2 select_pan" id="draw_select" style="font-size: 3vh">
-                                <div class="col">
-                                    <a class="select" id="holdplus" href="javascript:void(0);">連莊並莊加一</a>
-                                </div>
-                                <div class="col">
-                                    <a class="select" id="hold" href="javascript:void(0);">只留莊</a>
-                                </div>
-                                <div class="col">
-                                    <a class="select" id="pass" href="javascript:void(0);">過莊</a>
-                                </div>
-                            </div>
-                            <div class="center_button_container" style="margin-top: 2vh;">
-                                <a class="button" href="javascript:draw();">確定</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- Log Modal -->
-    <div class="modal" id="log">
-        <div class="modal-dialog modal-lg modal-dialog-scrollable mh-75">
-            <div class="modal-content">
-                <div class="modal-body">
-                    <div class="title">記錄</div>
-                        <table id="log_table">
-                            <tr style="font-size: 2.5vh">
-                                <th style="width: 25%; border-bottom: solid 0.5vh var(--highlight)">時間</th>
-                                <th style="width: 75%; border-bottom: solid 0.5vh var(--highlight)">事件</th>
-                            </tr>
-                            <tr id="log_after"></tr>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- Settle Modal -->
-    <div class="modal" id="settle">
-        <div class="modal-dialog modal-lg modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <ul class="nav nav-pills" role="tablist">
-                        <li class="nav-item">
-                            <a class="nav-link nav-custom active" data-toggle="pill" href="#instant_settle">結算</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link nav-custom" data-toggle="pill" href="#adjust">調整番數</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link nav-custom" data-toggle="pill" href="#change_seat">換位</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link nav-custom" data-toggle="pill" href="#change_name">改名</a>
-                        </li>
-                    </ul>
-                    </div>
-                    <div class="modal-body">
-                    <div class="tab-content">
-                        <div class="tab-pane show active" id="instant_settle">
-                            <table>
-                        <tr>
-                            <th style="width: 80%"></th>
-                            <th style="width: 20%"></th>
-                        </tr>
-                            </table>
-                            <div class="center_button_container none">
-                                <a class="button" href="javascript:iset('all');">結算全部</a>
-                            </div>
-                        </div>
-                        <div class="tab-pane" id="adjust">
-                            <div class="mt-2" style="font-size: 4vh">
-                            所有調整皆不會影響現時的拉踢：
-                            </div>
-                            <table style="width: 100%">
-                                <tr>
-                                    <th style="width: 30%">玩家名稱</th>
-                                    <th style="width: 20%">現時番數</th>
-                                    <th style="width: 30%">動作</th>
-                                    <th style="width: 20%">數值</th>
-                                </tr>
-                                <tr>
-                                    <td class="p1box"></td>
-                                    <td></td>
-                                    <td><div class="select_pan adjust_select_pan row"><a class="select add" href="javascript:void(0);" title="增加番數"><div class="col"><i class="fas fa-plus-square"></i></div></a><a class="select minus" href="javascript:void(0);" title="減少番數"><div class="col"><i class="fas fa-minus-square"></i></div></a><a class="select equal" href="javascript:void(0);" title="設定番數為右方數值"><div class="col"><i class="fas fa-equals"></i></div></a></div></td>
-                                    <td><input type="number" class="intonly p1_input"></td>
-                                </tr>
-                                <tr>
-                                    <td class="p2box"></td>
-                                    <td></td>
-                                    <td><div class="select_pan adjust_select_pan row"><a class="select add" href="javascript:void(0);" title="增加番數"><div class="col"><i class="fas fa-plus-square"></i></div></a><a class="select minus" href="javascript:void(0);" title="減少番數"><div class="col"><i class="fas fa-minus-square"></i></div></a><a class="select equal" href="javascript:void(0);" title="設定番數為右方數值"><div class="col"><i class="fas fa-equals"></i></div></a></div></td>
-                                    <td><input type="number" class="intonly p2_input"></td>
-                                </tr>
-                                <tr>
-                                    <td class="p3box"></td>
-                                    <td></td>
-                                    <td><div class="select_pan adjust_select_pan row"><a class="select add" href="javascript:void(0);" title="增加番數"><div class="col"><i class="fas fa-plus-square"></i></div></a><a class="select minus" href="javascript:void(0);" title="減少番數"><div class="col"><i class="fas fa-minus-square"></i></div></a><a class="select equal" href="javascript:void(0);" title="設定番數為右方數值" ><div class="col"><i class="fas fa-equals"></i></div></a></div></td>
-                                    <td><input type="number" class="intonly p3_input"></td>
-                                </tr>
-                                <tr>
-                                    <td class="p4box"></td>
-                                    <td></td>
-                                    <td><div class="select_pan adjust_select_pan row"><a class="select add" href="javascript:void(0);" title="增加番數"><div class="col"><i class="fas fa-plus-square"></i></div></a><a class="select minus" href="javascript:void(0);" title="減少番數"><div class="col"><i class="fas fa-minus-square"></i></div></a><a class="select equal" href="javascript:void(0);"title="設定番數為右方數值"><div class="col"><i class="fas fa-equals"></i></div></a></div></td>
-                                    <td><input type="number" class="intonly p4_input"></td>
-                                </tr>
-                                    <td>
-                                </tr>
-                            </table>
-                            <div class="center_button_container">
-                                <a class="button" href="javascript:adjust();">即時調整</a>
-                            </div>
-                        </div>
-                        <div class="tab-pane" id="change_seat">
-                            <div class="mt-2">請選擇換位方法：</div>
-                            <div class="mt-2 mb-2 row select_pan" id="change_seat_pan">
-                                <a class="button select col" href="javascript:void(0);">東南對調、西北對調</a>
-                                <a class="button select col" href="javascript:void(0);">自選 </a>
-                            </div>
-                            <div class="player_select row select_pan mt-2 ml-2 none" id="pane1">
-                                東位：
-                                <a class="p1box col" href="javascript:void(0);"></a>
-                                <a class="p2box col" href="javascript:void(0);"></a>
-                                <a class="p3box col" href="javascript:void(0);"></a>
-                                <a class="p4box col" href="javascript:void(0);"></a>
-                            </div>
-                            <div class="player_select row select_pan mt-2 ml-2 none" id="pane2">
-                                南位：
-                                <a class="p1box col" href="javascript:void(0);"></a>
-                                <a class="p2box col" href="javascript:void(0);"></a>
-                                <a class="p3box col" href="javascript:void(0);"></a>
-                                <a class="p4box col" href="javascript:void(0);"></a>
-                            </div>
-                            <div class="player_select row select_pan mt-2 ml-2 none" id="pane3">
-                                西位：
-                                <a class="p1box col" href="javascript:void(0);"></a>
-                                <a class="p2box col" href="javascript:void(0);"></a>
-                                <a class="p3box col" href="javascript:void(0);"></a>
-                                <a class="p4box col" href="javascript:void(0);"></a>
-                            </div>
-                            <div class="player_select row select_pan mt-2 mb-2 ml-2 none" id="pane4">
-                                北位：
-                                <a class="p1box col" href="javascript:void(0);"></a>
-                                <a class="p2box col" href="javascript:void(0);"></a>
-                                <a class="p3box col" href="javascript:void(0);"></a>
-                                <a class="p4box col" href="javascript:void(0);"></a>
-                            </div>
-                            <div class="center_button_container none">
-                                <a class="button" href="javascript:change_seat();">換位</a>
-                            </div>
-                        </div>
-                        <div class="tab-pane" id="change_name">
-                            <div class="mt-2">請更改需改名玩家的名字：</div>
-                            <div class="row" style="display:flex; justify-content:center;：">
-                                <div class="mt-2 ml-2 mr-2 col-5"><input class="p1_input"></input></div>
-                                <div class="mt-2 ml-2 mr-2 col-5"><input class="p2_input"></input></div><br>
-                                <div class="mt-2 ml-2 mr-2 mb-2 col-5"><input class="p3_input"></input></div>
-                                <div class="mt-2 ml-2 mr-2 mb-2 col-5"><input class="p4_input"></input></div>
-                            </div>
-                            <div class="center_button_container">
-                                <a class="button" href="javascript:change_name();">改名</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- Confirm import modal -->
-    <div class="modal" id="confirm_import">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-body">
-                    <div class="title">確認匯入資料</div>
-                    <div class="mt-2" style="font-size:clamp(15px, 4vh, 45px);"><i class="fas fa-exclamation-triangle"></i>資料匯入後，現有的資料將被覆蓋</div>
-                    <div class="row" style="justify-content: center; align-items: center;">
-                        <div id="import_data_dump"></div>
-                    </div>
-                    <div class="row">
-                        <div class="col ml-2"><a class="button" style="float: left" href="javascript:void(0);">確定</a></div>
-                        <div class="col mr-2"><a class="button" style="float: right" href="javascript:void(0);">取消</a></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Break modal -->
-    <div class="modal" id="break">
-        <div class="modal-dialog modal-lg modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-body">
-                    <div class="title">終止拉踢</div>
-                    <table style="font-size: 2.5vh">
-                        <tr>
-                            <th style="width: 80%"></th>
-                            <th style="width: 20%"></th>
-                        </tr>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!--End Modal-->
-    <div class="modal" id="end">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-body">
-                    <div class="title">完結遊戲?</div>
-                    <div class="row">
-                        <div class="col ml-2"><a class="button" style="float: left" href="javascript:end();">確定</a></div>
-                        <div class="col mr-2"><a class="button" style="float: right" href="javascript:void(0);">取消</a></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+        <div id="loading_text" style="font-size: 1rem;"></div>
+        <noscript><div>Please enable javascript to continue.</div></noscript>
 </div>
+</body>
+<style>
+:root {
+    --p1-color: #d08770;
+    --p2-color: #ebcb8b;
+    --p3-color: #a3be8c;
+    --p4-color: #b48ead;
+    --bg-nord: #2e3440;
+    --fg-nord: #e5e9f0;
+    --highlight: #81a1c1;
+}
+body{
+    margin: 0px;
+    font-family: 'Courier New', monospace;
+}
+#container{
+    display: flex;
+    background-color: var(--bg-nord);
+    height: 100vh;
+    width: 100vw;
+    top: 0px;
+    left: 0px;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+#loading_squares{
+    position: relative;
+    height: clamp(80px, 15vh, 15vw);
+    width: clamp(80px, 15vh, 15vw);
+    background-color: var(--highlight);
+}
+#loading_square_bg{
+   position: absolute;
+   width: 100%;
+   height: 100%;
+   top: 0px;
+   left: 0px;
+   z-index: 1;
+   animation-name: loading_bg;
+   animation-timing-function: linear;
+   animation-duration: 2.5s;
+   animation-iteration-count: infinite;
+}
+#loading_square_fg{
+   position: absolute;
+   width: 100%;
+   height:100%;
+   top: 0px;
+   left: 0px;
+   z-index: 2;
+   animation-name: loading_fg;
+   animation-timing-function: linear;
+   animation-duration: 2.5s;
+   animation-iteration-count: infinite;
+}
+#loading_text{
+    text-align: center;
+    color: var(--fg-nord);
+    margin-top: 1em;
+}
+@keyframes loading_fg{
+   0% {background-color: var(--p1-color); top: 0%; left: 0%; height: 100%; width: 0px}
+   20% {background-color: var(--p1-color); height: 100%; width: 100%}
+   20.5% {display: none; top: 0%; left: 0%; height: 0%; width: 100%}
+   25% {background-color: var(--p2-color); display: block;}
+   45% {background-color: var(--p2-color); top: 0%; left: 0%; height: 100%; width:100%;}
+   45.5% {display: none; top: 0%; left: 100%; height: 100%; width: 0px; }
+   50% {background-color: var(--p3-color); display: block;}
+   70% {background-color: var(--p3-color); top: 0%; left: 0%; height: 100%; width:100%;}
+   70.5% {display: none; top: 100%; left: 0%; height: 0%; width: 100%}
+   75% {background-color: var(--p4-color); display: block;}
+   95% {background-color: var(--p4-color); top: 0%; left: 0%; height: 100%; width: 100%}
+   95.5% {display: none; top: 0%; left: 0%; height: 0%; width: 0%}
+   100% {display: none;}
+}
+
+@keyframes loading_bg{
+   0% {background-color: var(--p4-color);}
+   20% {background-color: var(--p4-color);}
+   20.1% {background-color: var(--p1-color);}
+   45% {background-color: var(--p1-color);}
+   45.1% {background-color: var(--p2-color);}
+   70% {background-color: var(--p2-color);}
+   70.1% {background-color: var(--p3-color);}
+   95% {background-color: var(--p3-color);}
+   95.1% {background-color: var(--p4-color);}
+   100% {background-color: var(--p4-color);}
+}
+button{
+    font-family: 'Courier New', monospace;
+}
+</style>
+<script>
+const broadcast = new BroadcastChannel('msg-channel'); //Create broadcast channel
+let loading_text=document.getElementById('loading_text');
+broadcast.onmessage = event => {
+    loading_text.innerHTML=event.data; //Show broadcast message from service worker
+}
+function redirect(){
+    setTimeout(function(){window.location.replace('main.html')}, 500);
+}
+async function register_sw(){
+    if ('serviceWorker' in navigator){
+        try{
+            let sw_status = await navigator.serviceWorker.register('sw.js'); //Try register service worker
+        } catch (err){
+            loading_text.innerHTML='Error: ' + err + '<br>Redirecting without service worker.';
+            redirect(); //Redirect if any error
+        }
+    } else {
+        loading_text.innerHTML='Browser do not support service worker, redirecting...'
+        redirect(); //Redirect if not supported
+    }
+}
+register_sw()
+navigator.serviceWorker.ready.then(()=>{
+    console.log('Service Worker ready!');
+    loading_text.innerHTML='Service Worker Ready!!'
+    redirect(); //Redirect when ready
+});
+</script>
