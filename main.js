@@ -71,6 +71,24 @@ let theme = { //Object for themes
         '--fg-nord': '#fbf1c7',
         '--highlight': '#8ec07c'
     },
+    Tomorrow_night:{
+        '--p1-color': '#cc6666',
+        '--p2-color': '#f0c674',
+        '--p3-color': '#8abeb7',
+        '--p4-color': '#b294bb',
+        '--bg-nord': '#1d1f21',
+        '--fg-nord': '#c5c8c6',
+        '--highlight': '#969896'
+    },
+    Tomorrow:{
+        '--p1-color': '#c82829',
+        '--p2-color': '#eab700',
+        '--p3-color': '#3e999f',
+        '--p4-color': '#8959a8',
+        '--bg-nord': '#ffffff',
+        '--fg-nord': '#4d4d4c',
+        '--highlight': '#8e908c'
+    },
     High_contrast:{
         '--p1-color': '#ff0000',
         '--p2-color': '#00ff00',
@@ -1139,7 +1157,9 @@ function display_pause_screen(option){
             player_obj.instantget = allplayer[x].instantget;
             player_obj.max_yaku = allplayer[x].max_yaku;
             player_obj.streak = allplayer[x].max_winning_streak;
+            player_obj.win = allplayer[x].win;
             player_obj.yaku = parseInt(allplayer[x].balance) + parseInt(allplayer[x].unrealized);
+            player_obj.involvement = player_obj.win + player_obj.deal_lose;
             ranking.push(player_obj);
         }
         ranking.sort((b,a)=>a.yaku - b.yaku);
@@ -1147,7 +1167,7 @@ function display_pause_screen(option){
         for (x=0; x<4; x++){
             $('#ranking tr:nth(' + x + ') td:nth(1)').html(ranking[x].name);
             $('#ranking tr:nth(' + x + ') td:nth(1)').css('border-left', '5px solid var(--p' + ranking[x].index + '-color');
-            $('#ranking tr:nth(' + x + ') td:nth(2)').html(ranking[x].yaku);
+            $('#ranking tr:nth(' + x + ') td:nth(2)').html(ranking[x].yaku + ' ($' + ranking[x].yaku * default_setting.money + ')');
         }
         function get_greatest(arr, property, option){
             let index = 0;
@@ -1184,6 +1204,12 @@ function display_pause_screen(option){
         let milestone_instantpay = get_greatest(ranking, 'instantpay', true);
         $('.milestone:nth(5)').css('color', 'var(--p' + ranking[milestone_instantpay].index + '-color');
         $('.milestone:nth(5) span').html(ranking[milestone_instantpay].name);
+        let milestone_win = get_greatest(ranking, 'win', true);
+        $('.milestone:nth(6)').css('color', 'var(--p' + ranking[milestone_win].index + '-color');
+        $('.milestone:nth(6) span').html(ranking[milestone_win].name);
+        let milestone_involvement = get_greatest(ranking, 'involvement', false);
+        $('.milestone:nth(7)').css('color', 'var(--p' + ranking[milestone_involvement].index + '-color');
+        $('.milestone:nth(7) span').html(ranking[milestone_involvement].name);
     } else {
         $('#main').removeClass('none');
         $('#pause_screen').addClass('none');
@@ -1803,6 +1829,7 @@ async function capture_screen(){
     let cYear = current_time.getFullYear();
     $('#timestamp').html(current_time);
     $('#timestamp').removeClass('none');
+    $('#placeholder_for_protrait').addClass('none');
     const captured = await html2canvas(document.querySelector("#capture"));
     let href = captured.toDataURL();
     const anchor = document.createElement('a');
@@ -1814,6 +1841,7 @@ async function capture_screen(){
     $('#timestamp').addClass('none');
     $('.camera').removeClass('fa-circle-notch rotate');
     $('.camera').addClass('fa-camera-retro');
+    $('#placeholder_for_protrait').removeClass('none');
 }
 
 function fullscreen(){
@@ -1825,6 +1853,9 @@ $(document).ready(function(){
     adjust_main_display_size();
     inputcontrol();
     uicontrol();
+    $(function () {
+        $('[data-toggle="tooltip"]').tooltip()
+    })
     $(window).resize(function(){
         adjust_main_display_size();
     });
