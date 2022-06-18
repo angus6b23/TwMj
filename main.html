@@ -55,7 +55,7 @@
             <a class="button mt-1" href="javascript:void(0);" style="width: 100%" data-toggle="modal" data-target="#about"><i class="fas fa-heart mr-2"></i></i>關於</a>
             <a class="button button-big mt-1" href="javascript:initiate();"><i class="fas fa-gamepad mr-2"></i>開始</a>
         </div>
-        <div style="position: absolute; bottom: 0px; right: 0px;">20220528 Nightly</div>
+        <div style="position: absolute; bottom: 0px; right: 0px;">20220616 Nightly</div>
     </div>
     <!-- Main screen -->
     <div class="container-fluid" id="main">
@@ -370,7 +370,7 @@
                             <span class="ml-2"></span>
                         </div>
                         <div class="milestone">
-                            <i class="fas fa-heart-broken"></i>心已碎
+                            <i class="fas fa-heart-broken mr-2"></i>心已碎
                             <span class="ml-2"></span>
                         </div>
                     </div>
@@ -382,10 +382,12 @@
                         <canvas id="balance_chart2"></canvas>
                     </div>
                 </div>
+                <div class="none" id="timestamp"></div>
+                <div id="placeholder_for_protrait"></div>
             </div>
             <div class="col-2" style="height:98vh" id="pause_controls">
                 <a class="button button-big" href="javascript:display_pause_screen(false);"><div><i class="fas fa-play mr-3"></i>繼續</div></a>
-                <a class="button button-big" href="javascript:capture_screen();" download="capture_screen.png"><div><i class="fas fa-camera-retro mr-3"></i>截圖</div></a>
+                <a class="button button-big" href="javascript:capture_screen();"><div><i class="fas fa-camera-retro camera mr-3"></i>截圖</div></a>
                 <a class="button button-big" href="javascript:display_pause_screen(false);"><div><i class="fas fa-check-circle mr-3"></i>結束</div></a>
             </div>
         </div>
@@ -426,7 +428,7 @@
             <div class="col footer_select">
                 <a href="javascript:capture_screen();">
                     <div>
-                        <i class="fas fa-camera-retro"></i><br>截圖
+                        <i class="fas fa-camera-retro camera"></i><br>截圖
                     </div>
                 </a>
             </div>
@@ -491,7 +493,8 @@
                                 <ul>
                                     <li>Bootstrap 4.6.0 (MIT)</li>
                                     <li>JQuery 3.5.1 (MIT)</li>
-                                    <li>Plotly (MIT)</li>
+                                    <li>Chart.js (MIT)</li>
+                                    <li>html2canvas (MIT)</li>
                                     <li>Font Awesome (MIT, Sil OFL)</li>
                                     <li>Noto Fonts (Sil OFL)</li>
                                 </ul>
@@ -554,10 +557,12 @@
                                     <option value="High_contrast">高對比</option>
                                 </select></div>
                                 <div class="mt-1 col-4 gs_left">字體</div>
-                                <div class="mt-1 col-8 gs_right select_pan">
-                                    <a class="button select active" href="javascript:set_font('');">預設</a>
-                                    <a class="button select" href="javascript:set_font('Noto Serif TC, serif');" style="font-family: Noto Serif TC, serif">思源宋體</a>
-                                    <a class="button select" href="javascript:set_font('Noto Sans TC, sans-serif');" style="font-family: Noto Sans TC, sans-serif">思源黑體</a>
+                                <div class="mt-1 col-8 gs_right">
+                                    <div class="select_pan row" style="width: 50%">
+                                        <a class="button select col active" href="javascript:set_font('');"><div>預設</div></a>
+                                        <a class="button select col" href="javascript:set_font('Noto Serif TC, serif');" style="font-family: Noto Serif TC, serif"><div>思源宋體</div></a>
+                                        <a class="button select col" href="javascript:set_font('Noto Sans TC, sans-serif');" style="font-family: Noto Sans TC, sans-serif"><div>思源黑體</div></a>
+                                    </div>
                                 </div>
                                 <div class="col mt-2" style="text-align:center;"><a class="button" href="javascript:fullscreen();">全屏幕</a></div>
                             </div>
@@ -579,13 +584,13 @@
                             </div>
                         </div>
                         <div class="tab-pane" id="clear">
-                            <div class="mt-2" style="font-size:clamp(15px, 4vh, 45px);"><i class="fas fa-exclamation-triangle"></i>清理暫存會影響現時設置及遊戲</div>
+                            <div class="mt-2" style="font-size:clamp(15px, 4vh, 45px);"><i class="fas fa-exclamation-triangle"></i>清理資料會影響現時設置及遊戲</div>
                             <div class="row select_pan mt-2">
-                                <a class="button select col" href="javascript:void(0);">清除所有暫存</a>
-                                <a class="button select col" href="javascript:void(0);">只清除本局遊戲暫存</a>
-                                <a class="button select col" href="javascript:void(0);">只清除設置暫存</a>
+                                <a class="button select col" href="javascript:void(0);">清除所有資料</a>
+                                <a class="button select col" href="javascript:void(0);">撤銷 Service Worker</a>
+                                <a class="button select col" href="javascript:void(0);">清除資料並撤銷 Service Worker</a>
                             </div>
-                            <div class="center_button_container mt-2"><a class="button" href="javascript:void(0);">確定</a></div>
+                            <div class="center_button_container mt-2"><a class="button" href="javascript:trigger_clear_data();">確定</a></div>
                         </div>
                     </div>
                 </div>
