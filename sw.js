@@ -58,7 +58,6 @@ async function get_active_files(request){
             const responseToCache = response.clone();
             const cache = await caches.open(webversion);
             await cache.put(request, responseToCache) //Then cache the response
-            console.log(responseToCache + 'Cached');
             return response
         }
     }

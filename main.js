@@ -1191,12 +1191,12 @@ function display_pause_screen(option){
         $('#pause_footer').addClass('none');
     }
     try {
-        balance_chart2.data = generate_chart_config().data
+        balance_chart2.data = generate_chart_config(true).data
         balance_chart2.update();
     } catch {
         const balance_chart = new Chart (
             document.getElementById('balance_chart2'),
-            generate_chart_config()
+            generate_chart_config(true)
         )
         window.balance_chart2 = balance_chart;
     }
@@ -1685,6 +1685,37 @@ function import_json(){
     });
 }
 
+function trigger_clear_data(){
+    if ($('#clear .select_pan a:nth(0)').hasClass('active')){
+        clear_data(0);
+    } else if($('#clear .select_pan a:nth(1)').hasClass('active')){
+        clear_data(1);
+    } else if($('#clear .select_pan a:nth(2)').hasClass('active')){
+        clear_data(2);
+    }
+    $('#option').modal('hide');
+}
+
+function clear_data(option){
+    if (option == 0 || option == 2){
+        localStorage.removeItem('data');
+        localStorage.removeItem('default_setting');
+    }
+    if (option == 1 || option == 2){
+        if ('serviceWorker' in navigator){
+            remove_sw();
+        }
+    }
+    location.reload();
+}
+
+async function remove_sw(){
+    let registrations = await navigator.serviceWorker.getRegistrations();
+    for (let registration of registrations){
+        registration.unregister();
+    }
+}
+
 function show_alert(alert_message){
     $('#alert_message').html(alert_message)
     $('#alert').removeClass('none');
@@ -1693,21 +1724,20 @@ function show_alert(alert_message){
     }, 3000)
 }
 
-
 //Functions and variables for chart.js
 function create_chart(){
     const balance_chart = new Chart (
         document.getElementById('balance_chart'),
-        generate_chart_config()
+        generate_chart_config(false)
     )
     return balance_chart;
 }
 function update_chart(){
-    balance_chart.data = generate_chart_config().data
+    balance_chart.data = generate_chart_config(false).data
     balance_chart.update('none');
 }
 
-function generate_chart_config(){
+function generate_chart_config(legend){
     let chart_config = {
         type: 'line',
         data: {
@@ -1718,7 +1748,7 @@ function generate_chart_config(){
             maintainAspectRatio: false,
             plugins:{
                 legend:{
-                    display: false
+                    display: legend
                 }
             }
         },
@@ -1765,14 +1795,25 @@ function generate_chart_dataset(){
 }
 
 async function capture_screen(){
+    $('.camera').removeClass('fa-camera-retro');
+    $('.camera').addClass('fa-circle-notch rotate');
+    let current_time = new Date();
+    let cDay = current_time.getDate();
+    let cMonth = current_time.getMonth() + 1;
+    let cYear = current_time.getFullYear();
+    $('#timestamp').html(current_time);
+    $('#timestamp').removeClass('none');
     const captured = await html2canvas(document.querySelector("#capture"));
     let href = captured.toDataURL();
     const anchor = document.createElement('a');
     anchor.style.display = 'none';
     anchor.href = href;
-    anchor.download = 'Captured.png';
+    anchor.download = 'TwMj_' + cDay + '-' + cMonth + '-' + cYear + '.png';
     document.body.appendChild(anchor);
     anchor.click();
+    $('#timestamp').addClass('none');
+    $('.camera').removeClass('fa-circle-notch rotate');
+    $('.camera').addClass('fa-camera-retro');
 }
 
 function fullscreen(){

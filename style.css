@@ -560,7 +560,9 @@ table {
     color: var(--fg-nord);
     opacity: 0.3;
 }
-
+#placeholder_for_protrait{
+    height:0px;
+}
 .tab-content {
     font-size: clamp(12px, 2.5vh, 40px);
 }
@@ -921,6 +923,18 @@ input[type=number], textarea{
     animation-delay: 1.5s;
 }
 
+.rotate{
+    animation-name: rotation;
+    animation-duration: 0.5s;
+    animation-iteration-count: infinite;
+    animation-timing-function: linear;
+}
+
+@keyframes rotation{
+    0%{transform: rotate(0)}
+    50%{transform: rotate(180deg)}
+    100%{transform: rotate(360deg)}
+}
 /* CSS different orientation */
 @media screen and (orientation: portrait) {
     #initial input{
@@ -964,5 +978,9 @@ input[type=number], textarea{
     }
     #graph_container{
         width:90vw;
+    }
+    #placeholder_for_protrait{
+        height:15vh;
+        width:100%;
     }
 }
