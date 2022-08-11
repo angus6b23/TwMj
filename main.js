@@ -1356,7 +1356,10 @@ function change_name(){
     for (x = 1; x < 5; x++){
         let newname = $('#change_name .p' + x + '_input').val(); //Loop all input on change name
         if (newname !== allplayer[x].name){
-            newname = checkname(newname);
+            if (newname === ''){//Check for empty names
+                newname = '玩家' + i;
+                i++;
+            }
             msg = msg + allplayer[x].name + ' 改名為 ' + newname + '<br>';
             allplayer[x].name = newname;
             action += 1;
