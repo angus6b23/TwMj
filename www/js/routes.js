@@ -1,34 +1,42 @@
 
 var routes = [
-  {
-    path: '/',
-    url: './index.html',
-  },
-  {
-    path: '/about/',
-    url: './pages/about.html',
-  },
-  {
-    path: '/form/',
-    url: './pages/form.html',
-  },
-  {
-    path: '/stats/',
-    componentUrl: './pages/stats.html',
-  },
-  {
-    path: '/product/:id/',
-    componentUrl: './pages/product.html',
-  },
-  {
-    path: '/settings/',
-    url: './pages/settings.html',
-  },
+    {
+        path: '/',
+        url: './index.html',
+    },
+    {
+        path: '/about/',
+        url: './pages/about.html',
+    },
+    {
+        path: '/license/',
+        url: './pages/license.html',
+    },
+    {
+        path: '/import/',
+        url: './pages/import.html',
+    },
+    {
+        path: '/form/',
+        url: './pages/form.html',
+    },
+    {
+        path: '/stats/',
+        componentUrl: './pages/stats.html',
+    },
+    {
+        path: '/product/:id/',
+        componentUrl: './pages/product.html',
+    },
+    {
+        path: '/settings/',
+        url: './pages/settings.html',
+    },
 
-  {
-    path: '/dynamic-route/blog/:blogId/post/:postId/',
-    componentUrl: './pages/dynamic-route.html',
-  },
+    {
+        path: '/dynamic-route/blog/:blogId/post/:postId/',
+        componentUrl: './pages/dynamic-route.html',
+    },
   {
     path: '/request-and-load/user/:userId/',
     async: function ({ router, to, resolve }) {
