@@ -17,6 +17,10 @@ var routes = [
         url: './pages/import.html',
     },
     {
+        path: '/deal/',
+        url: './pages/deal.html',
+    },
+    {
         path: '/form/',
         url: './pages/form.html',
     },

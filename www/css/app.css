@@ -15,3 +15,8 @@
 #round_counter{
     text-align: center;
 }
+
+.edit-icon{
+    max-width:5vw;
+    font-size: 2em;
+}
