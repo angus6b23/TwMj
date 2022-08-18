@@ -16,7 +16,7 @@
                 </button>
             </p>
             <p class="row">
-                <button href="#" class="col-50 button button-fill">
+                <button href="#" data-popup=".log-popup" class="col-50 button button-fill popup-open">
                     <i class="f7-icons if-not-md">arrow_counterclockwise_circle</i>
                     <i class="material-icons md-only">history</i>
                     <p style="margin-left: 1vw">記錄</p>
@@ -119,6 +119,7 @@
             </ul>
         </div>
         <!-- Actions -->
+        <!-- Actions for themes -->
         <div class="actions-modal theme-actions">
             <div class="actions-group">
                 <span class="actions-label">主題</span>
@@ -127,6 +128,28 @@
                 </div>
                 <div class="actions-button actions-button-bold" onclick="test(2)">
                     <div class="actions-button-text">德古拉</div>
+                </div>
+            </div>
+        </div>
+        <!-- Popups -->
+        <!-- Popup for log -->
+        <div class="popup log-popup popup-tablet-fullscreen">
+            <div class="view">
+                <div class="page">
+                    <div class="navbar">
+                        <div class="navbar-bg"></div>
+                        <div class="navbar-inner">
+                            <div class="title">記錄</div>
+                            <div class="right">
+                                <a class="link popup-close">
+                                    <i class="material-icons">close</i>
+                                    <span class="if-not-md">關閉</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="page-content">
+                    </div>
                 </div>
             </div>
         </div>

@@ -21,8 +21,6 @@ $(document).on('page:afterin', '.page[data-name="import"]', function(){
     app.toolbar.hide('.toolbar');
     $('.import-submit').click(function(){
         console.log('clicked');
-        var import_data = app.form.convertToData('import-form');
-        alert(JSON.stringify(import_data));
     });
 });
 // Show Toolbar when entering license page
@@ -30,6 +28,36 @@ $(document).on('page:afterout','.page[data-name="import"]', function(){
     app.toolbar.show('.toolbar');
 });
 
+// Function for positioning different player in deal popup
+// Putting the index of selected_player into the top div
+function set_deal_position(player_selected){
+    $('#deal-form input').prop('disabled', false);
+    let position = 'left';
+    for (x=1; x<=4; x++){
+        if (x == player_selected){ //Append selected player into specific position
+            $('.deal_selected').append($('#p' + x + '_deal'));
+            $('.deal_selected input').prop('disabled', true);
+            $('.deal_selected .plus_or_minus').text('-');
+        } else if (position == 'left'){ //Append other players into corresponding positions
+            $('.deal_' + position).append($('#p' + x + '_deal'));
+            $('.deal_' + position + ' .plus_or_minus').text('+');
+            position = 'center';
+        } else if (position == 'center'){
+            $('.deal_' + position).append($('#p' + x + '_deal'));
+            $('.deal_' + position + ' .plus_or_minus').text('+');
+            position = 'right';
+        } else {
+            $('.deal_' + position).append($('#p' + x + '_deal'));
+            $('.deal_' + position + ' .plus_or_minus').text('+');
+        }
+    }
+}
+
+// Fill in values automatically in deal modal
+function deal_input_actions(){
+    let total = 0 - $('.deal_left input').val() - $('.deal_center input').val() - $('.deal_right input').val();
+    $('.deal_selected input').val(Math.abs(total));
+}
 
 function test(value){
     console.log('test');

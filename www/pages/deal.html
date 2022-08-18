@@ -12,26 +12,107 @@
         </div>
     </div>
     <div class="page-content">
-        <div class="block">
-            <div class="row">
-                <div class="col-33"></div>
-                <div class="col-33">
-                    <h1 id="deal_selected" style="text-align:center">placeholder</h1>
-                    <h2 id="deal_total" style="text-align:center">(-100)</h2>
+        <form id="deal-form" action="javascript:submit_deal_form()">
+            <div class="block block-strong">
+                <div class="row">
+                    <h1 class="col-100 align-text-center">出銃者</h1>
+                    <div class="col-33"></div>
+                    <div class="col-33">
+                        <div class="deal_selected">
+                        </div>
+                    </div>
+                    <div class="col-33">
+                        <h1><a href="#" data-actions=".deal-actions" class="button edit-icon actions-open">
+                            <i class="f7-icons if-not-md">square_pencil</i>
+                            <i class="material-icons md-only">edit</i>
+                        </a></h1>
+                    </div>
                 </div>
-                <div class="col-33">
-                    <h1><a href="#" class="button edit-icon">
-                        <i class="f7-icons if-not-md">square_pencil</i>
-                        <i class="material-icons md-only">edit</i>
-                    </a></h1>
+            </div>
+            <div class="block">
+                <div class="row no-gap">
+                    <div class="col-33">
+                        <h2 class="align-text-center">
+                            <i class="f7-icons if-not-md">arrow_down_left</i>
+                            <i class="material-icons md-only">south_west</i>
+                        </h2>
+                        <div class="deal_left">
+                        </div>
+                    </div>
+                    <div class="col-33">
+                        <h2 class="align-text-center">
+                            <i class="f7-icons if-not-md">arrow_down</i>
+                            <i class="material-icons md-only">arrow_downward</i>
+                        </h2>
+                        <div class="deal_center">
+                        </div>
+                    </div>
+                    <div class="col-33">
+                        <h2 class="align-text-center">
+                            <i class="f7-icons if-not-md">arrow_down_right</i>
+                            <i class="material-icons md-only">south_east</i>
+                        </h2>
+                        <div class="deal_right">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="p1_deal" class="card" onclick="$('#p1_deal input').focus()">
+                <h2 class="p1_name align-text-center">Adam</h2>
+                <div class="input_wrapper">
+                    <h3><span class="plus_or_minus">+</span></h3>
+                    <span><h3>
+                        <input type="number" min=0 id="p1_deal_input" class="align-text-center" oninput="validity.valid||(value='');deal_input_actions()"></input>
+                    </h3></span>
+                </div>
+            </div>
+            <div id="p2_deal" class="card" onclick="$('#p2_deal input').focus()">
+                <h2 class="p2_name align-text-center">Abel</h2>
+                <div class="input_wrapper">
+                    <h3><span class="plus_or_minus">+</span></h3>
+                    <span><h3>
+                        <input type="number" min=0 id="p2_deal_input" class="align-text-center" oninput="validity.valid||(value='');deal_input_actions()"></input>
+                    </h3></span>
+                </div>
+            </div>
+            <div id="p3_deal" class="card" onclick="$('#p3_deal input').focus()">
+                <h2 class="p3_name align-text-center">Axel</h2>
+                <div class="input_wrapper">
+                    <h3><span class="plus_or_minus">+</span></h3>
+                    <span><h3>
+                        <input type="number" min=0 id="p3_deal_input" class="align-text-center" oninput="validity.valid||(value='');deal_input_actions()"></input>
+                    </h3></span>
+                </div>
+            </div>
+            <div id="p4_deal" class="card" onclick="$('#p4_deal input').focus()">
+                <h2 class="p4_name align-text-center">Axel</h2>
+                <div class="input_wrapper">
+                    <h3><span class="plus_or_minus">+</span></h3>
+                    <span><h3>
+                        <input type="number" min=0 id="p1_deal_input" class="align-text-center" oninput="validity.valid||(value='');deal_input_actions()"></input>
+                    </h3></span>
                 </div>
             </div>
             <div class="row">
-                <div class="col-33">
+                <div class="col">
+                    <button type="submit" class="button button-fill">確定</button>
                 </div>
-                <div class="col-33">
+            </div>
+        </form>
+        <div class="actions-modal deal-actions">
+            <div class="actions-group">
+                <span class="actions-label">請選擇出銃者</span>
+                <div class="actions-button actions-button-bold" onclick="set_deal_position(1);app.actions.close();">
+                    <div class="actions-button-text p1_name">Adam</div>
                 </div>
-                <div class="col-33">
+                <div class="actions-button actions-button-bold" onclick="set_deal_position(2);app.actions.close();">
+                    <div class="actions-button-text p2_name">Abel</div>
+                </div>
+                <div class="actions-button actions-button-bold" onclick="set_deal_position(3);app.actions.close();">
+                    <div class="actions-button-text p3_name">Axel</div>
+                </div>
+                <div class="actions-button actions-button-bold" onclick="set_deal_position(4);app.actions.close();">
+                    <div class="actions-button-text p4_name">Axel</div>
                 </div>
             </div>
         </div>

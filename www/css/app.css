@@ -20,3 +20,21 @@
     max-width:5vw;
     font-size: 2em;
 }
+
+.align-text-center{
+    text-align: center;
+}
+
+.card input{
+    width: 80%;
+    display: inline-block;
+}
+
+.plus_or_minus{
+    display: inline-block;
+}
+
+.input_wrapper{
+    display: flex;
+    justify-content: center;
+}
