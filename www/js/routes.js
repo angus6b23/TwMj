@@ -21,8 +21,8 @@ var routes = [
         url: './pages/deal.html',
     },
     {
-        path: '/form/',
-        url: './pages/form.html',
+        path: '/start/',
+        url: './pages/start.html',
     },
     {
         path: '/stats/',

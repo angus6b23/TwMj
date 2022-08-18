@@ -9,31 +9,104 @@
   --f7-theme-color-rgb: 129, 161, 193;
   --f7-theme-color-shade: #668db4;
   --f7-theme-color-tint: #9cb5ce;
+  --p1-color: #d08770;
+  --p2-color: #ebcb8b;
+  --p3-color: #a3be8c;
+  --p4-color: #b48ead;
+  --bg-nord: #2e3440;
+  --fg-nord: #e5e9f0;
+  --highlight: #81a1c1;
 }
 
 /* Your app custom styles here */
-#round_counter{
+/* CSS for global Classes */
+.align-text-center{
     text-align: center;
 }
+.p1_input{
+    border-bottom: 1px var(--p1-color) solid !important;
+    background-color: transparent;
+    transition 0.5s;
+}
+.p1_input:focus{
+    background-color: var(--p1-color) !important;
+    transition: 0.5s;
+}
+.p2_input{
+    border-bottom: 1px var(--p2-color) solid !important;
+    background-color: transparent;
+    transition 0.5s;
+}
+.p2_input:focus{
+    background-color: var(--p2-color) !important;
+    transition: 0.5s;
+}
+.p3_input{
+    border-bottom: 1px var(--p3-color) solid !important;
+    background-color: transparent;
+    transition 0.5s;
+}
+.p3_input:focus{
+    background-color: var(--p3-color) !important;
+    transition: 0.5s;
+}
+.p4_input{
+    border-bottom: 1px var(--p4-color) solid !important;
+    background-color: transparent;
+    transition 0.5s;
+}
+.p4_input:focus{
+    background-color: var(--p4-color) !important;
+    transition: 0.5s;
+}
 
+/* CSS for table in main view */
+#table_wrap{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+#table{
+    display: flex;
+    height: min(65vh, 90vw);
+    width: min(65vh, 90vw);
+}
+.table_short_block{
+    height:12.5%;
+}
+.table_long_block{
+    height:50%;
+}
+.table_fill{
+    height:100%;
+}
+#center {
+    height: 50%;
+    width: 50%;
+    display: flex;
+    justify-content: center;
+}
+.dots {
+    height: 2vh;
+    width: 2vh;
+    border-radius: 50%;
+    background-color: var(--bg-nord);
+}
+#table div{
+    border: 1px solid white;
+}
+/* CSS for deal and tsumo popup */
 .edit-icon{
     max-width:5vw;
     font-size: 2em;
 }
-
-.align-text-center{
-    text-align: center;
-}
-
 .card input{
     width: 80%;
     display: inline-block;
 }
-
 .plus_or_minus{
     display: inline-block;
 }
-
 .input_wrapper{
     display: flex;
     justify-content: center;

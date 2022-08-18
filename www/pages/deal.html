@@ -15,17 +15,17 @@
         <form id="deal-form" action="javascript:submit_deal_form()">
             <div class="block block-strong">
                 <div class="row">
-                    <h1 class="col-100 align-text-center">出銃者</h1>
+                    <h2 class="col-100 align-text-center">出銃者</h2>
                     <div class="col-33"></div>
                     <div class="col-33">
                         <div class="deal_selected">
                         </div>
                     </div>
                     <div class="col-33">
-                        <h1><a href="#" data-actions=".deal-actions" class="button edit-icon actions-open">
+                        <h2><a href="#" data-actions=".deal-actions" class="button edit-icon actions-open">
                             <i class="f7-icons if-not-md">square_pencil</i>
                             <i class="material-icons md-only">edit</i>
-                        </a></h1>
+                        </a></h2>
                     </div>
                 </div>
             </div>
@@ -62,7 +62,7 @@
                 <div class="input_wrapper">
                     <h3><span class="plus_or_minus">+</span></h3>
                     <span><h3>
-                        <input type="number" min=0 id="p1_deal_input" class="align-text-center" oninput="validity.valid||(value='');deal_input_actions()"></input>
+                        <input type="number" min=0 id="p1_deal_input" class="align-text-center p1_input" oninput="validity.valid||(value='');deal_input_actions()"></input>
                     </h3></span>
                 </div>
             </div>
@@ -71,7 +71,7 @@
                 <div class="input_wrapper">
                     <h3><span class="plus_or_minus">+</span></h3>
                     <span><h3>
-                        <input type="number" min=0 id="p2_deal_input" class="align-text-center" oninput="validity.valid||(value='');deal_input_actions()"></input>
+                        <input type="number" min=0 id="p2_deal_input" class="align-text-center p2_input" oninput="validity.valid||(value='');deal_input_actions()"></input>
                     </h3></span>
                 </div>
             </div>
@@ -80,16 +80,16 @@
                 <div class="input_wrapper">
                     <h3><span class="plus_or_minus">+</span></h3>
                     <span><h3>
-                        <input type="number" min=0 id="p3_deal_input" class="align-text-center" oninput="validity.valid||(value='');deal_input_actions()"></input>
+                        <input type="number" min=0 id="p3_deal_input" class="align-text-center p3_input" oninput="validity.valid||(value='');deal_input_actions()"></input>
                     </h3></span>
                 </div>
             </div>
             <div id="p4_deal" class="card" onclick="$('#p4_deal input').focus()">
-                <h2 class="p4_name align-text-center">Axel</h2>
+                <h2 class="p4_name align-text-center">Albert</h2>
                 <div class="input_wrapper">
                     <h3><span class="plus_or_minus">+</span></h3>
                     <span><h3>
-                        <input type="number" min=0 id="p1_deal_input" class="align-text-center" oninput="validity.valid||(value='');deal_input_actions()"></input>
+                        <input type="number" min=0 id="p1_deal_input" class="align-text-center p4_input" oninput="validity.valid||(value='');deal_input_actions()"></input>
                     </h3></span>
                 </div>
             </div>
@@ -112,7 +112,7 @@
                     <div class="actions-button-text p3_name">Axel</div>
                 </div>
                 <div class="actions-button actions-button-bold" onclick="set_deal_position(4);app.actions.close();">
-                    <div class="actions-button-text p4_name">Axel</div>
+                    <div class="actions-button-text p4_name">Albert</div>
                 </div>
             </div>
         </div>
