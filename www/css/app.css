@@ -23,6 +23,12 @@
 .align-text-center{
     text-align: center;
 }
+.align-text-right{
+    text-align: right;
+}
+.ml-1{
+    margin-left: 1vw;
+}
 .p1_input{
     border-bottom: 1px var(--p1-color) solid !important;
     background-color: transparent;

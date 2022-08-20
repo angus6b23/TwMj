@@ -1,49 +1,60 @@
 <div class="page" data-name="start">
     <div class="page-content">
         <div class="block-title block-title-medium">請輸入玩家名稱</div>
-        <div class="list inline-labels">
-            <div class="item-content">
-                <div class="item-inner">
-                    <div class="item-title item-label">東位</div>
-                    <div class="item-input-wrap">
-                        <input class="p1_input align-text-center" type="text" required />
-                        <span class="input-clear-button"></span>
-                    </div>
-                 </div>
-            </div>
-            <div class="item-content">
-                <div class="item-inner">
-                    <div class="item-title item-label">南位</div>
-                    <div class="item-input-wrap">
-                        <input class="p2_input align-text-center" type="text" required />
-                        <span class="input-clear-button"></span>
-                    </div>
+        <form id="start-form" action="javascript:submit_start_form()">
+            <div class="list inline-labels">
+                <div class="item-content">
+                    <div class="item-inner">
+                        <div class="item-title item-label">東位</div>
+                        <div class="item-input-wrap">
+                            <input class="p1_input align-text-center" type="text" name="east_name" required />
+                            <span class="input-clear-button"></span>
+                        </div>
+                     </div>
                 </div>
-            </div>
-            <div class="item-content">
-                <div class="item-inner">
-                    <div class="item-title item-label">西位</div>
-                    <div class="item-input-wrap">
-                        <input class="p3_input align-text-center" type="text" required />
-                        <span class="input-clear-button"></span>
+                <div class="item-content">
+                    <div class="item-inner">
+                        <div class="item-title item-label">南位</div>
+                        <div class="item-input-wrap">
+                            <input class="p2_input align-text-center" type="text" name="south_name" required />
+                            <span class="input-clear-button"></span>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="item-content">
-                <div class="item-inner">
-                    <div class="item-title item-label">北位</div>
-                    <div class="item-input-wrap">
-                        <input class="p4_input align-text-center" type="text" required />
-                        <span class="input-clear-button"></span>
+                <div class="item-content">
+                    <div class="item-inner">
+                        <div class="item-title item-label">西位</div>
+                        <div class="item-input-wrap">
+                            <input class="p3_input align-text-center" type="text" name="west_name" required />
+                            <span class="input-clear-button"></span>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <a href="#" class="item-link item-content" onclick="app.dialog.prompt('每一番多少錢？', '港式台牌計分版', function(value){set_money_multiplier(value)})">
-                <div class="item-inner">
-                    <div class="item-title">每番金錢</div>
-                    <div class="item-after money_multiplier">1</div>
+                <div class="item-content">
+                    <div class="item-inner">
+                        <div class="item-title item-label">北位</div>
+                        <div class="item-input-wrap">
+                            <input class="p4_input align-text-center" type="text" name="north_name" required />
+                            <span class="input-clear-button"></span>
+                        </div>
+                    </div>
                 </div>
-            </a>
-        </div>
+                <a href="#" class="item-link item-content" onclick="app.dialog.prompt('每一番多少錢？', '港式台牌計分版', function(value){set_money_multiplier(value)})">
+                    <div class="item-inner">
+                        <div class="item-title">每番金錢</div>
+                        <div class="item-after">
+                            <div class="item-input-wrap">
+                                <input type="text" name="multiplier" class="align-text-right" value="1" disabled></input>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <button type="submit" class="button button-fill">
+                <i class="f7-icons if-not-md">gamecontroller_fill</i>
+                <i class="material-icons md-only">sports_esports</i>
+                <span class="ml-1">開始</span>
+            </button>
+        </form>
     </div>
 </div>

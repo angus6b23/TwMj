@@ -73,6 +73,7 @@ const theme = { //Object for themes
         '--highlight': '#ff00ff'
     },
 };
+
 // ------------------------------------------ //
 // POPUP RELATED FUNCTIONS
 // ------------------------------------------ //
@@ -88,7 +89,7 @@ function set_money_multiplier(value){ //Check money multiplier input before sett
         });
         money_multiplier_error_toast.open();
     } else {
-        $('.money_multiplier').text(check_value);
+        $('#start-form input[name="multiplier"]').val(value);
     }
 }
 
