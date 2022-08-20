@@ -65,7 +65,10 @@
     background-color: var(--p4-color) !important;
     transition: 0.5s;
 }
-
+/* CSS for start popup */
+#start-form input:disabled{
+    width: 10vw;
+}
 /* CSS for table in main view */
 #table_wrap{
     display: flex;

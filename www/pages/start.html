@@ -49,6 +49,21 @@
                         </div>
                     </div>
                 </a>
+                <a href="#" class="item-link item-content" onclick="app.dialog.prompt('玩家可以被拉多少次後選擇終結拉踢？', '港式台牌計分版', function(value){set_break_streak(value)})">
+                    <div class="item-inner">
+                        <div class="item-title">斷拉</div>
+                        <div class="item-after">
+                            <div class="item-input-wrap">
+                                <input type="text" name="break_streak" class="align-text-right" value="3" disabled></input>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+                <a href="/import/" class="item-link item-content">
+                    <div class="item-inner">
+                        <div class="item-title">匯入</div>
+                    </div>
+                </a>
             </div>
             <button type="submit" class="button button-fill">
                 <i class="f7-icons if-not-md">gamecontroller_fill</i>

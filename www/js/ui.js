@@ -83,7 +83,7 @@ function set_money_multiplier(value){ //Check money multiplier input before sett
     console.log(check_value);
     if (isNaN(check_value) || check_value <= 0 || check_value == ''){
         const money_multiplier_error_toast = app.toast.create({
-            text: '設定錯誤！必須為正數',
+            text: '設定錯誤！必須為正數！',
             position: 'bottom',
             closeTimeout: 1500,
         });
@@ -92,7 +92,34 @@ function set_money_multiplier(value){ //Check money multiplier input before sett
         $('#start-form input[name="multiplier"]').val(value);
     }
 }
-
+function set_break_streak(value){ //Check break streak input before setting it as value
+    let check_value = parseInt(value);
+    console.log(check_value);
+    if (isNaN(check_value) || check_value <= 0 || check_value == ''){
+        const break_streak_error_toast = app.toast.create({
+            text: '設定錯誤！必須為正整數！',
+            position: 'bottom',
+            closeTimeout: 1500,
+        });
+        break_streak_error_toast.open();
+    } else {
+        $('#start-form input[name="break_streak"]').val(value);
+    }
+}
+function submit_start_form(){ //Function for handling start form submit
+    const start_form = document.getElementById('start-form');
+    let start_obj = new Object(); //Put all parameters to an object and submit to main.js for initiating
+    start_obj.name_array = [NaN];
+    start_obj.name_array.push(start_form.elements['east_name']);
+    start_obj.name_array.push(start_form.elements['south_name']);
+    start_obj.name_array.push(start_form.elements['west_name']);
+    start_obj.name_array.push(start_form.elements['north_name']);
+    start_obj.multiplier = start_form.elements['multiplier'];
+    start_obj.break_streak = start_form.elements['break_streak'];
+    console.log(start_obj);
+    // Call function in main.js here
+    app.popup.close('#start-popup')
+}
 // Function for positioning different player in deal popup
 // Putting the index of selected_player into the top div
 function set_deal_position(player_selected){

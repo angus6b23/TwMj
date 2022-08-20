@@ -1,11 +1,11 @@
 {
-  "name": "TwMj",
+  "name": "港式台牌計分板",
   "short_name": "TwMj",
   "description": "TwMj",
   "lang": "en-US",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#81a1c1",
+  "background_color": "#000000",
   "theme_color": "#81a1c1",
   "icons": [
     {
