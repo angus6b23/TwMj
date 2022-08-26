@@ -1,8 +1,11 @@
+// ------------------------------------------ //
+// GLOBAL Variables
+// ------------------------------------------ //
 let allplayer=[NaN]; //Array for all players, such that allplayer[1].name = name of player1
 let game_record=[NaN]; //Array for record of game, such that game_record[1] = Results of first game
 let fulldata_JSON = new Array; // Array for undo and redo, saves most of the data
 let msg = ''; //Message used for game log
-var game_log = new Array; //Array saving all game log objects
+let game_log = new Array; //Array saving all game log objects
 let gamestat={ //Object for holding game statistics
     round: 1,
     round_prevailing: 1,
@@ -56,6 +59,9 @@ let player_template={
     unr_arr: []
 }
 let mapped = new Object //Object for saving index of player position
+// ------------------------------------------ //
+// START POPUP FUNCTIONS
+// ------------------------------------------ //
 function start_game(start_obj){
     default_setting.money = parseInt(start_obj.multiplier); //Apply settings into corresponding object
     default_setting.break = parseInt(start_obj.break_streak);
@@ -83,7 +89,9 @@ function map_players(){
         }
     }
 }
-
+// ------------------------------------------ //
+// EVENT HANDLEERS
+// ------------------------------------------ //
 app.on('data_change', async function(){
     await map_players();
     start_game_ui();

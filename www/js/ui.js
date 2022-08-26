@@ -1,4 +1,6 @@
-// Constant for theme_select
+// ------------------------------------------ //
+// GLOBAL VARIABLES
+// ------------------------------------------ //
 const theme = { //Object for themes
     Nord:{
         '--p1-color': '#d08770',
@@ -81,7 +83,7 @@ const theme = { //Object for themes
         'is_Dark': false
     },
 };
-//Declare for global variables
+//Declared for global variables
 var p1_action
 var p2_action
 var p3_action
