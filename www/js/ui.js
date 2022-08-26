@@ -7,7 +7,8 @@ const theme = { //Object for themes
         '--p4-color': '#b48ead',
         '--bg-nord': '#2e3440',
         '--fg-nord': '#e5e9f0',
-        '--highlight': '#81a1c1'
+        '--highlight': '#81a1c1',
+        'is_Dark': true
     },
     Nord_alt:{
         '--p1-color': '#8fbcbb',
@@ -16,7 +17,8 @@ const theme = { //Object for themes
         '--p4-color': '#5e81ac',
         '--bg-nord': '#2e3440',
         '--fg-nord': '#e5e9f0',
-        '--highlight': '#a3be8c'
+        '--highlight': '#a3be8c',
+        'is_Dark': true
     },
     Dracula:{
         '--p1-color': '#8be9fd',
@@ -25,7 +27,8 @@ const theme = { //Object for themes
         '--p4-color': '#f1fa8c',
         '--bg-nord': '#282a36',
         '--fg-nord': '#f8f8f2',
-        '--highlight': '#ff79c6'
+        '--highlight': '#ff79c6',
+        'is_Dark': true
     },
     Gruvbox_light:{
         '--p1-color': '#cc241d',
@@ -34,7 +37,8 @@ const theme = { //Object for themes
         '--p4-color': '#458588',
         '--bg-nord': '#fbf1c7',
         '--fg-nord': '#3c3836',
-        '--highlight': '#689d6a'
+        '--highlight': '#689d6a',
+        'is_Dark': false
     },
     Gruvbox_dark:{
         '--p1-color': '#fb4934',
@@ -43,7 +47,8 @@ const theme = { //Object for themes
         '--p4-color': '#83a598',
         '--bg-nord': '#3c3836',
         '--fg-nord': '#fbf1c7',
-        '--highlight': '#8ec07c'
+        '--highlight': '#8ec07c',
+        'is_Dark': true
     },
     Tomorrow_night:{
         '--p1-color': '#cc6666',
@@ -52,7 +57,8 @@ const theme = { //Object for themes
         '--p4-color': '#b294bb',
         '--bg-nord': '#1d1f21',
         '--fg-nord': '#c5c8c6',
-        '--highlight': '#969896'
+        '--highlight': '#969896',
+        'is_Dark': true
     },
     Tomorrow:{
         '--p1-color': '#c82829',
@@ -61,7 +67,8 @@ const theme = { //Object for themes
         '--p4-color': '#8959a8',
         '--bg-nord': '#ffffff',
         '--fg-nord': '#4d4d4c',
-        '--highlight': '#8e908c'
+        '--highlight': '#8e908c',
+        'is_Dark': false
     },
     High_contrast:{
         '--p1-color': '#ff0000',
@@ -70,17 +77,222 @@ const theme = { //Object for themes
         '--p4-color': '#ffff00',
         '--bg-nord': '#ffffff',
         '--fg-nord': '#000000',
-        '--highlight': '#ff00ff'
+        '--highlight': '#ff00ff',
+        'is_Dark': false
     },
 };
+//Declare for global variables
+var p1_action
+var p2_action
+var p3_action
+var p4_action
+// ------------------------------------------ //
+// GLOBAL FUNCTIONS
+// ------------------------------------------ //
+// Function when triggering ui_update
+app.on('ui_update', function(){
+    // Update table display
+    for (i=1;i<5;i++){
+        $('.p' + i + '_name').text(allplayer[i].name);
+        if (allplayer[i].unrealized == 0){
+            $('.p' + i + '_balance').html(allplayer[i].balance);
+        } else if (allplayer[i].unrealized > 0){
+            $('.p' + i + '_balance').html(allplayer[i].balance + ' (' + allplayer[i].unrealized + ')');
+        } else {
+            $('.p' + i + '_balance').html(allplayer[i].balance + ' (' + allplayer[i].unrealized + ')');
+        }
+    }
+    console.log('ui updated called');
+});
+// ------------------------------------------ //
+// MAIN PAGE RELATED FUNCTIONS
+// ------------------------------------------ //
+// Starting Modal Functions
+function start_game_ui(){
+    $('#N-text').addClass('p' + mapped.N + '_name');
+    $('#N-text2').addClass('p' + mapped.N + '_balance');
+    $('#north').addClass('p' + mapped.N + '_bg');
+    $('#E-text').addClass('p' + mapped.E + '_name');
+    $('#E-text2').addClass('p' + mapped.E + '_balance');
+    $('#east').addClass('p' + mapped.E + '_bg');
+    $('#S-text').addClass('p' + mapped.S + '_name');
+    $('#S-text2').addClass('p' + mapped.S + '_balance');
+    $('#south').addClass('p' + mapped.S + '_bg');
+    $('#W-text').addClass('p' + mapped.W + '_name');
+    $('#W-text2').addClass('p' + mapped.W + '_balance');
+    $('#west').addClass('p' + mapped.W + '_bg');
+    $('.north-block').addClass('p' + mapped.N + '_action');
+    $('.east-block').addClass('p' + mapped.E + '_action');
+    $('.south-block').addClass('p' + mapped.S + '_action');
+    $('.west-block').addClass('p' + mapped.W + '_action');
+    p1_action = app.actions.create({
+        buttons: [
+            {
+                text: allplayer[1].name,
+                label: true
+            },
+            {
+                text: '即收',
+                onClick: function(){
+                    console.log('即收');
+                    // Function for opening popup
+                }
+            },
+            {
+                text: '即付',
+                onClick: function(){
+                    console.log('即付');
+                    // Function for opening popup
+                }
+            },
+            {
+                text: '出銃',
+                onClick: function(){
+                    set_deal_position(1);
+                    app.popup.open('#deal-popup')
+                    // Function for opening popup
+                }
+            },
+            {
+                text: '自摸',
+                onClick: function(){
+                    console.log('自摸');
+                    // Function for opening popup
+                }
+            }
+        ]
+    });
+    p2_action = app.actions.create({
+        buttons: [
+            {
+                text: allplayer[2].name,
+                label: true
+            },
+            {
+                text: '即收',
+                onClick: function(){
+                    // Function for opening popup
+                }
+            },
+            {
+                text: '即付',
+                onClick: function(){
+                    // Function for opening popup
+                }
+            },
+            {
+                text: '出銃',
+                onClick: function(){
+                    set_deal_position(2);
+                    app.popup.open('#deal-popup');
+                    // Function for opening popup
+                }
+            },
+            {
+                text: '自摸',
+                onClick: function(){
+                    // Function for opening popup
+                }
+            }
+        ]
+    });
+    p3_action = app.actions.create({
+        buttons: [
+            {
+                text: allplayer[3].name,
+                label: true,
+            },
+            {
+                text: '即收',
+                onClick: function(){
+                    // Function for opening popup
+                }
+            },
+            {
+                text: '即付',
+                onClick: function(){
+                    // Function for opening popup
+                }
+            },
+            {
+                text: '出銃',
+                onClick: function(){
+                    set_deal_position(3);
+                    app.popup.open('#deal-popup');
+                    // Function for opening popup
+                }
+            },
+            {
+                text: '自摸',
+                onClick: function(){
+                    // Function for opening popup
+                }
+            }
+        ]
+    });
+    p4_action = app.actions.create({
+        buttons: [
+            {
+                text: allplayer[4].name,
+                label: true
+            },
+            {
+                text: '即收',
+                onClick: function(){
+                    // Function for opening popup
+                }
+            },
+            {
+                text: '即付',
+                onClick: function(){
+                    // Function for opening popup
+                }
+            },
+            {
+                text: '出銃',
+                onClick: function(){
+                    set_deal_position(4);
+                    app.popup.open('#deal-popup')
+                    // Function for opening popup
+                }
+            },
+            {
+                text: '自摸',
+                onClick: function(){
+                    // Function for opening popup
+                }
+            }
+        ]
+    });
+}
 
+// Adding event handlers for triggering action sheets
+function open_action_sheet(player_index){
+    switch(player_index){
+        case 1: p1_action.open(); break;
+        case 2: p2_action.open(); break;
+        case 3: p3_action.open(); break;
+        case 4: p4_action.open(); break;
+    }
+}
+$('.east-block').click(function(){
+    open_action_sheet(mapped.E);
+})
+$('.south-block').click(function(){
+    open_action_sheet(mapped.S);
+})
+$('.west-block').click(function(){
+    open_action_sheet(mapped.W);
+})
+$('.north-block').click(function(){
+    open_action_sheet(mapped.N);
+})
 // ------------------------------------------ //
 // POPUP RELATED FUNCTIONS
 // ------------------------------------------ //
 // Starting Modal Functions
 function set_money_multiplier(value){ //Check money multiplier input before setting it as value
     let check_value = parseFloat(value);
-    console.log(check_value);
     if (isNaN(check_value) || check_value <= 0 || check_value == ''){
         const money_multiplier_error_toast = app.toast.create({
             text: '設定錯誤！必須為正數！',
@@ -94,7 +306,6 @@ function set_money_multiplier(value){ //Check money multiplier input before sett
 }
 function set_break_streak(value){ //Check break streak input before setting it as value
     let check_value = parseInt(value);
-    console.log(check_value);
     if (isNaN(check_value) || check_value <= 0 || check_value == ''){
         const break_streak_error_toast = app.toast.create({
             text: '設定錯誤！必須為正整數！',
@@ -110,20 +321,21 @@ function submit_start_form(){ //Function for handling start form submit
     const start_form = document.getElementById('start-form');
     let start_obj = new Object(); //Put all parameters to an object and submit to main.js for initiating
     start_obj.name_array = [NaN];
-    start_obj.name_array.push(start_form.elements['east_name']);
-    start_obj.name_array.push(start_form.elements['south_name']);
-    start_obj.name_array.push(start_form.elements['west_name']);
-    start_obj.name_array.push(start_form.elements['north_name']);
-    start_obj.multiplier = start_form.elements['multiplier'];
-    start_obj.break_streak = start_form.elements['break_streak'];
-    console.log(start_obj);
+    start_obj.name_array.push(start_form.elements['east_name'].value);
+    start_obj.name_array.push(start_form.elements['south_name'].value);
+    start_obj.name_array.push(start_form.elements['west_name'].value);
+    start_obj.name_array.push(start_form.elements['north_name'].value);
+    start_obj.multiplier = start_form.elements['multiplier'].value;
+    start_obj.break_streak = start_form.elements['break_streak'].value;
+    start_game(start_obj);
     // Call function in main.js here
-    app.popup.close('#start-popup')
+    app.popup.close('#start-popup');
 }
 // Function for positioning different player in deal popup
 // Putting the index of selected_player into the top div
 function set_deal_position(player_selected){
     $('#deal-form input').prop('disabled', false);
+    $('#deal-form input').val('');
     let position = 'left';
     for (x=1; x<=4; x++){
         if (x == player_selected){ //Append selected player into specific position
@@ -155,7 +367,7 @@ $('#deal-popup').on('popup:closed', function(){
 });
 
 // ------------------------------------------ //
-// Setting RELATED FUNCTIONS
+// SETTINGS RELATED FUNCTIONS
 // ------------------------------------------ //
 // Hide Toolbar after entering license page
 $(document).on('page:afterin', '.page[data-name="license"]', function(){
@@ -170,7 +382,7 @@ $(document).on('page:afterin', '.page[data-name="import"]', function(){
     $('textarea').focus();
     app.toolbar.hide('.toolbar');
     $('.import-submit').click(function(){
-        console.log('clicked');
+        console.log('clicked');// Add submit function
     });
 });
 // Show Toolbar when entering license page
@@ -183,15 +395,6 @@ function remove_data_prompt(){
         // TODO: Add function for removal of data here
         console.log('Remove confirmed');
     })
-}
-
-
-function test(value){
-    console.log('test');
-    if(value){
-        console.log(value);
-    }
-    $('.test').html('test');
 }
 
 app.popup.open('#start-popup');

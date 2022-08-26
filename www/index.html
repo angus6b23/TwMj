@@ -46,9 +46,9 @@
                     <span class="tabbar-label">數據</span>
                 </a>
                 <a href="#view-settings" class="tab-link">
-                    <i class="icon f7-icons if-not-md">gear</i>
-                    <i class="icon material-icons if-md">settings</i>
-                    <span class="tabbar-label">設定</span>
+                    <i class="icon f7-icons if-not-md">ellipsis_vertical</i>
+                    <i class="icon material-icons if-md">more_vert</i>
+                    <span class="tabbar-label">更多</span>
                 </a>
             </div>
         </div>
@@ -64,27 +64,56 @@
                 <div id="table_wrap">
                     <div id="table" class="row no-gap">
                         <div class="col-25 table_short_block"></div>
-                        <div class="col-50 table_short_block north-block" id="N-text"></div>
+                        <div class="col-50 table_short_block north-block">
+                            <h3 id="N-text" class="align-text-center"></h3>
+                            <h3 id="N-text2" class="align-text-center"></h3>
+                        </div>
                         <div class="col-25 table_short_block"></div>
                         <div class="col-25 table_short_block"></div>
                         <div class="col-50 table_short_block north-block" id="north"></div>
                         <div class="col-25 table_short_block"></div>
                         <div class="col-25 row no-gap table_long_block">
-                            <div class="col-50 table_fill east-block" id="E-text"></div>
+                            <div class="col-50 table_fill east-block">
+                                <h3 id="E-text" class="align-text-center"></h3>
+                                <h3 id="E-text2" class="align-text-center"></h3>
+                            </div>
                             <div class="col-50 table_fill east-block" id="east"></div>
                         </div>
                         <div class="col-50 table_long_block" id="center"></div>
                         <div class="col-25 row no-gap table_long_block">
                             <div class="col-50 table_fill west-block" id="west"></div>
-                            <div class="col-50 table_fill west-block" id="W-text"></div>
+                            <div class="col-50 table_fill west-block">
+                                <h3 id="W-text" class="align-text-center"></h3>
+                                <h3 id="W-text2" class="align-text-center"></h3>
+                            </div>
                         </div>
                         <div class="col-25 table_short_block"></div>
                         <div class="col-50 table_short_block south-block" id="south"></div>
                         <div class="col-25 table_short_block"></div>
                         <div class="col-25 table_short_block"></div>
-                        <div class="col-50 table_short_block south-block" id="S-text"></div>
+                        <div class="col-50 table_short_block south-block">
+                            <h3 id="S-text" class="align-text-center"></h3>
+                            <h3 id="S-text2" class="align-text-center"></h3>
+                        </div>
                         <div class="col-25 table_short_block"></div>
                     </div>
+                </div>
+                <div class="block row">
+                    <button class="button button-fill col">
+                        <i class="f7-icons if-not-md">hourglass</i>
+                        <i class="material-icons md-only">hourglass_empty</i>
+                        <span class="margin-left">流局</span>
+                    </button>
+                    <button class="button button-fill col">
+                        <i class="f7-icons if-not-md">bandage</i>
+                        <i class="material-icons md-only">healing</i>
+                        <span class="margin-left">詐糊</span>
+                    </button>
+                    <button class="button button-fill col">
+                        <i class="f7-icons if-not-md">checkmark_circle</i>
+                        <i class="material-icons md-only">check_circle_outline</i>
+                        <span class="margin-left">結束</span>
+                    </button>
                 </div>
                 <div class="block-title">Navigation</div>
                 <div class="list">
