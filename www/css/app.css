@@ -26,6 +26,15 @@
 .align-text-right{
     text-align: right;
 }
+.none{
+    display: none !important;
+}
+.input_underlined{
+    border-bottom:  1px var(--f7-theme-color) solid !important;
+}
+.input_underlined:disabled{
+    border-bottom: 0px black solid !important;
+}
 .p1_input{
     border-bottom: 1px var(--p1-color) solid !important;
     background-color: transparent;
@@ -73,6 +82,25 @@
 }
 .p4_bg{
     background-color: var(--p4-color);
+}
+.grid-button{
+    justify-content: center;
+    align-items: center;
+    aspect-ratio: 1 / 1;
+    height: 100%;
+    max-height: max(70px, 10vh);
+}
+/* Hide Input arrows */
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+    -moz-appearance: textfield;
 }
 /* CSS for start popup */
 #start-form input:disabled{
@@ -128,32 +156,23 @@
     font-size: 2em;
 }
 .card input{
-    width: 80%;
     display: inline-block;
+    width: 100%;
 }
-.p1_card{
+.card{
     border: 1px solid transparent;
 }
-.p2_card{
-    border: 1px solid transparent;
+.p1_card.dealer h2{
+    color: var(--p1-color);
 }
-.p3_card{
-    border: 1px solid transparent;
+.p2_card.dealer h2{
+    color: var(--p2-color);
 }
-.p4_card{
-    border: 1px solid transparent;
+.p3_card.dealer h2{
+    color: var(--p3-color);
 }
-.p1_card.dealer{
-    border: 1px solid var(--p1-color);
-}
-.p2_card.dealer{
-    border: 1px solid var(--p2-color);
-}
-.p3_card.dealer{
-    border: 1px solid var(--p3-color);
-}
-.p4_card.dealer{
-    border: 1px solid var(--p4-color);
+.p4_card.dealer h2{
+    color: var(--p4-color);
 }
 .plus_or_minus{
     display: inline-block;

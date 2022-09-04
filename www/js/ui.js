@@ -136,14 +136,16 @@ function start_game_ui(){
             {
                 text: '即收',
                 onClick: function(){
-                    console.log('即收');
+                    set_instantGet_position(1);
+                    app.popup.open('#instantGet-popup');
                     // Function for opening popup
                 }
             },
             {
                 text: '即付',
                 onClick: function(){
-                    console.log('即付');
+                    set_instantPay_position(1);
+                    app.popup.open('#instantPay-popup');
                     // Function for opening popup
                 }
             },
@@ -151,14 +153,15 @@ function start_game_ui(){
                 text: '出銃',
                 onClick: function(){
                     set_deal_position(1);
-                    app.popup.open('#deal-popup')
+                    app.popup.open('#deal-popup');
                     // Function for opening popup
                 }
             },
             {
                 text: '自摸',
                 onClick: function(){
-                    console.log('自摸');
+                    set_tsumo_position(1);
+                    app.popup.open('#tsumo-popup');
                     // Function for opening popup
                 }
             }
@@ -173,12 +176,16 @@ function start_game_ui(){
             {
                 text: '即收',
                 onClick: function(){
+                    set_instantGet_position(2);
+                    app.popup.open('#instantGet-popup');
                     // Function for opening popup
                 }
             },
             {
                 text: '即付',
                 onClick: function(){
+                    set_instantPay_position(2);
+                    app.popup.open('#instantPay-popup');
                     // Function for opening popup
                 }
             },
@@ -193,6 +200,8 @@ function start_game_ui(){
             {
                 text: '自摸',
                 onClick: function(){
+                    set_tsumo_position(2);
+                    app.popup.open('#tsumo-popup');
                     // Function for opening popup
                 }
             }
@@ -207,12 +216,16 @@ function start_game_ui(){
             {
                 text: '即收',
                 onClick: function(){
+                    set_instantGet_position(3);
+                    app.popup.open('#instantGet-popup');
                     // Function for opening popup
                 }
             },
             {
                 text: '即付',
                 onClick: function(){
+                    set_instantPay_position(3);
+                    app.popup.open('#instantPay-popup');
                     // Function for opening popup
                 }
             },
@@ -227,6 +240,8 @@ function start_game_ui(){
             {
                 text: '自摸',
                 onClick: function(){
+                    set_tsumo_position(3);
+                    app.popup.open('#tsumo-popup');
                     // Function for opening popup
                 }
             }
@@ -241,12 +256,16 @@ function start_game_ui(){
             {
                 text: '即收',
                 onClick: function(){
+                    set_instantGet_position(4);
+                    app.popup.open('#instantGet-popup');
                     // Function for opening popup
                 }
             },
             {
                 text: '即付',
                 onClick: function(){
+                    set_instantPay_position(4);
+                    app.popup.open('#instantPay-popup');
                     // Function for opening popup
                 }
             },
@@ -261,6 +280,8 @@ function start_game_ui(){
             {
                 text: '自摸',
                 onClick: function(){
+                    set_tsumo_position(4);
+                    app.popup.open('#tsumo-popup');
                     // Function for opening popup
                 }
             }
@@ -333,7 +354,9 @@ function submit_start_form(){ //Function for handling start form submit
     // Call function in main.js here
     app.popup.close('#start-popup');
 }
-// Function for positioning different player in deal popup
+//
+// Function deal popup
+//
 // Putting the index of selected_player into the top div
 function set_deal_position(player_selected){
     $('#deal-form input').prop('disabled', false);
@@ -360,14 +383,103 @@ function set_deal_position(player_selected){
 }
 // Fill in values automatically in deal popup
 function deal_input_actions(){
-    let total = 0 - $('.deal_left input').val() - $('.deal_center input').val() - $('.deal_right input').val();
-    $('.deal_selected input').val(Math.abs(total));
+    let left = isNaN(parseInt($('.deal_left input').val())) ? 0 : parseInt($('.deal_left input').val());
+    let center = isNaN(parseInt($('.deal_center input').val())) ? 0 : parseInt($('.deal_center input').val());
+    let right = isNaN(parseInt($('.deal_right input').val())) ? 0 : parseInt($('.deal_right input').val());
+    let total = 0 + left + center + right;
+    $('.deal_selected input').val(total);
 }
 // Clear all inputs upon popup close
 $('#deal-popup').on('popup:closed', function(){
     $('#deal-form input').val('');
 });
-
+//
+// Function for tsumo popup
+//
+// Putting the index of selected_player into the top div
+function set_tsumo_position(player_selected){
+    $('#tsumo-form input').prop('disabled', false);
+    $('#tsumo-form input').val('');
+    let position = 'left';
+    for (x=1; x<=4; x++){
+        if (x == player_selected){ //Append selected player into specific position
+            $('.tsumo_selected').append($('#p' + x + '_tsumo'));
+            $('.tsumo_selected input').prop('disabled', true);
+            $('.tsumo_selected .plus_or_minus').text('+');
+        } else if (position == 'left'){ //Append other players into corresponding positions
+            $('.tsumo_' + position).append($('#p' + x + '_tsumo'));
+            $('.tsumo_' + position + ' .plus_or_minus').text('-');
+            position = 'center';
+        } else if (position == 'center'){
+            $('.tsumo_' + position).append($('#p' + x + '_tsumo'));
+            $('.tsumo_' + position + ' .plus_or_minus').text('-');
+            position = 'right';
+        } else {
+            $('.tsumo_' + position).append($('#p' + x + '_tsumo'));
+            $('.tsumo_' + position + ' .plus_or_minus').text('-');
+        }
+    }
+}
+// Fill in values automatically in tsumo popup
+function tsumo_input_actions(){
+    let left = isNaN(parseInt($('.tsumo_left input').val())) ? 0 : parseInt($('.tsumo_left input').val());
+    let center = isNaN(parseInt($('.tsumo_center input').val())) ? 0 : parseInt($('.tsumo_center input').val());
+    let right = isNaN(parseInt($('.tsumo_right input').val())) ? 0 : parseInt($('.tsumo_right input').val());
+    let total = 0 + left + center + right;
+    $('.tsumo_selected input').val(total);
+}
+// Clear all inputs upon popup close
+$('#tsumo-popup').on('popup:closed', function(){
+    $('#tsumo-form input').val('');
+});
+//
+// Function for positioning different player in InstantGet popup
+//
+// Putting the index of selected_player into the top div
+function set_instantGet_position(player_selected){
+    $('#instantGet-form .card').addClass('none');
+    for (x=1; x<=4; x++){
+        if (x == player_selected){ //Append selected player into specific position
+            $('#p' +x + '_instantGet').removeClass('none');
+            $('.instantGet_selected').append($('#p' + x + '_instantGet'));
+        }
+    }
+}
+// Show number input when others is selected
+function instantGet_change(){
+    let selected_value = $('input[name="instant-get"]:checked').val();
+    if (selected_value == 'others'){
+        $('#instantGet-form input[type="number"]').removeClass('none');
+        $('#instantGet-form input[type="number"]').focus();
+    } else {
+        $('#instantGet-form input[type="number"]').addClass('none');
+        $('#instantGet-form input[type="number"]').val('');
+    }
+}
+//
+// Function for positioning different player in InstantPay popup
+//
+// Putting the index of selected_player into the top div
+function set_instantPay_position(player_selected){
+    $('#instantPay-form .card').addClass('none');
+    for (x=1; x<=4; x++){
+        if (x == player_selected){ //Append selected player into specific position
+            $('#p' +x + '_instantPay').removeClass('none');
+            $('.instantPay_selected').append($('#p' + x + '_instantPay'));
+        }
+    }
+}
+// Show number input when others is selected
+function instantPay_change(){
+    let selected_value = $('input[name="instant-pay"]:checked').val();
+    if (selected_value == 'others'){
+        $('#instantPay-form input[type="number"]').removeClass('none');
+        $('#instantPay-form input[type="number"]').focus();
+    } else {
+        $('#instantPay-form input[type="number"]').addClass('none');
+        $('#instantPay-form input[type="number"]').val('');
+    }
+}
 // ------------------------------------------ //
 // SETTINGS RELATED FUNCTIONS
 // ------------------------------------------ //

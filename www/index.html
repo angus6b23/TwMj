@@ -4,201 +4,156 @@
     <meta charset="utf-8">
     <!--
     Customize this policy to fit your own app's needs. For more guidance, please refer to the docs:
-      https://cordova.apache.org/docs/en/latest/
+    https://cordova.apache.org/docs/en/latest/
     Some notes:
     * https://ssl.gstatic.com is required only on Android and is needed for TalkBack to function properly
     * Disables use of inline scripts in order to mitigate risk of XSS vulnerabilities. To change this:
-      * Enable inline JS: add 'unsafe-inline' to default-src
-    -->
-    <meta http-equiv="Content-Security-Policy" content="default-src * 'self' 'unsafe-inline' 'unsafe-eval' data: content:">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, viewport-fit=cover">
+    * Enable inline JS: add 'unsafe-inline' to default-src
+-->
+<meta http-equiv="Content-Security-Policy" content="default-src * 'self' 'unsafe-inline' 'unsafe-eval' data: content:">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, viewport-fit=cover">
 
-    <meta name="theme-color" content="#212121">
-    <meta name="format-detection" content="telephone=no">
-    <meta name="msapplication-tap-highlight" content="no">
-    <title>TwMj</title>
-    <!-- web-start -->
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png">
-    <link rel="icon" href="assets/icons/favicon.png">
-    <link rel="manifest" href="/manifest.json">
-    <!-- web-end -->
-    <link rel="stylesheet" href="framework7/framework7-bundle.min.css">
-    <link rel="stylesheet" href="css/icons.css">
-    <link rel="stylesheet" href="css/app.css">
+<meta name="theme-color" content="#212121">
+<meta name="format-detection" content="telephone=no">
+<meta name="msapplication-tap-highlight" content="no">
+<title>TwMj</title>
+<!-- web-start -->
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png">
+<link rel="icon" href="assets/icons/favicon.png">
+<link rel="manifest" href="/manifest.json">
+<!-- web-end -->
+<link rel="stylesheet" href="framework7/framework7-bundle.min.css">
+<link rel="stylesheet" href="css/icons.css">
+<link rel="stylesheet" href="css/app.css">
 </head>
 <body>
     <div id="app" class="dark">
-    <!-- Views/Tabs container -->
-    <div class="views tabs safe-areas">
-      <!-- Tabbar for switching views-tabs -->
-        <div class="toolbar toolbar-bottom tabbar-labels">
-            <div class="toolbar-inner">
-                <a href="#view-home" class="tab-link tab-link-active">
-                    <i class="icon f7-icons if-not-md">house_fill</i>
-                    <i class="icon material-icons if-md">home</i>
-                    <span class="tabbar-label">主頁</span>
-                </a>
-                <a href="#view-stats" class="tab-link">
-                    <i class="icon f7-icons if-not-md">chart_bar_alt_fill</i>
-                    <i class="icon material-icons if-md">leaderboard</i>
-                    <span class="tabbar-label">數據</span>
-                </a>
-                <a href="#view-settings" class="tab-link">
-                    <i class="icon f7-icons if-not-md">ellipsis_vertical</i>
-                    <i class="icon material-icons if-md">more_vert</i>
-                    <span class="tabbar-label">更多</span>
-                </a>
-            </div>
-        </div>
-
-      <!-- Your main view/tab, should have "view-main" class. It also has "tab-active" class -->
-        <div id="view-home" class="view view-main view-init tab tab-active">
-            <div class="page" data-name="home">
-      <!-- Scrollable page content-->
-            <div class="page-content">
-                <div class="block block-strong">
-                    <h1 id="round_counter" class="align-text-center">第一局・東圈東</h1>
+        <!-- Views/Tabs container -->
+        <div class="views tabs safe-areas">
+            <!-- Tabbar for switching views-tabs -->
+            <div class="toolbar toolbar-bottom tabbar-labels">
+                <div class="toolbar-inner">
+                    <a href="#view-home" class="tab-link tab-link-active">
+                        <i class="icon f7-icons if-not-md">house_fill</i>
+                        <i class="icon material-icons if-md">home</i>
+                        <span class="tabbar-label">主頁</span>
+                    </a>
+                    <a href="#view-stats" class="tab-link">
+                        <i class="icon f7-icons if-not-md">chart_bar_alt_fill</i>
+                        <i class="icon material-icons if-md">leaderboard</i>
+                        <span class="tabbar-label">數據</span>
+                    </a>
+                    <a href="#view-settings" class="tab-link">
+                        <i class="icon f7-icons if-not-md">ellipsis_vertical</i>
+                        <i class="icon material-icons if-md">more_vert</i>
+                        <span class="tabbar-label">更多</span>
+                    </a>
                 </div>
-                <div id="table_wrap">
-                    <div id="table" class="row no-gap">
-                        <div class="col-25 table_short_block"></div>
-                        <div class="col-50 table_short_block north-block">
-                            <h3 id="N-text" class="align-text-center"></h3>
-                            <h3 id="N-text2" class="align-text-center"></h3>
+            </div>
+
+            <!-- Your main view/tab, should have "view-main" class. It also has "tab-active" class -->
+            <div id="view-home" class="view view-main view-init tab tab-active">
+                <div class="page" data-name="home">
+                    <!-- Scrollable page content-->
+                    <div class="page-content">
+                        <div class="block block-strong">
+                            <h1 id="round_counter" class="align-text-center">第一局・東圈東</h1>
                         </div>
-                        <div class="col-25 table_short_block"></div>
-                        <div class="col-25 table_short_block"></div>
-                        <div class="col-50 table_short_block north-block" id="north"></div>
-                        <div class="col-25 table_short_block"></div>
-                        <div class="col-25 row no-gap table_long_block">
-                            <div class="col-50 table_fill east-block">
-                                <h3 id="E-text" class="align-text-center"></h3>
-                                <h3 id="E-text2" class="align-text-center"></h3>
+                        <div id="table_wrap">
+                            <div id="table" class="row no-gap">
+                                <div class="col-25 table_short_block"></div>
+                                <div class="col-50 table_short_block north-block">
+                                    <h3 id="N-text" class="align-text-center"></h3>
+                                    <h3 id="N-text2" class="align-text-center"></h3>
+                                </div>
+                                <div class="col-25 table_short_block"></div>
+                                <div class="col-25 table_short_block"></div>
+                                <div class="col-50 table_short_block north-block" id="north"></div>
+                                <div class="col-25 table_short_block"></div>
+                                <div class="col-25 row no-gap table_long_block">
+                                    <div class="col-50 table_fill east-block">
+                                        <h3 id="E-text" class="align-text-center"></h3>
+                                        <h3 id="E-text2" class="align-text-center"></h3>
+                                    </div>
+                                    <div class="col-50 table_fill east-block" id="east"></div>
+                                </div>
+                                <div class="col-50 table_long_block" id="center"></div>
+                                <div class="col-25 row no-gap table_long_block">
+                                    <div class="col-50 table_fill west-block" id="west"></div>
+                                    <div class="col-50 table_fill west-block">
+                                        <h3 id="W-text" class="align-text-center"></h3>
+                                        <h3 id="W-text2" class="align-text-center"></h3>
+                                    </div>
+                                </div>
+                                <div class="col-25 table_short_block"></div>
+                                <div class="col-50 table_short_block south-block" id="south"></div>
+                                <div class="col-25 table_short_block"></div>
+                                <div class="col-25 table_short_block"></div>
+                                <div class="col-50 table_short_block south-block">
+                                    <h3 id="S-text" class="align-text-center"></h3>
+                                    <h3 id="S-text2" class="align-text-center"></h3>
+                                </div>
+                                <div class="col-25 table_short_block"></div>
                             </div>
-                            <div class="col-50 table_fill east-block" id="east"></div>
                         </div>
-                        <div class="col-50 table_long_block" id="center"></div>
-                        <div class="col-25 row no-gap table_long_block">
-                            <div class="col-50 table_fill west-block" id="west"></div>
-                            <div class="col-50 table_fill west-block">
-                                <h3 id="W-text" class="align-text-center"></h3>
-                                <h3 id="W-text2" class="align-text-center"></h3>
-                            </div>
+                        <div class="block row">
+                            <button class="button col grid-button row">
+                                <i class="f7-icons if-not-md col-100">hourglass</i>
+                                <i class="material-icons md-only col-100">hourglass_empty</i>
+                                <span>流局</span>
+                            </button>
+                            <button class="button col grid-button row">
+                                <i class="f7-icons if-not-md col-100">bandage</i>
+                                <i class="material-icons md-only col-100">healing</i>
+                                <span>詐糊</span>
+                            </button>
+                            <button class="button col grid-button row">
+                                <i class="f7-icons if-not-md col-100">checkmark_circle</i>
+                                <i class="material-icons md-only col-100">check_circle_outline</i>
+                                <span>結束</span>
+                            </button>
                         </div>
-                        <div class="col-25 table_short_block"></div>
-                        <div class="col-50 table_short_block south-block" id="south"></div>
-                        <div class="col-25 table_short_block"></div>
-                        <div class="col-25 table_short_block"></div>
-                        <div class="col-50 table_short_block south-block">
-                            <h3 id="S-text" class="align-text-center"></h3>
-                            <h3 id="S-text2" class="align-text-center"></h3>
-                        </div>
-                        <div class="col-25 table_short_block"></div>
                     </div>
                 </div>
-                <div class="block row">
-                    <button class="button button-fill col">
-                        <i class="f7-icons if-not-md">hourglass</i>
-                        <i class="material-icons md-only">hourglass_empty</i>
-                        <span class="margin-left">流局</span>
-                    </button>
-                    <button class="button button-fill col">
-                        <i class="f7-icons if-not-md">bandage</i>
-                        <i class="material-icons md-only">healing</i>
-                        <span class="margin-left">詐糊</span>
-                    </button>
-                    <button class="button button-fill col">
-                        <i class="f7-icons if-not-md">checkmark_circle</i>
-                        <i class="material-icons md-only">check_circle_outline</i>
-                        <span class="margin-left">結束</span>
-                    </button>
-                </div>
-                <div class="block-title">Navigation</div>
-                <div class="list">
-                    <ul>
-                        <li>
-                            <a href="/about/" class="item-content item-link">
-                                <div class="item-inner">
-                                    <div class="item-title">About</div>
-                                </div>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="/form/" class="item-content item-link">
-                                <div class="item-inner">
-                                    <div class="item-title">Form</div>
-                                </div>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-
-            <div class="block-title">Modals</div>
-            <div class="block block-strong">
-              <div class="row">
-                <div class="col-50">
-                  <a href="#" class="button button-raised button-fill popup-open" data-popup="#deal-popup">Popup</a>
-                </div>
-                <div class="col-50">
-                  <a href="#" class="button button-raised button-fill login-screen-open" data-login-screen="#my-login-screen">Login Screen</a>
-                </div>
-              </div>
             </div>
 
-            <div class="block-title">Panels</div>
-            <div class="block block-strong">
-              <div class="row">
-                <div class="col-50">
-                  <a href="#" class="button button-raised button-fill panel-open" data-panel="left">Left Panel</a>
-                </div>
-                <div class="col-50">
-                  <a href="#" class="button button-raised button-fill panel-open" data-panel="right">Right Panel</a>
-                </div>
-              </div>
+            <!-- Catalog View -->
+            <div id="view-stats" class="view view-init tab" data-name="stats" data-url="/stats/">
+                <!-- Catalog page will be loaded here dynamically from /catalog/ route -->
             </div>
 
-            <div class="list links-list">
-              <ul>
-                <li>
-                  <a href="/dynamic-route/blog/45/post/125/?foo=bar#about">Dynamic (Component) Route</a>
-                </li>
-                <li>
-                  <a href="/load-something-that-doesnt-exist/">Default Route (404)</a>
-                </li>
-                <li>
-                  <a href="/request-and-load/user/123456/">Request Data & Load</a>
-                </li>
-              </ul>
+            <!-- Settings View -->
+            <div id="view-settings" class="view view-init tab" data-name="settings" data-url="/settings/">
+                <!-- Settings page will be loaded here dynamically from /settings/ route -->
             </div>
-          </div>
         </div>
-      </div>
 
-      <!-- Catalog View -->
-      <div id="view-stats" class="view view-init tab" data-name="stats" data-url="/stats/">
-        <!-- Catalog page will be loaded here dynamically from /catalog/ route -->
-      </div>
 
-      <!-- Settings View -->
-      <div id="view-settings" class="view view-init tab" data-name="settings" data-url="/settings/">
-        <!-- Settings page will be loaded here dynamically from /settings/ route -->
-      </div>
+        <!-- Popups -->
+        <!-- Popup for Starting game -->
+        <div class="popup popup-tablet-fullscreen" id="start-popup">
+            <div class="view view-init" data-name="start" data-url="/start/"></div>
+        </div>
+        <!-- Popup for deal modal -->
+        <div class="popup" id="deal-popup">
+            <div class="view view-init" data-name="deal" data-url="/deal/"></div>
+        </div>
+        <!-- Popup for tsumo modal -->
+        <div class="popup" id="tsumo-popup">
+            <div class="view view-init" data-name="tsumo" data-url="/tsumo/"></div>
+        </div>
+        <!-- Popup for instant get modal -->
+        <div class="popup" id="instantGet-popup">
+            <div class="view view-init" data-name="instantGet" data-url="/instantGet/"></div>
+        </div>
+        <div class="popup" id="instantPay-popup">
+            <div class="view view-init" data-name="instantPay" data-url="/instantPay/"></div>
+        </div>
+
+
     </div>
-
-
-    <!-- Popups -->
-    <!-- Popup for Starting game -->
-    <div class="popup popup-tablet-fullscreen" id="start-popup">
-        <div class="view view-init" data-name="start" data-url="/start/"></div>
-    </div>
-    <!-- Popup for deal modal -->
-    <div class="popup" id="deal-popup">
-        <div class="view view-init" data-name="deal" data-url="/deal/"></div>
-    </div>
-
-</div>
     <!-- CORDOVA_PLACEHOLDER_DONT_REMOVE -->
     <!-- Framework7 library -->
     <script src="framework7/framework7-bundle.min.js"></script>

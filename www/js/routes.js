@@ -25,12 +25,16 @@ var routes = [
         url: './pages/start.html',
     },
     {
-        path: '/stats/',
-        componentUrl: './pages/stats.html',
+        path: '/tsumo/',
+        url: './pages/tsumo.html',
     },
     {
-        path: '/product/:id/',
-        componentUrl: './pages/product.html',
+        path: '/instantGet/',
+        url: './pages/instantGet.html'
+    },
+    {
+        path: '/instantPay/',
+        url: './pages/instantPay.html'
     },
     {
         path: '/settings/',
