@@ -40,7 +40,10 @@ var routes = [
         path: '/settings/',
         url: './pages/settings.html',
     },
-
+    {
+        path: '/stats/',
+        url: './pages/stats.html',
+    },
     {
         path: '/dynamic-route/blog/:blogId/post/:postId/',
         componentUrl: './pages/dynamic-route.html',

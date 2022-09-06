@@ -298,6 +298,7 @@ function open_action_sheet(player_index){
         case 4: p4_action.open(); break;
     }
 }
+// Event handlers for clicking block
 $('.east-block').click(function(){
     open_action_sheet(mapped.E);
 })
@@ -350,51 +351,83 @@ function submit_start_form(){ //Function for handling start form submit
     start_obj.name_array.push(start_form.elements['north_name'].value);
     start_obj.multiplier = start_form.elements['multiplier'].value;
     start_obj.break_streak = start_form.elements['break_streak'].value;
-    start_game(start_obj);
+    start_game(start_obj); //Function from Main.js
     // Call function in main.js here
     app.popup.close('#start-popup');
 }
 //
-// Function deal popup
+// Functions for deal popup
 //
 // Putting the index of selected_player into the top div
 function set_deal_position(player_selected){
     $('#deal-form input').prop('disabled', false);
     $('#deal-form input').val('');
     let position = 'left';
-    for (x=1; x<=4; x++){
-        if (x == player_selected){ //Append selected player into specific position
-            $('.deal_selected').append($('#p' + x + '_deal'));
-            $('.deal_selected input').prop('disabled', true);
+    for (i=1; i<=4; i++){
+        if (i == player_selected){ //Append selected player into specific position
+            $('.deal_selected').append($('#p' + i + '_deal'));
             $('.deal_selected .plus_or_minus').text('-');
+            $('#p' + i + '_deal_input').prop('disabled', true)
         } else if (position == 'left'){ //Append other players into corresponding positions
-            $('.deal_' + position).append($('#p' + x + '_deal'));
+            $('.deal_' + position).append($('#p' + i + '_deal'));
             $('.deal_' + position + ' .plus_or_minus').text('+');
             position = 'center';
         } else if (position == 'center'){
-            $('.deal_' + position).append($('#p' + x + '_deal'));
+            $('.deal_' + position).append($('#p' + i + '_deal'));
             $('.deal_' + position + ' .plus_or_minus').text('+');
             position = 'right';
         } else {
-            $('.deal_' + position).append($('#p' + x + '_deal'));
+            $('.deal_' + position).append($('#p' + i + '_deal'));
             $('.deal_' + position + ' .plus_or_minus').text('+');
         }
     }
 }
 // Fill in values automatically in deal popup
 function deal_input_actions(){
-    let left = isNaN(parseInt($('.deal_left input').val())) ? 0 : parseInt($('.deal_left input').val());
-    let center = isNaN(parseInt($('.deal_center input').val())) ? 0 : parseInt($('.deal_center input').val());
-    let right = isNaN(parseInt($('.deal_right input').val())) ? 0 : parseInt($('.deal_right input').val());
+    let left = parseInt($('.deal_left input').val()) || 0;
+    let center = parseInt($('.deal_center input').val()) || 0;
+    let right = parseInt($('.deal_right input').val()) || 0;
     let total = 0 + left + center + right;
     $('.deal_selected input').val(total);
+}
+// Function for handling deal submit format. Then call function in main.js
+function submit_deal_form(){
+    let deal_object = new Object(); //Create an object for storing index of selected player and array
+    deal_object.array = new Array();
+    for(i=1; i<=4; i++){ //Search for index of selected player
+        if($('.deal_selected div').hasClass('p' + i + '_card')){
+            deal_object.selected = i;
+            break;
+        }
+    }
+    for (i=1; i<=4; i++){
+        if (i == deal_object.selected){ // When the player is selected player
+            if($('#p' + i +'_deal_input').val() == '' || $('#p' + i +'_deal_input').val() == 0){ //Throw error if no input or input = 0
+                const deal_error_toast = app.toast.create({
+                    text: '尚未輸入勝出玩家所贏的番數！',
+                    position: 'bottom',
+                    closeTimeout: 1500,
+                });
+                deal_error_toast.open();
+                return;
+            }
+            else{
+                let value = 0 - parseInt($('#p' + i +'_deal_input').val()); //Pass negative value to array for selected player
+                deal_object.array.push(value);
+            }
+        } else {
+            let value = parseInt($('#p' + i + '_deal_input').val()) || 0; //Pass 0 as empty value for other players
+            deal_object.array.push(value);
+        }
+    }
+    console.log(deal_object);
 }
 // Clear all inputs upon popup close
 $('#deal-popup').on('popup:closed', function(){
     $('#deal-form input').val('');
 });
 //
-// Function for tsumo popup
+// Functions for tsumo popup
 //
 // Putting the index of selected_player into the top div
 function set_tsumo_position(player_selected){
@@ -422,18 +455,50 @@ function set_tsumo_position(player_selected){
 }
 // Fill in values automatically in tsumo popup
 function tsumo_input_actions(){
-    let left = isNaN(parseInt($('.tsumo_left input').val())) ? 0 : parseInt($('.tsumo_left input').val());
-    let center = isNaN(parseInt($('.tsumo_center input').val())) ? 0 : parseInt($('.tsumo_center input').val());
-    let right = isNaN(parseInt($('.tsumo_right input').val())) ? 0 : parseInt($('.tsumo_right input').val());
+    let left = parseInt($('.tsumo_left input').val()) || 0;
+    let center = parseInt($('.tsumo_center input').val()) || 0;
+    let right = parseInt($('.tsumo_right input').val()) || 0;
     let total = 0 + left + center + right;
     $('.tsumo_selected input').val(total);
+}
+// Function for handling tsumo submit format. Then call function in main.js
+function submit_tsumo_form(){
+    let tsumo_object = new Object(); //Create an object for storing index of selected player and array
+    tsumo_object.array = new Array();
+    for(i=1; i<=4; i++){ //Search for index of selected player
+        if($('.tsumo_selected div').hasClass('p' + i + '_card')){
+            tsumo_object.selected = i;
+            break;
+        }
+    }
+    for (i=1; i<=4; i++){
+        if (i != tsumo_object.selected){ // When the player is selected player
+            if($('#p' + i +'_tsumo_input').val() == '' || $('#p' + i +'_tsumo_input').val() == 0){ //Throw error if no input or input = 0
+                const tsumo_error_toast = app.toast.create({
+                    text: '尚未輸入所有非自摸玩家所輸的番數！',
+                    position: 'bottom',
+                    closeTimeout: 1500,
+                });
+                tsumo_error_toast.open();
+                return;
+            }
+            else{
+                let value = 0 - parseInt($('#p' + i +'_tsumo_input').val()); //Pass negative value to array for unselected player
+                tsumo_object.array.push(value);
+            }
+        } else {
+            let value = parseInt($('#p' + i + '_tsumo_input').val()); //Pass value for selected players
+            tsumo_object.array.push(value);
+        }
+    }
+    console.log(tsumo_object);
 }
 // Clear all inputs upon popup close
 $('#tsumo-popup').on('popup:closed', function(){
     $('#tsumo-form input').val('');
 });
 //
-// Function for positioning different player in InstantGet popup
+// Functions for InstantGet popup
 //
 // Putting the index of selected_player into the top div
 function set_instantGet_position(player_selected){
@@ -457,7 +522,7 @@ function instantGet_change(){
     }
 }
 //
-// Function for positioning different player in InstantPay popup
+// Functions for InstantPay popup
 //
 // Putting the index of selected_player into the top div
 function set_instantPay_position(player_selected){
