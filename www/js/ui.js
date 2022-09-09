@@ -83,11 +83,6 @@ const theme = { //Object for themes
         'is_Dark': false
     },
 };
-//Declared for global variables
-var p1_action
-var p2_action
-var p3_action
-var p4_action
 // ------------------------------------------ //
 // GLOBAL FUNCTIONS
 // ------------------------------------------ //
@@ -127,175 +122,15 @@ function start_game_ui(){
     $('.east-block').addClass('p' + mapped.E + '_action');
     $('.south-block').addClass('p' + mapped.S + '_action');
     $('.west-block').addClass('p' + mapped.W + '_action');
-    p1_action = app.actions.create({
-        buttons: [
-            {
-                text: allplayer[1].name,
-                label: true
-            },
-            {
-                text: '即收',
-                onClick: function(){
-                    set_instantGet_position(1);
-                    app.popup.open('#instantGet-popup');
-                    // Function for opening popup
-                }
-            },
-            {
-                text: '即付',
-                onClick: function(){
-                    set_instantPay_position(1);
-                    app.popup.open('#instantPay-popup');
-                    // Function for opening popup
-                }
-            },
-            {
-                text: '出銃',
-                onClick: function(){
-                    set_deal_position(1);
-                    app.popup.open('#deal-popup');
-                    // Function for opening popup
-                }
-            },
-            {
-                text: '自摸',
-                onClick: function(){
-                    set_tsumo_position(1);
-                    app.popup.open('#tsumo-popup');
-                    // Function for opening popup
-                }
-            }
-        ]
-    });
-    p2_action = app.actions.create({
-        buttons: [
-            {
-                text: allplayer[2].name,
-                label: true
-            },
-            {
-                text: '即收',
-                onClick: function(){
-                    set_instantGet_position(2);
-                    app.popup.open('#instantGet-popup');
-                    // Function for opening popup
-                }
-            },
-            {
-                text: '即付',
-                onClick: function(){
-                    set_instantPay_position(2);
-                    app.popup.open('#instantPay-popup');
-                    // Function for opening popup
-                }
-            },
-            {
-                text: '出銃',
-                onClick: function(){
-                    set_deal_position(2);
-                    app.popup.open('#deal-popup');
-                    // Function for opening popup
-                }
-            },
-            {
-                text: '自摸',
-                onClick: function(){
-                    set_tsumo_position(2);
-                    app.popup.open('#tsumo-popup');
-                    // Function for opening popup
-                }
-            }
-        ]
-    });
-    p3_action = app.actions.create({
-        buttons: [
-            {
-                text: allplayer[3].name,
-                label: true,
-            },
-            {
-                text: '即收',
-                onClick: function(){
-                    set_instantGet_position(3);
-                    app.popup.open('#instantGet-popup');
-                    // Function for opening popup
-                }
-            },
-            {
-                text: '即付',
-                onClick: function(){
-                    set_instantPay_position(3);
-                    app.popup.open('#instantPay-popup');
-                    // Function for opening popup
-                }
-            },
-            {
-                text: '出銃',
-                onClick: function(){
-                    set_deal_position(3);
-                    app.popup.open('#deal-popup');
-                    // Function for opening popup
-                }
-            },
-            {
-                text: '自摸',
-                onClick: function(){
-                    set_tsumo_position(3);
-                    app.popup.open('#tsumo-popup');
-                    // Function for opening popup
-                }
-            }
-        ]
-    });
-    p4_action = app.actions.create({
-        buttons: [
-            {
-                text: allplayer[4].name,
-                label: true
-            },
-            {
-                text: '即收',
-                onClick: function(){
-                    set_instantGet_position(4);
-                    app.popup.open('#instantGet-popup');
-                    // Function for opening popup
-                }
-            },
-            {
-                text: '即付',
-                onClick: function(){
-                    set_instantPay_position(4);
-                    app.popup.open('#instantPay-popup');
-                    // Function for opening popup
-                }
-            },
-            {
-                text: '出銃',
-                onClick: function(){
-                    set_deal_position(4);
-                    app.popup.open('#deal-popup')
-                    // Function for opening popup
-                }
-            },
-            {
-                text: '自摸',
-                onClick: function(){
-                    set_tsumo_position(4);
-                    app.popup.open('#tsumo-popup');
-                    // Function for opening popup
-                }
-            }
-        ]
-    });
 }
 
 // Adding event handlers for triggering action sheets
 function open_action_sheet(player_index){
     switch(player_index){
-        case 1: p1_action.open(); break;
-        case 2: p2_action.open(); break;
-        case 3: p3_action.open(); break;
-        case 4: p4_action.open(); break;
+        case 1: app.actions.open('.p1-actions'); break;
+        case 2: app.actions.open('.p2-actions'); break;
+        case 3: app.actions.open('.p3-actions'); break;
+        case 4: app.actions.open('.p4-actions'); break;
     }
 }
 // Event handlers for clicking block
@@ -317,7 +152,7 @@ $('.north-block').click(function(){
 // Starting Modal Functions
 function set_money_multiplier(value){ //Check money multiplier input before setting it as value
     let check_value = parseFloat(value);
-    if (isNaN(check_value) || check_value <= 0 || check_value == ''){
+    if (isNaN(check_value) || check_value <= 0 || check_value == ''){ //Throw toast error if input is invalid
         const money_multiplier_error_toast = app.toast.create({
             text: '設定錯誤！必須為正數！',
             position: 'bottom',
@@ -330,7 +165,7 @@ function set_money_multiplier(value){ //Check money multiplier input before sett
 }
 function set_break_streak(value){ //Check break streak input before setting it as value
     let check_value = parseInt(value);
-    if (isNaN(check_value) || check_value <= 0 || check_value == ''){
+    if (isNaN(check_value) || check_value <= 0 || check_value == ''){ //Throw toast error if input is invalid
         const break_streak_error_toast = app.toast.create({
             text: '設定錯誤！必須為正整數！',
             position: 'bottom',
