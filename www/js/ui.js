@@ -101,6 +101,11 @@ app.on('ui_update', function(){
     }
     console.log('ui updated called');
 });
+app.on('pageInit', function(){ // Add event listeners for all pages
+    $('.quick-actions .actions-button').on('click', function(){ //Event listeners for closing actions after click
+        app.actions.close();
+    })
+})
 // ------------------------------------------ //
 // MAIN PAGE RELATED FUNCTIONS
 // ------------------------------------------ //
@@ -146,6 +151,7 @@ $('.west-block').click(function(){
 $('.north-block').click(function(){
     open_action_sheet(mapped.N);
 })
+
 // ------------------------------------------ //
 // POPUP RELATED FUNCTIONS
 // ------------------------------------------ //
@@ -190,9 +196,112 @@ function submit_start_form(){ //Function for handling start form submit
     // Call function in main.js here
     app.popup.close('#start-popup');
 }
-//
+// ------------------------------------------ //
+// Functions for InstantGet popup
+// ------------------------------------------ //
+// Putting the index of selected_player into the top div
+function set_instantGet_position(player_selected){
+    $('#instantGet-form .card').addClass('none');
+    for (i=1; i<=4; i++){
+        if (i == player_selected){ //Append selected player into specific position
+            $('#p' +i + '_instantGet').removeClass('none');
+            $('.instantGet_selected').append($('#p' + i + '_instantGet'));
+        } else {
+            $('#instantGet_cards').append($('#p' + i + '_instantGet'));
+        }
+    }
+}
+// Show number input when others is selected
+function instantGet_change(){
+    let selected_value = $('input[name="instant-get"]:checked').val();
+    if (selected_value == 'others'){
+        $('#instantGet-form input[type="number"]').removeClass('none');
+        $('#instantGet-form input[type="number"]').focus();
+    } else {
+        $('#instantGet-form input[type="number"]').addClass('none');
+        $('#instantGet-form input[type="number"]').val('');
+    }
+}
+// Function for handling instant get submit format. Then call function in main.js
+function submit_instantGet_form(){
+    let instantGet_object = new Object();
+    for(i=1; i<=4; i++){ //Search for index of selected player
+        if($('.instantGet_selected div').hasClass('p' + i + '_card')){
+            instantGet_object.selected = i;
+            break;
+        }
+    }
+    instantGet_object.value = $('#instantGet-form input[name="instant-get"]:checked').val();
+    if (instantGet_object.value == 'others'){
+        instantGet_object.value = $('input[name="instantGet_others"]').val();
+    }
+    instantGet_object.value = parseInt(instantGet_object.value) || 0;
+    if (instantGet_object.value == 0){
+        const instantGet_error_toast = app.toast.create({
+            text: '尚未輸入即收的番數或輸入錯誤，即收番數必須為正整數',
+            position: 'bottom',
+            closeTimeout: 1500,
+        });
+        instantGet_error_toast.open();
+        return;
+    }
+    instant_get(instantGet_object.selected, instantGet_object.value);
+    app.popup.close('#instantGet-popup');
+}
+// ------------------------------------------ //
+// Functions for InstantPay popup
+// ------------------------------------------ //
+// Putting the index of selected_player into the top div
+function set_instantPay_position(player_selected){
+    $('#instantPay-form .card').addClass('none');
+    for (x=1; x<=4; x++){
+        if (x == player_selected){ //Append selected player into specific position
+            $('#p' +x + '_instantPay').removeClass('none');
+            $('.instantPay_selected').append($('#p' + x + '_instantPay'));
+        } else {
+            $('#instantPay_cards').append($('#p' + x + '_instantPay'));
+        }
+    }
+}
+// Show number input when others is selected
+function instantPay_change(){
+    let selected_value = $('input[name="instant-pay"]:checked').val();
+    if (selected_value == 'others'){
+        $('#instantPay-form input[type="number"]').removeClass('none');
+        $('#instantPay-form input[type="number"]').focus();
+    } else {
+        $('#instantPay-form input[type="number"]').addClass('none');
+        $('#instantPay-form input[type="number"]').val('');
+    }
+}
+function submit_instantPay_form(){
+    let instantPay_object = new Object();
+    for(i=1; i<=4; i++){ //Search for index of selected player
+        if($('.instantPay_selected div').hasClass('p' + i + '_card')){
+            instantPay_object.selected = i;
+            break;
+        }
+    }
+    instantPay_object.value = $('#instantPay-form input[name="instant-pay"]:checked').val();
+    if (instantPay_object.value == 'others'){
+        instantPay_object.value = $('input[name="instantPay_others"]').val();
+    }
+    instantPay_object.value = parseInt(instantPay_object.value) || 0;
+    if (instantPay_object.value == 0){
+        const instantPay_error_toast = app.toast.create({
+            text: '尚未輸入即付的番數或輸入錯誤，即收番數必須為正整數',
+            position: 'bottom',
+            closeTimeout: 1500,
+        });
+        instantPay_error_toast.open();
+        return;
+    }
+    instant_pay(instantPay_object.selected, instantPay_object.value);
+    app.popup.close('#instantPay-popup');
+}
+// ------------------------------------------ //
 // Functions for deal popup
-//
+// ------------------------------------------ //
 // Putting the index of selected_player into the top div
 function set_deal_position(player_selected){
     $('#deal-form input').prop('disabled', false);
@@ -228,7 +337,7 @@ function deal_input_actions(){
 // Function for handling deal submit format. Then call function in main.js
 function submit_deal_form(){
     let deal_object = new Object(); //Create an object for storing index of selected player and array
-    deal_object.array = new Array();
+    deal_object.array = [NaN];
     for(i=1; i<=4; i++){ //Search for index of selected player
         if($('.deal_selected div').hasClass('p' + i + '_card')){
             deal_object.selected = i;
@@ -255,15 +364,16 @@ function submit_deal_form(){
             deal_object.array.push(value);
         }
     }
-    console.log(deal_object);
+    deal(deal_object.selected, deal_object.array); //Call function in main.js for managing deal
+    app.popup.close('#deal-popup');
 }
 // Clear all inputs upon popup close
 $('#deal-popup').on('popup:closed', function(){
     $('#deal-form input').val('');
 });
-//
+// ------------------------------------------ //
 // Functions for tsumo popup
-//
+// ------------------------------------------ //
 // Putting the index of selected_player into the top div
 function set_tsumo_position(player_selected){
     $('#tsumo-form input').prop('disabled', false);
@@ -332,54 +442,6 @@ function submit_tsumo_form(){
 $('#tsumo-popup').on('popup:closed', function(){
     $('#tsumo-form input').val('');
 });
-//
-// Functions for InstantGet popup
-//
-// Putting the index of selected_player into the top div
-function set_instantGet_position(player_selected){
-    $('#instantGet-form .card').addClass('none');
-    for (x=1; x<=4; x++){
-        if (x == player_selected){ //Append selected player into specific position
-            $('#p' +x + '_instantGet').removeClass('none');
-            $('.instantGet_selected').append($('#p' + x + '_instantGet'));
-        }
-    }
-}
-// Show number input when others is selected
-function instantGet_change(){
-    let selected_value = $('input[name="instant-get"]:checked').val();
-    if (selected_value == 'others'){
-        $('#instantGet-form input[type="number"]').removeClass('none');
-        $('#instantGet-form input[type="number"]').focus();
-    } else {
-        $('#instantGet-form input[type="number"]').addClass('none');
-        $('#instantGet-form input[type="number"]').val('');
-    }
-}
-//
-// Functions for InstantPay popup
-//
-// Putting the index of selected_player into the top div
-function set_instantPay_position(player_selected){
-    $('#instantPay-form .card').addClass('none');
-    for (x=1; x<=4; x++){
-        if (x == player_selected){ //Append selected player into specific position
-            $('#p' +x + '_instantPay').removeClass('none');
-            $('.instantPay_selected').append($('#p' + x + '_instantPay'));
-        }
-    }
-}
-// Show number input when others is selected
-function instantPay_change(){
-    let selected_value = $('input[name="instant-pay"]:checked').val();
-    if (selected_value == 'others'){
-        $('#instantPay-form input[type="number"]').removeClass('none');
-        $('#instantPay-form input[type="number"]').focus();
-    } else {
-        $('#instantPay-form input[type="number"]').addClass('none');
-        $('#instantPay-form input[type="number"]').val('');
-    }
-}
 // ------------------------------------------ //
 // SETTINGS RELATED FUNCTIONS
 // ------------------------------------------ //
