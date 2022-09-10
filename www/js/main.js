@@ -7,9 +7,8 @@ let fulldata_JSON = new Array; // Array for undo and redo, saves most of the dat
 let msg = ''; //Message used for game log
 let game_log = new Array; //Array saving all game log objects
 let gamestat={ //Object for holding game statistics
-    round: 1,//1 = 第一圈東局， 2 = 南局, 3 = 西局, 4 = 北局
-    round_prevailing: 1,// 1 = 東位莊, 2 = 南位莊 ...
-    total_games: 0,
+    round: 1,// 1 = 1st game, 2 = 2nd game ...
+    round_prevailing: 1,//1 = 第一局東圈東， 2 = 東局南 ... 5 = 第一局南圈東 ... 17 = 第二局東圈東
     streak: 0, //Record current steak of banker(連莊)
     banker: 'E', //Record current position of banker(莊位)
     tie: 0, //Record how many ties in current game(流局)
@@ -60,16 +59,14 @@ class player_template{
         this.instant_get = 0;
         this.instant_pay = 0;
         this.bal_arr = [];
-        this.unr_arr = [];
     }
-
 }
 class log_template{
     constructor(message){
         let time = new Date();
-        let hour = toString(time.getHours());
-        let minute = toString(time.getMinutes());
-        this.timestamp = hour.padStart(2,'0') + ':' + minute.padStart(2,'0');
+        let hour = time.getHours().toString();
+        let minute = time.getMinutes().toString();
+        this.timestamp = hour.padStart(2,0) + ':' + minute.padStart(2,0);
         this.message = message;
         this.removed = false;
     }
@@ -148,6 +145,7 @@ function deal(player_index, game_arr){
     msg = '第' + gamestat.round + '場：<br>';
     // Manage game statistics first
     gamestat.total_change += Math.abs(game_arr[player_index]);
+    gamestat.deal += 1;
     allplayer[player_index].lose += 1;
     allplayer[player_index].deal_lose += 1;
     let winner_count = 0
@@ -166,6 +164,29 @@ function deal(player_index, game_arr){
     let total_yaku = parseInt(gamestat.avg_yaku) * (parseInt(gamestat.deal) + parseInt(gamestat.tsumo)) + Math.abs(parseInt(game_arr[player_index])); //Calculate total yakus
     gamestat.deal += 1; // Add 1 deal game to gamestat
     gamestat.avg_yaku = Math.round((total_yaku / (parseInt(gamestat.deal) + parseInt(gamestat.tsumo))) * 100 ) / 100; //Calculate and ound average yaku to 2 decimal places
+    transaction('deal', game_arr); //Call transaction after collecting statistics
+}
+function tsumo(player_index, game_arr){
+    msg = '第' + gamestat.round + '場：<br>';
+    // Manage game statistics first
+    gamestat.total_change += Math.abs(game_arr[player_index]);
+    gamestat.tsumo += 1;
+    allplayer[player_index].win += 1;
+    allplayer[player_index].tsumo += 1;
+    let total_yaku = 0;
+    for (i = 1; i <= 4; i++){ //Find for max yaku and generate log
+        if(game_arr[i] < 0){
+            allplayer[i].lose += 1;
+            (Math.abs(game_arr[i]) > gamestat.max_yaku) ? gamestat.max_yaku = Math.abs(game_arr[i]) : null;
+            (Math.abs(game_arr[i]) > allplayer[player_index].max_yaku) ? allplayer[player_index].max_yaku = Math.abs(game_arr[i]) : null;
+            total_yaku += Math.abs(game_arr[i]);
+        }
+    }
+    let avg_yaku = Math.round(total_yaku / 3 * 100) / 100;
+    msg += allplayer[player_index].name + ' 己自摸了 ' + avg_yaku + '番<br>';
+    transaction('tsumo', game_arr);
+}
+function transaction(action, game_arr){
     // Set player status before transaction
     for (i = 1; i <= 4; i++){
         (game_arr[i] > 0) ? allplayer[i].status = 'win' :
@@ -179,18 +200,31 @@ function deal(player_index, game_arr){
                 (allplayer[i]['loseto' + x] > 0 && allplayer[x].status == 'lose') ? pay_half_price(i, x): null;
             }
         }
-        if (allplayer[i].status == 'neutral'){ //For neutral player => Ignore winning player, pay full to both neutral and losing players
+        else if (allplayer[i].status == 'neutral'){ //For neutral player => Ignore winning player, pay full to both neutral and losing players
             for ( x = 1; x<=4 ; x++){
                 (allplayer[i]['loseto' + x] > 0 && allplayer[x].status != 'win') ? pay_full_price(i, x) : null;
             }
         }
-        if (allplayer[i].status == 'lose'){//For losing player => Pay full price to other losing and neutral player, stack streak and price for winning players
+        else if (allplayer[i].status == 'lose'){//For losing player => Pay full price to other losing and neutral player, stack streak and price for winning players
             for (x = 1; x<=4; x++){
                 (allplayer[i]['loseto' + x] > 0 && allplayer[x].status != 'win') ? pay_full_price(i,x) : null;
                 if (allplayer[x].status == 'win'){
                     allplayer[i]['sf' + x] += 1;
-                    allplayer[i]['loseto' + x ] = allplayer[i]['loseto' + x ] * parseFloat(default_setting.fold) + parseInt(game_arr[x]);
+                    (action == 'deal' ) ? allplayer[i]['loseto' + x ] = allplayer[i]['loseto' + x ] * parseFloat(default_setting.fold) + parseInt(game_arr[x]) : //Select value from winner if deal
+                    (action == 'tsumo') ? allplayer[i]['loseto' + x ] = Math.ceil(allplayer[i]['loseto' + x ] * parseFloat(default_setting.fold)) + Math.abs(parseInt(game_arr[i])) : null;  //Select value from loser if tsumo
                 }
+            }
+        }
+    }
+    gamestat.round += 1; // Add round to gamestat
+    (allplayer[mapped[gamestat.banker]].status == 'win') ? hold_banker() : pass_banker();
+    // Calculate unrealized gain or loses for all player
+    for (i=1; i<=4; i++){
+        allplayer[i].unrealized = 0;
+        for (x = 1; x<=4 ; x++){
+            if ( i !== x ){
+                allplayer[i].unrealized += allplayer[x]['loseto' + i];
+                allplayer[i].unrealized -= allplayer[i]['loseto' + x];
             }
         }
     }
@@ -210,6 +244,20 @@ function pay_half_price(payer_index, receiver_index){
     allplayer[receiver_index].balance += Math.floor(allplayer[payer_index]['loseto' + receiver_index] / 2);
     allplayer[payer_index]['loseto' + receiver_index ] = 0;
     allplayer[payer_index]['sf' + receiver_index] = 0;
+}
+function hold_banker(){
+    gamestat.streak += 1;
+    (gamestat.streak > allplayer[mapped[gamestat.banker]].max_streak) ? allplayer[mapped[gamestat.banker]].max_streak = gamestat.streak : null;
+    (gamestat.streak > gamestat.max_streak) ? gamestat.max_streak = gamestat.streak: null;
+}
+function pass_banker(){
+    gamestat.round_prevailing += 1;
+    switch(gamestat.banker){
+        case 'E': gamestat.banker = 'S'; break;
+        case 'S': gamestat.banker = 'W'; break;
+        case 'W': gamestat.banker = 'N'; break;
+        case 'N': gamestat.banker = 'E'; break;
+    }
 }
 // ------------------------------------------ //
 // EVENT HANDLEERS

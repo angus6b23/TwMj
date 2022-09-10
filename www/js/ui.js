@@ -102,9 +102,12 @@ app.on('ui_update', function(){
     console.log('ui updated called');
 });
 app.on('pageInit', function(){ // Add event listeners for all pages
-    $('.quick-actions .actions-button').on('click', function(){ //Event listeners for closing actions after click
+    $('.quick-actions .actions-button').on('click', function(){ //Event listeners for closing actions after click [Firefox]
         app.actions.close();
     })
+})
+$('.quick-actions .actions-button').on('click', function(){ //Event listeners for closing actions after click [Chromium]
+    app.actions.close();
 })
 // ------------------------------------------ //
 // MAIN PAGE RELATED FUNCTIONS
@@ -409,7 +412,7 @@ function tsumo_input_actions(){
 // Function for handling tsumo submit format. Then call function in main.js
 function submit_tsumo_form(){
     let tsumo_object = new Object(); //Create an object for storing index of selected player and array
-    tsumo_object.array = new Array();
+    tsumo_object.array = [NaN];
     for(i=1; i<=4; i++){ //Search for index of selected player
         if($('.tsumo_selected div').hasClass('p' + i + '_card')){
             tsumo_object.selected = i;
@@ -436,7 +439,9 @@ function submit_tsumo_form(){
             tsumo_object.array.push(value);
         }
     }
-    console.log(tsumo_object);
+    console.log(tsumo_object.selected + ', ' + tsumo_object.array);
+    tsumo(tsumo_object.selected, tsumo_object.array);
+    app.popup.close('#tsumo-popup');
 }
 // Clear all inputs upon popup close
 $('#tsumo-popup').on('popup:closed', function(){
@@ -465,6 +470,16 @@ $(document).on('page:afterin', '.page[data-name="import"]', function(){
 $(document).on('page:afterout','.page[data-name="import"]', function(){
     app.toolbar.show('.toolbar');
 });
+// Dump logs before show log popup
+$(document).on('popup:open', '.log-popup', function(){
+    let append_log = ''
+    $('.log-popup .log').remove();
+    for(i = 0; i < game_log.length; i++){
+        game_log[i].removed ? append_log += '<tr><td class="log align-text-center removed">' + game_log[i].timestamp + '</td><td class="log removed">' + game_log[i].message + '</td></tr>' :
+        append_log += '<tr><td class="log align-text-center">' + game_log[i].timestamp + '</td><td class="log">' + game_log[i].message + '</td></tr>';
+        $('#log_table').html(append_log);
+    }
+})
 // Function for handling prompt of removal of data
 function remove_data_prompt(){
     app.dialog.confirm('清除資料會影響現時設置及遊戲，確定要清除？', function(){
