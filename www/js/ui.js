@@ -111,10 +111,10 @@ app.on('ui_update', function(){
                 $('#p' + i + '-action-break').removeClass('none');
                 let streak_warning = $('.exclamation')[0].cloneNode(true);
                 switch (allplayer[i].position){
-                    case 'E': $('#east').append(streak_warning);
-                    case 'S': $('#south').append(streak_warning);
-                    case 'W': $('#west').append(streak_warning);
-                    case 'N': $('#north').append(streak_warning);
+                    case 'E': $('#east').append(streak_warning);break;
+                    case 'S': $('#south').append(streak_warning);break;
+                    case 'W': $('#west').append(streak_warning);break;
+                    case 'N': $('#north').append(streak_warning);break;
                 }
             }
         }
