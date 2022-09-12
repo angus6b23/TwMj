@@ -89,17 +89,36 @@ const theme = { //Object for themes
 // Function when triggering ui_update
 app.on('ui_update', function(){
     // Update table display
-    for (i=1;i<5;i++){
-        $('.p' + i + '_name').text(allplayer[i].name);
-        if (allplayer[i].unrealized == 0){
-            $('.p' + i + '_balance').html(allplayer[i].balance);
-        } else if (allplayer[i].unrealized > 0){
-            $('.p' + i + '_balance').html(allplayer[i].balance + ' (' + allplayer[i].unrealized + ')');
+    // Reomve all streak warning first
+    $('#table .exclamation').remove();
+    $('.action-break').addClass('none');
+    for (i=1;i<=4;i++){
+        $('.p' + i + '_name').text(allplayer[i].name); //Fill all player names
+        // Fill all player balance
+        if (default_setting.display_as_money){ //Calculate balance to money if display_as_money is true
+            let display_balance = Math.round(allplayer[i].balance * default_setting.money * 100) / 100;
+            let unrealized_balance = Math.round(allplayer[i].unrealized * default_setting.money * 100) / 100;
+            (allplayer[i].unrealized == 0) ? $('.p' + i + '_balance').text('$' + display_balance):
+            (allplayer[i].unrealized > 0) ? $('.p' + i + '_balance').text('$' + display_balance + ' (+$' + unrealized_balance + ')') :
+            $('.p' + i + '_balance').text('$' + display_balance + ' (-$' + Math.abs(unrealized_balance) + ')');
         } else {
-            $('.p' + i + '_balance').html(allplayer[i].balance + ' (' + allplayer[i].unrealized + ')');
+            (allplayer[i].unrealized == 0) ? $('.p' + i + '_balance').text(allplayer[i].balance):
+            (allplayer[i].unrealized > 0) ? $('.p' + i + '_balance').text(allplayer[i].balance + ' (+' + allplayer[i].unrealized + ')') :
+            $('.p' + i + '_balance').text(allplayer[i].balance + ' (' + allplayer[i].unrealized + ')');
+        }
+        for (x=1; x<=4; x++){
+            if (parseInt(allplayer[i]['sf' + x]) > 0  && parseInt(allplayer[i]['sf' + x]) % default_setting.break == 0){ //Copy streak warning node if streak % break = 0
+                $('#p' + i + '-action-break').removeClass('none');
+                let streak_warning = $('.exclamation')[0].cloneNode(true);
+                switch (allplayer[i].position){
+                    case 'E': $('#east').append(streak_warning);
+                    case 'S': $('#south').append(streak_warning);
+                    case 'W': $('#west').append(streak_warning);
+                    case 'N': $('#north').append(streak_warning);
+                }
+            }
         }
     }
-    console.log('ui updated called');
 });
 app.on('pageInit', function(){ // Add event listeners for all pages
     $('.quick-actions .actions-button').on('click', function(){ //Event listeners for closing actions after click [Firefox]
@@ -154,6 +173,35 @@ $('.west-block').click(function(){
 $('.north-block').click(function(){
     open_action_sheet(mapped.N);
 })
+//Event handler for clicking tie button
+$('.tie').on('click', function(){
+    app.dialog.create({
+        title: '流局',
+        text: '請選擇流局時連不連莊',
+        buttons: [
+            {
+                text: '連莊',
+                onClick: function(){
+                    tie('hold_banker');
+                }
+            },
+            {
+                text: '不連莊',
+                onClick: function(){
+                    tie('pass_banker');
+                }
+            },
+            {
+                text: '取消',
+                onClick: function(){
+                    app.dialog.close();
+                },
+                color: 'red'
+            }
+        ],
+        verticalButtons: true
+    }).open();
+});
 
 // ------------------------------------------ //
 // POPUP RELATED FUNCTIONS
@@ -193,8 +241,8 @@ function submit_start_form(){ //Function for handling start form submit
     start_obj.name_array.push(start_form.elements['south_name'].value);
     start_obj.name_array.push(start_form.elements['west_name'].value);
     start_obj.name_array.push(start_form.elements['north_name'].value);
-    start_obj.multiplier = start_form.elements['multiplier'].value;
-    start_obj.break_streak = start_form.elements['break_streak'].value;
+    start_obj.multiplier = parseFloat(start_form.elements['multiplier'].value);
+    start_obj.break_streak = parseInt(start_form.elements['break_streak'].value);
     start_game(start_obj); //Function from Main.js
     // Call function in main.js here
     app.popup.close('#start-popup');
@@ -439,7 +487,6 @@ function submit_tsumo_form(){
             tsumo_object.array.push(value);
         }
     }
-    console.log(tsumo_object.selected + ', ' + tsumo_object.array);
     tsumo(tsumo_object.selected, tsumo_object.array);
     app.popup.close('#tsumo-popup');
 }
@@ -450,6 +497,11 @@ $('#tsumo-popup').on('popup:closed', function(){
 // ------------------------------------------ //
 // SETTINGS RELATED FUNCTIONS
 // ------------------------------------------ //
+function display_as_money(){
+    default_setting.display_as_money = !default_setting.display_as_money;
+    app.emit('ui_update');
+    app.tab.show('#view-home');
+}
 // Hide Toolbar after entering license page
 $(document).on('page:afterin', '.page[data-name="license"]', function(){
     app.toolbar.hide('.toolbar');

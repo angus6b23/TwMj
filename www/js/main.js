@@ -32,6 +32,7 @@ let default_setting={ //Object for holding settings
     break: 3, //Loser can choose to stop consecutive after 3 loses
     base: 0, //Base Money
     money: 1, //Multiplier (Money = yaku x money multiplier)
+    display_as_money: false //Display money instead of score on main table when true;
 };
 class player_template{
     constructor(name, position){
@@ -55,6 +56,7 @@ class player_template{
         this.lose = 0;
         this.deal_lose = 0;
         this.deal_win = 0;
+        this.cut_half = 0;
         this.max_yaku = 0;
         this.instant_get = 0;
         this.instant_pay = 0;
@@ -76,8 +78,8 @@ let mapped = new Object //Object for saving index of player position
 // START POPUP FUNCTIONS
 // ------------------------------------------ //
 function start_game(start_obj){
-    default_setting.money = parseInt(start_obj.multiplier); //Apply settings into corresponding object
-    default_setting.break = parseInt(start_obj.break_streak);
+    default_setting.money = start_obj.multiplier; //Apply settings into corresponding object
+    default_setting.break = start_obj.break_streak;
     for (i = 1; i<5; i++){
         let position;
         switch(i){
@@ -187,6 +189,7 @@ function tsumo(player_index, game_arr){
     transaction('tsumo', game_arr);
 }
 function transaction(action, game_arr){
+    game_record.push(game_arr);
     // Set player status before transaction
     for (i = 1; i <= 4; i++){
         (game_arr[i] > 0) ? allplayer[i].status = 'win' :
@@ -210,7 +213,7 @@ function transaction(action, game_arr){
                 (allplayer[i]['loseto' + x] > 0 && allplayer[x].status != 'win') ? pay_full_price(i,x) : null;
                 if (allplayer[x].status == 'win'){
                     allplayer[i]['sf' + x] += 1;
-                    (action == 'deal' ) ? allplayer[i]['loseto' + x ] = allplayer[i]['loseto' + x ] * parseFloat(default_setting.fold) + parseInt(game_arr[x]) : //Select value from winner if deal
+                    (action == 'deal' ) ? allplayer[i]['loseto' + x ] = Math.ceil(allplayer[i]['loseto' + x ] * parseFloat(default_setting.fold)) + parseInt(game_arr[x]) : //Select value from winner if deal
                     (action == 'tsumo') ? allplayer[i]['loseto' + x ] = Math.ceil(allplayer[i]['loseto' + x ] * parseFloat(default_setting.fold)) + Math.abs(parseInt(game_arr[i])) : null;  //Select value from loser if tsumo
                 }
             }
@@ -232,18 +235,21 @@ function transaction(action, game_arr){
     app.emit('data_change');
 }
 function pay_full_price(payer_index, receiver_index){
-    msg += allplayer[payer_index].name + ' 已支付了 ' + allplayer[payer_index]['loseto' + receiver_index] + ' 番給 ' + allplayer[receiver_index].name + '<br>';
-    allplayer[payer_index].balance -= allplayer[payer_index]['loseto' + receiver_index];
-    allplayer[receiver_index].balance += allplayer[payer_index]['loseto' + receiver_index];
+    let to_pay = parseInt(allplayer[payer_index]['loseto' + receiver_index]);
+    msg += allplayer[payer_index].name + ' 已支付了 ' + to_pay + ' 番給 ' + allplayer[receiver_index].name + '<br>';
+    allplayer[payer_index].balance -= to_pay;
+    allplayer[receiver_index].balance += to_pay;
     allplayer[payer_index]['loseto' + receiver_index ] = 0;
     allplayer[payer_index]['sf' + receiver_index] = 0;
 }
 function pay_half_price(payer_index, receiver_index){
-    msg += allplayer[payer_index].name + ' 已支付了 ' + allplayer[payer_index]['loseto' + receiver_index] + ' 番給 ' + allplayer[receiver_index].name + '[踢半]<br>';
-    allplayer[payer_index].balance -= Math.floor(allplayer[payer_index]['loseto' + receiver_index] / 2);
-    allplayer[receiver_index].balance += Math.floor(allplayer[payer_index]['loseto' + receiver_index] / 2);
+    let to_pay = parseInt(Math.floor(allplayer[payer_index]['loseto' + receiver_index] / 2));
+    msg += allplayer[payer_index].name + ' 已支付了 ' + to_pay + ' 番給 ' + allplayer[receiver_index].name + '[踢半]<br>';
+    allplayer[payer_index].balance -= to_pay;
+    allplayer[receiver_index].balance += to_pay;
     allplayer[payer_index]['loseto' + receiver_index ] = 0;
     allplayer[payer_index]['sf' + receiver_index] = 0;
+    allplayer[payer_index].cut_half += 1;
 }
 function hold_banker(){
     gamestat.streak += 1;
@@ -259,6 +265,19 @@ function pass_banker(){
         case 'N': gamestat.banker = 'E'; break;
     }
 }
+// ------------------------------------------ //
+// Function for tie
+// ------------------------------------------ //
+function tie(action){
+    msg = '第' + gamestat.round + '場：<br>流局';
+    gamestat.tie += 1;
+    game_record.push(['tie']);
+    (action == 'hold_banker') ? hold_banker() :
+    (action == 'pass_banker') ? pass_banker() : null ;
+    add_log(msg);
+    app.emit('data_change');
+}
+
 // ------------------------------------------ //
 // EVENT HANDLEERS
 // ------------------------------------------ //
