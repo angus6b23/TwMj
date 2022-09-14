@@ -1,6 +1,5 @@
-
 <div class="page" data-name="stats">
-    <div class="page-contents">
+    <div class="page-content">
         <div class="block">
             <p class="segmented segmented-raised">
                 <button href="#history-view" class="button button-outline tab-link tab-link-active">遊戲記綠</button>
@@ -11,7 +10,19 @@
         </div>
         <div class="tabs">
             <div id="history-view" class="view tab tab-active">
-                1
+                    <table class="data-table">
+                        <thead>
+                            <tr style="position:sticky; top: 0px;">
+                                <th class="numeric-cell align-text-center default_th th-sticky">#</th>
+                                <th class="numeric-cell align-text-center p1_name p1_th th-sticky"></th>
+                                <th class="numeric-cell align-text-center p2_name p2_th th-sticky"></th>
+                                <th class="numeric-cell align-text-center p3_name p3_th th-sticky"></th>
+                                <th class="numeric-cell align-text-center p4_name p4_th th-sticky"></th>
+                            </tr>
+                            <tbody id="game_record" class="align-text-center">
+                            </tbody>
+                        </thead>
+                    </table>
             </div>
             <div id="game_stat-view" class="view tab">
                 2

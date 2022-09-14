@@ -1,7 +1,7 @@
 // ------------------------------------------ //
 // GLOBAL VARIABLES
 // ------------------------------------------ //
-const theme = { //Object for themes
+const themes = { //Object for themes
     Nord:{
         '--p1-color': '#d08770',
         '--p2-color': '#ebcb8b',
@@ -9,7 +9,11 @@ const theme = { //Object for themes
         '--p4-color': '#b48ead',
         '--bg-nord': '#2e3440',
         '--fg-nord': '#e5e9f0',
-        '--highlight': '#81a1c1',
+        '--f7-theme-color': '#81a1c1',
+        '--f7-theme-color-rgb:': '129, 161, 193',
+        '--f7-theme-color-shade': '#668db4',
+        '--f7-theme-color-tint': '#9cb5ce',
+        'zh_name': '北歐',
         'is_Dark': true
     },
     Nord_alt:{
@@ -19,7 +23,11 @@ const theme = { //Object for themes
         '--p4-color': '#5e81ac',
         '--bg-nord': '#2e3440',
         '--fg-nord': '#e5e9f0',
-        '--highlight': '#a3be8c',
+        '--f7-theme-color': '#a3be8c',
+        '--f7-theme-color-rgb': '163, 190, 140',
+        '--f7-theme-color-shade': '#8eaf72',
+        '--f7-theme-color-tint': '#b8cda6',
+        'zh_name': '異色北歐',
         'is_Dark': true
     },
     Dracula:{
@@ -29,7 +37,11 @@ const theme = { //Object for themes
         '--p4-color': '#f1fa8c',
         '--bg-nord': '#282a36',
         '--fg-nord': '#f8f8f2',
-        '--highlight': '#ff79c6',
+        '--f7-theme-color': '#ff79c6',
+        '--f7-theme-color-rgb': '255, 121, 198',
+        '--f7-theme-color-shade': '#ff50b5',
+        '--f7-theme-color-tint': '#ffa2d7',
+        'zh_name': '德古拉',
         'is_Dark': true
     },
     Gruvbox_light:{
@@ -39,7 +51,11 @@ const theme = { //Object for themes
         '--p4-color': '#458588',
         '--bg-nord': '#fbf1c7',
         '--fg-nord': '#3c3836',
-        '--highlight': '#689d6a',
+        '--f7-theme-color': '#689d6a',
+        '--f7-theme-color-rgb': '104, 157, 106',
+        '--f7-theme-color-shade': '#578658',
+        '--f7-theme-color-tint': '#81ad82',
+        'zh_name': '亮色航空',
         'is_Dark': false
     },
     Gruvbox_dark:{
@@ -49,7 +65,11 @@ const theme = { //Object for themes
         '--p4-color': '#83a598',
         '--bg-nord': '#3c3836',
         '--fg-nord': '#fbf1c7',
-        '--highlight': '#8ec07c',
+        '--f7-theme-color': '#8ec07c',
+        '--f7-theme-color-rgb': '142, 192, 124',
+        '--f7-theme-color-shade': '#76b360',
+        '--f7-theme-color-tint': '#a6cd98',
+        'zh_name': '暗色航空',
         'is_Dark': true
     },
     Tomorrow_night:{
@@ -59,7 +79,11 @@ const theme = { //Object for themes
         '--p4-color': '#b294bb',
         '--bg-nord': '#1d1f21',
         '--fg-nord': '#c5c8c6',
-        '--highlight': '#969896',
+        '--f7-theme-color': '#969896',
+        '--f7-theme-color-rgb': '150, 152, 150',
+        '--f7-theme-color-shade': '#818481',
+        '--f7-theme-color-tint': '#abacab',
+        'zh_name': '暗色明日',
         'is_Dark': true
     },
     Tomorrow:{
@@ -69,7 +93,11 @@ const theme = { //Object for themes
         '--p4-color': '#8959a8',
         '--bg-nord': '#ffffff',
         '--fg-nord': '#4d4d4c',
-        '--highlight': '#8e908c',
+        '--f7-theme-color': '#8e908c',
+        '--f7-theme-color-rgb': '142, 144, 140',
+        '--f7-theme-color-shade': '#7a7c77',
+        '--f7-theme-color-tint': '#a2a4a1',
+        'zh_name': '亮色明日',
         'is_Dark': false
     },
     High_contrast:{
@@ -79,7 +107,11 @@ const theme = { //Object for themes
         '--p4-color': '#ffff00',
         '--bg-nord': '#ffffff',
         '--fg-nord': '#000000',
-        '--highlight': '#ff00ff',
+        '--f7-theme-color': '#ff00ff',
+        '--f7-theme-color-rgb': '255, 0, 255',
+        '--f7-theme-color-shade': '#d600d6',
+        '--f7-theme-color-tint': '#ff29ff',
+        'zh_name': '高對比',
         'is_Dark': false
     },
 };
@@ -91,6 +123,11 @@ app.on('ui_update', function(){
     // Update table display
     // Reomve all streak warning first
     $('#table .exclamation').remove();
+    // Remove all animation dots
+    $('#center .animation_dots').remove();
+    // Remove all banker Class and streak counter
+    $('#east, #south, #west, #north').removeClass('banker_block');
+    $('#east, #south, #west, #north').text('');
     $('.action-break').addClass('none');
     for (i=1;i<=4;i++){
         $('.p' + i + '_name').text(allplayer[i].name); //Fill all player names
@@ -107,6 +144,7 @@ app.on('ui_update', function(){
             $('.p' + i + '_balance').text(allplayer[i].balance + ' (' + allplayer[i].unrealized + ')');
         }
         for (x=1; x<=4; x++){
+            //Apply streak_warning
             if (parseInt(allplayer[i]['sf' + x]) > 0  && parseInt(allplayer[i]['sf' + x]) % default_setting.break == 0){ //Copy streak warning node if streak % break = 0
                 $('#p' + i + '-action-break').removeClass('none');
                 let streak_warning = $('.exclamation')[0].cloneNode(true);
@@ -117,10 +155,53 @@ app.on('ui_update', function(){
                     case 'N': $('#north').append(streak_warning);break;
                 }
             }
+            //Add dot animations
+            if (parseInt(allplayer[i]['sf' + x]) > 0){
+                for (streak = 1; streak <= allplayer[i]['sf' + x]; streak++){
+                    let animation_dots = $('.animation_dots');
+                    animation_dots = animation_dots[animation_dots.length - 1].cloneNode();
+                    animation_dots.classList.add( 'p' + i + '_to_p' + x );
+                    animation_dots.classList.add('delay_' + (streak - 1));
+                    $('#center').append(animation_dots);
+                }
+            }
+        }
+        // End of double for loop
+        // Add banker animation and banker class
+        if (gamestat.banker == allplayer[i].position){
+            switch (allplayer[i].position){
+                case 'E': $('#east').addClass('banker_block'); (gamestat.streak > 0) ? $('#east').html('<h1>' + gamestat.streak + '</h1>'):null; break;
+                case 'S': $('#south').addClass('banker_block'); (gamestat.streak > 0) ? $('#south').html('<h1>' + gamestat.streak + '</h1>'):null; break;
+                case 'W': $('#west').addClass('banker_block'); (gamestat.streak > 0) ? $('#west').html('<h1>' + gamestat.streak + '</h1>'):null; break;
+                case 'N': $('#north').addClass('banker_block'); (gamestat.streak > 0) ? $('#north').html('<h1>' + gamestat.streak + '</h1>'):null; break;
+            }
         }
     }
+    // End of single for loop
+    // Fill Game Record
+    let game_record_append = ''
+    for (i=game_record.length - 1; i>= 1; i--){
+        if(game_record[i].length == 5){
+            game_record_append += '<tr><td>' + i + '</td><td>' + game_record[i][1] + '</td><td>' + game_record[i][2] + '</td><td>' + game_record[i][3] + '</td><td>'+ game_record[i][4] + '</td></tr>'
+        } else {
+            game_record_append += '<tr><td>' + i + '</td><td colspan="4">流局</td></tr>';
+        }
+    }
+    $('#game_record').html(game_record_append);
 });
+// ------------------------------------------ //
+// Auto Run Functions
+// ------------------------------------------ //
 app.on('pageInit', function(){ // Add event listeners for all pages
+    if(load()){
+        map_players();
+        fill_names();
+        app.emit('data_change');
+        app.preloader.hide();
+    } else {
+        app.popup.open('#start-popup');
+        app.preloader.hide();
+    }
     $('.quick-actions .actions-button').on('click', function(){ //Event listeners for closing actions after click [Firefox]
         app.actions.close();
     })
@@ -128,11 +209,22 @@ app.on('pageInit', function(){ // Add event listeners for all pages
 $('.quick-actions .actions-button').on('click', function(){ //Event listeners for closing actions after click [Chromium]
     app.actions.close();
 })
+if(load()){
+    map_players();
+    fill_names();
+    app.emit('data_change');
+    app.preloader.hide();
+} else {
+    app.popup.open('#start-popup');
+    app.preloader.hide();
+}
 // ------------------------------------------ //
-// MAIN PAGE RELATED FUNCTIONS
+// Starting RELATED FUNCTIONS
 // ------------------------------------------ //
 // Starting Modal Functions
-function start_game_ui(){
+function fill_names(){
+    // Remove all Classes
+    $('#N-text, #N-text2, #north, #E-text, #E-text2, #east, #S-text, #S-text2, #south, #W-text, #W-text2, #west, #N-text, #N-text2, #north').removeClass('p1_name, p1_balance, p1_bg, p2_name, p2_balance, p2_bg, p3_name, p3_balance, p3_bg, p4_name, p4_balance, p4_bg');
     $('#N-text').addClass('p' + mapped.N + '_name');
     $('#N-text2').addClass('p' + mapped.N + '_balance');
     $('#north').addClass('p' + mapped.N + '_bg');
@@ -149,8 +241,29 @@ function start_game_ui(){
     $('.east-block').addClass('p' + mapped.E + '_action');
     $('.south-block').addClass('p' + mapped.S + '_action');
     $('.west-block').addClass('p' + mapped.W + '_action');
+    let css_root = document.querySelector(':root')
+    for (i=1; i<=4; i++){ //Set position in css for animations
+        if (allplayer[i].position == 'E'){
+            css_root.style.setProperty('--p' + i + '-position-top', 'calc(50% - 1vh)');
+            css_root.style.setProperty('--p' + i + '-position-left', '-2vh');
+        }
+        else if (allplayer[i].position == 'S'){
+            css_root.style.setProperty('--p' + i + '-position-top', 'calc(100% + 2vh)');
+            css_root.style.setProperty('--p' + i + '-position-left', 'calc(50% - 1vh)');
+        }
+        else if (allplayer[i].position == 'W'){
+            css_root.style.setProperty('--p' + i + '-position-top', 'calc(50% - 1vh)');
+            css_root.style.setProperty('--p' + i + '-position-left', 'calc(100% + 2vh)');
+        }
+        else if (allplayer[i].position == 'N'){
+            css_root.style.setProperty('--p' + i + '-position-top', '-2vh');
+            css_root.style.setProperty('--p' + i + '-position-left', 'calc(50% - 1vh)');
+        }
+    }
 }
-
+// ------------------------------------------ //
+// MAIN PAGE RELATED FUNCTIONS
+// ------------------------------------------ //
 // Adding event handlers for triggering action sheets
 function open_action_sheet(player_index){
     switch(player_index){
@@ -202,7 +315,19 @@ $('.tie').on('click', function(){
         verticalButtons: true
     }).open();
 });
-
+function create_break_dialog(player_index){
+    let dialog_text = allplayer[player_index].name + '：<br>';
+    let receiver_index;
+    for(i = 1; i<=4; i++){
+        if (allplayer[player_index]['sf' + i] > 0 && allplayer[player_index]['sf' + i] % default_setting.break == 0){
+            dialog_text += '己被 ' + allplayer[i].name + ' 拉了' + allplayer[player_index]['sf' + i] + '次；總計' + allplayer[player_index]['loseto' + i] + '番<br>';
+            receiver_index = i;
+            break;
+        }
+    }
+    dialog_text += '<br>是否終止此拉踢？'
+    app.dialog.confirm(dialog_text, '中斷拉踢', function(){end_streak(player_index,receiver_index)}, function(){app.dialog.close()});
+}
 // ------------------------------------------ //
 // POPUP RELATED FUNCTIONS
 // ------------------------------------------ //
@@ -362,18 +487,21 @@ function set_deal_position(player_selected){
         if (i == player_selected){ //Append selected player into specific position
             $('.deal_selected').append($('#p' + i + '_deal'));
             $('.deal_selected .plus_or_minus').text('-');
-            $('#p' + i + '_deal_input').prop('disabled', true)
+            $('#p' + i + '_deal_input').prop('disabled', true);
         } else if (position == 'left'){ //Append other players into corresponding positions
             $('.deal_' + position).append($('#p' + i + '_deal'));
             $('.deal_' + position + ' .plus_or_minus').text('+');
+            $('#p' + i + '_deal_input').prop('disabled', false)
             position = 'center';
         } else if (position == 'center'){
             $('.deal_' + position).append($('#p' + i + '_deal'));
             $('.deal_' + position + ' .plus_or_minus').text('+');
+            $('#p' + i + '_deal_input').prop('disabled', false)
             position = 'right';
         } else {
             $('.deal_' + position).append($('#p' + i + '_deal'));
             $('.deal_' + position + ' .plus_or_minus').text('+');
+            $('#p' + i + '_deal_input').prop('disabled', false)
         }
     }
 }
@@ -430,22 +558,25 @@ function set_tsumo_position(player_selected){
     $('#tsumo-form input').prop('disabled', false);
     $('#tsumo-form input').val('');
     let position = 'left';
-    for (x=1; x<=4; x++){
-        if (x == player_selected){ //Append selected player into specific position
-            $('.tsumo_selected').append($('#p' + x + '_tsumo'));
+    for (i=1; i<=4; i++){
+        if (i == player_selected){ //Append selected player into specific position
+            $('.tsumo_selected').append($('#p' + i + '_tsumo'));
             $('.tsumo_selected input').prop('disabled', true);
             $('.tsumo_selected .plus_or_minus').text('+');
         } else if (position == 'left'){ //Append other players into corresponding positions
-            $('.tsumo_' + position).append($('#p' + x + '_tsumo'));
+            $('.tsumo_' + position).append($('#p' + i + '_tsumo'));
             $('.tsumo_' + position + ' .plus_or_minus').text('-');
+            $('#p' + i + '_tsumo_input').prop('disabled', false);
             position = 'center';
         } else if (position == 'center'){
-            $('.tsumo_' + position).append($('#p' + x + '_tsumo'));
+            $('.tsumo_' + position).append($('#p' + i + '_tsumo'));
             $('.tsumo_' + position + ' .plus_or_minus').text('-');
+            $('#p' + i + '_tsumo_input').prop('disabled', false);
             position = 'right';
         } else {
-            $('.tsumo_' + position).append($('#p' + x + '_tsumo'));
+            $('.tsumo_' + position).append($('#p' + i + '_tsumo'));
             $('.tsumo_' + position + ' .plus_or_minus').text('-');
+            $('#p' + i + '_tsumo_input').prop('disabled', false);
         }
     }
 }
@@ -502,6 +633,15 @@ function display_as_money(){
     app.emit('ui_update');
     app.tab.show('#view-home');
 }
+// Apply themes
+function apply_theme(theme_name){
+    let css_root = document.querySelector(':root')
+    for ( parameters in themes[theme_name]){
+        css_root.style.setProperty(parameters, themes[theme_name][parameters]);
+    }
+    (themes[theme_name]['is_Dark']) ? $("#app").addClass('dark') : $("#app").removeClass('dark');
+    $('#theme_name').text(themes[theme_name]['zh_name']);
+}
 // Hide Toolbar after entering license page
 $(document).on('page:afterin', '.page[data-name="license"]', function(){
     app.toolbar.hide('.toolbar');
@@ -539,5 +679,3 @@ function remove_data_prompt(){
         console.log('Remove confirmed');
     })
 }
-
-app.popup.open('#start-popup');

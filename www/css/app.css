@@ -16,12 +16,20 @@
   --bg-nord: #2e3440;
   --fg-nord: #e5e9f0;
   --highlight: #81a1c1;
+  --p1-position-top: calc(50% - 1vh);
+  --p1-position-left: -2vh;
+  --p2-position-top: calc(100% + 2vh);
+  --p2-position-left: calc(50% - 1vh);
+  --p3-position-top: calc(50% - 1vh);
+  --p3-position-left: calc(100% + 2vh);
+  --p4-position-top: -2vh;
+  --p4-position-left: calc(50% - 1vh);
 }
 
 /* Your app custom styles here */
 /* CSS for global Classes */
 .align-text-center{
-    text-align: center;
+    text-align: center !important;
 }
 .align-text-right{
     text-align: right;
@@ -73,15 +81,37 @@
 }
 .p1_bg{
     background-color: var(--p1-color);
+    z-index: 10;
 }
 .p2_bg{
     background-color: var(--p2-color);
+    z-index: 10;
 }
 .p3_bg{
     background-color: var(--p3-color);
+    z-index: 10;
 }
 .p4_bg{
     background-color: var(--p4-color);
+    z-index: 10;
+}
+.default_th{
+    border-bottom: 2px solid var(--f7-theme-color);
+}
+.p1_th{
+    border-bottom: 2px solid var(--p1-color);
+}
+.p2_th{
+    border-bottom: 2px solid var(--p2-color);
+}
+.p3_th{
+    border-bottom: 2px solid var(--p3-color);
+}
+.p4_th{
+    border-bottom: 2px solid var(--p4-color);
+}
+th{
+    font-size: 1rem !important;
 }
 .grid-button{
     justify-content: center;
@@ -89,7 +119,15 @@
     aspect-ratio: 1 / 1;
     height: 100%;
     max-height: max(70px, 10vh);
-    --f7-text-color;
+}
+table.data-table {
+    width: 100%;
+    border: none;
+    padding: 0;
+    margin: 0;
+    border-collapse: collapse;
+    text-align: left;
+}
 }
 /* Hide Input arrows */
 /* Chrome, Safari, Edge, Opera */
@@ -129,6 +167,7 @@ input[type=number] {
     width: 100%;
     margin-top: 2px;
     margin-bottom: 2px;
+    z-index: 15;
 }
 .table_short_block{
     height:12.5%;
@@ -142,15 +181,10 @@ input[type=number] {
 #center {
     height: 50%;
     width: 50%;
-    display: flex;
-    justify-content: center;
+    display: block !important;
+    position: relative
 }
-.dots {
-    height: 2vh;
-    width: 2vh;
-    border-radius: 50%;
-    background-color: var(--bg-nord);
-}
+
 /* CSS for deal and tsumo popup */
 .edit-icon{
     max-width:5vw;
@@ -163,16 +197,16 @@ input[type=number] {
 .card{
     border: 1px solid transparent;
 }
-.p1_card.dealer h2{
+.p1_card.banker h2{
     color: var(--p1-color);
 }
-.p2_card.dealer h2{
+.p2_card.banker h2{
     color: var(--p2-color);
 }
-.p3_card.dealer h2{
+.p3_card.banker h2{
     color: var(--p3-color);
 }
-.p4_card.dealer h2{
+.p4_card.banker h2{
     color: var(--p4-color);
 }
 .plus_or_minus{
@@ -181,4 +215,239 @@ input[type=number] {
 .input_wrapper{
     display: flex;
     justify-content: center;
+}
+/* CSS for stats */
+.th-sticky {
+  position: sticky !important;
+  top: 0px !important;
+  z-index: 99 !important;
+}
+#game_record{
+    overflow-y: scroll;
+    max-height: 50vh;
+}
+/* Animations for table */
+@keyframes p1_to_p2 {
+    from{
+        top: var(--p1-position-top);
+        left: var(--p1-position-left);
+        background-color: var(--p1-color);
+    }
+    to{
+        top: var(--p2-position-top);
+        left: var(--p2-position-left);
+        background-color: var(--p2-color);
+    }
+}
+@keyframes p1_to_p3 {
+    from{
+        top: var(--p1-position-top);
+        left: var(--p1-position-left);
+        background-color: var(--p1-color);
+    }
+    to{
+        top: var(--p3-position-top);
+        left: var(--p3-position-left);
+        background-color: var(--p3-color);
+    }
+}
+@keyframes p1_to_p4 {
+    from{
+        top: var(--p1-position-top);
+        left: var(--p1-position-left);
+        background-color: var(--p1-color);
+    }
+    to{
+        top: var(--p4-position-top);
+        left: var(--p4-position-left);
+        background-color: var(--p4-color);
+    }
+}
+@keyframes p2_to_p1 {
+    from{
+        top: var(--p2-position-top);
+        left: var(--p2-position-left);
+        background-color: var(--p2-color);
+    }
+    to{
+        top: var(--p1-position-top);
+        left: var(--p1-position-left);
+        background-color: var(--p1-color);
+    }
+}
+@keyframes p2_to_p3 {
+    from{
+        top: var(--p2-position-top);
+        left: var(--p2-position-left);
+        background-color: var(--p2-color);
+    }
+    to{
+        top: var(--p3-position-top);
+        left: var(--p3-position-left);
+        background-color: var(--p3-color);
+    }
+}
+@keyframes p2_to_p4 {
+    from{
+        top: var(--p2-position-top);
+        left: var(--p2-position-left);
+        background-color: var(--p2-color);
+    }
+    to{
+        top: var(--p4-position-top);
+        left: var(--p4-position-left);
+        background-color: var(--p4-color);
+    }
+}
+@keyframes p3_to_p1 {
+    from{
+        top: var(--p3-position-top);
+        left: var(--p3-position-left);
+        background-color: var(--p3-color);
+    }
+    to{
+        top: var(--p1-position-top);
+        left: var(--p1-position-left);
+        background-color: var(--p1-color);
+    }
+}
+@keyframes p3_to_p2 {
+    from{
+        top: var(--p3-position-top);
+        left: var(--p3-position-left);
+        background-color: var(--p3-color);
+    }
+    to{
+        top: var(--p2-position-top);
+        left: var(--p2-position-left);
+        background-color: var(--p2-color);
+    }
+}
+@keyframes p3_to_p4 {
+    from{
+        top: var(--p3-position-top);
+        left: var(--p3-position-left);
+        background-color: var(--p3-color);
+    }
+    to{
+        top: var(--p4-position-top);
+        left: var(--p4-position-left);
+        background-color: var(--p4-color);
+    }
+}
+@keyframes p4_to_p1 {
+    from{
+        top: var(--p4-position-top);
+        left: var(--p4-position-left);
+        background-color: var(--p4-color);
+    }
+    to{
+        top: var(--p1-position-top);
+        left: var(--p1-position-left);
+        background-color: var(--p1-color);
+    }
+}
+@keyframes p4_to_p2 {
+    from{
+        top: var(--p4-position-top);
+        left: var(--p4-position-left);
+        background-color: var(--p4-color);
+    }
+    to{
+        top: var(--p2-position-top);
+        left: var(--p2-position-left);
+        background-color: var(--p2-color);
+    }
+}
+@keyframes p4_to_p3 {
+    from{
+        top: var(--p4-position-top);
+        left: var(--p4-position-left);
+        background-color: var(--p4-color);
+    }
+    to{
+        top: var(--p3-position-top);
+        left: var(--p3-position-left);
+        background-color: var(--p3-color);
+    }
+}
+.p1_to_p2{
+    animation-name: p1_to_p2;
+}
+.p1_to_p3{
+    animation-name: p1_to_p3;
+}
+.p1_to_p4{
+    animation-name: p1_to_p4;
+}
+.p2_to_p1{
+    animation-name: p2_to_p1;
+}
+.p2_to_p3{
+    animation-name: p2_to_p3;
+}
+.p2_to_p4{
+    animation-name: p2_to_p4;
+}
+.p3_to_p1{
+    animation-name: p3_to_p1;
+}
+.p3_to_p2{
+    animation-name: p3_to_p2;
+}
+.p3_to_p4{
+    animation-name: p3_to_p4;
+}
+.p4_to_p1{
+    animation-name: p4_to_p1;
+}
+.p4_to_p2{
+    animation-name: p4_to_p2;
+}
+.p4_to_p3{
+    animation-name: p4_to_p3;
+}
+.delay_1{
+    animation-delay: 0.2s;
+}
+.delay_2{
+    animation-delay: 0.4s;
+}
+.delay_3{
+    animation-delay: 0.6s;
+}
+.delay_4{
+    animation-delay: 0.8s;
+}
+.delay_5{
+    animation-delay: 1.0s;
+}
+.delay_6{
+    animation-delay: 1.2s;
+}
+.animation_dots{
+    position: absolute;
+    height: 2vh;
+    width: 2vh;
+    border-radius: 50%;
+    z-index: 8;
+    animation-duration: 2s;
+    animation-iteration-count: infinite;
+    z-index: 8;
+}
+/* Animation for banker */
+@keyframes banker {
+    from {
+    }
+    to{
+        background-color: var(--f7-page-bg-color);
+    }
+
+}
+.banker_block{
+    animation-name: banker;
+    animation-duration: 3s;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+    animation-timing-function: ease-in;
 }

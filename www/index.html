@@ -16,7 +16,7 @@
 <meta name="theme-color" content="#212121">
 <meta name="format-detection" content="telephone=no">
 <meta name="msapplication-tap-highlight" content="no">
-<title>TwMj</title>
+<title>港式台牌計分版</title>
 <!-- web-start -->
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -59,7 +59,7 @@
                     <!-- Scrollable page content-->
                     <div class="page-content">
                         <div class="block block-strong">
-                            <h1 id="round_counter" class="align-text-center">第一局・東圈東</h1>
+                            <h1 id="round_counter" class="align-text-center">港式台牌計分版</h1>
                         </div>
                         <div id="table_wrap">
                             <div id="table" class="row no-gap">
@@ -169,7 +169,7 @@
                 <div class="actions-button actions-button-bold" onclick="set_tsumo_position(1);app.popup.open('#tsumo-popup')">
                     <div class="actions-button-text">自摸</div>
                 </div>
-                <div id="p1-action-break" class="action-break actions-button actions-button-bold none" onclick="set_tsumo_position(1);app.popup.open('#tsumo-popup')">
+                <div id="p1-action-break" class="action-break actions-button actions-button-bold none" onclick="create_break_dialog(1);">
                     <div class="actions-button-text">中斷拉踢</div>
                 </div>
             </div>
@@ -190,7 +190,7 @@
                 <div class="actions-button actions-button-bold" onclick="set_tsumo_position(2);app.popup.open('#tsumo-popup')">
                     <div class="actions-button-text">自摸</div>
                 </div>
-                <div id="p2-action-break" class="action-break actions-button actions-button-bold none" onclick="set_tsumo_position(1);app.popup.open('#tsumo-popup')">
+                <div id="p2-action-break" class="action-break actions-button actions-button-bold none" onclick="create_break_dialog(2);">
                     <div class="actions-button-text">中斷拉踢</div>
                 </div>
             </div>
@@ -211,7 +211,7 @@
                 <div class="actions-button actions-button-bold" onclick="set_tsumo_position(3);app.popup.open('#tsumo-popup')">
                     <div class="actions-button-text">自摸</div>
                 </div>
-                <div id="p3-action-break" class="action-break actions-button actions-button-bold none" onclick="set_tsumo_position(1);app.popup.open('#tsumo-popup')">
+                <div id="p3-action-break" class="action-break actions-button actions-button-bold none" onclick="create_break_dialog(3);">
                     <div class="actions-button-text">中斷拉踢</div>
                 </div>
             </div>
@@ -232,7 +232,7 @@
                 <div class="actions-button actions-button-bold" onclick="set_tsumo_position(4);app.popup.open('#tsumo-popup')">
                     <div class="actions-button-text">自摸</div>
                 </div>
-                <div id="p4-action-break" class="action-break actions-button actions-button-bold none" onclick="set_tsumo_position(1);app.popup.open('#tsumo-popup')">
+                <div id="p4-action-break" class="action-break actions-button actions-button-bold none" onclick="create_break_dialog(4);">
                     <div class="actions-button-text">中斷拉踢</div>
                 </div>
             </div>
@@ -245,6 +245,7 @@
             <i class="icon f7-icons if-not-md">exclamationmark_circle_fill</i>
             <i class="icon material-icons if-md">error</i>
         </div>
+        <div class="animation_dots"></div>
     </div>
     <!-- CORDOVA_PLACEHOLDER_DONT_REMOVE -->
     <!-- Framework7 library -->

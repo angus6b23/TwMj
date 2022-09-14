@@ -91,7 +91,8 @@ function start_game(start_obj){
         let new_player = new player_template(start_obj.name_array[i], position);
         allplayer.push(new_player); //Push all players into single array
     }
-    start_game_ui();
+    map_players();
+    fill_names();
     app.emit('data_change');
 }
 function map_players(){ //Create mapped object, such that mapped.E will return the index of player who has position of east
@@ -221,16 +222,6 @@ function transaction(action, game_arr){
     }
     gamestat.round += 1; // Add round to gamestat
     (allplayer[mapped[gamestat.banker]].status == 'win') ? hold_banker() : pass_banker();
-    // Calculate unrealized gain or loses for all player
-    for (i=1; i<=4; i++){
-        allplayer[i].unrealized = 0;
-        for (x = 1; x<=4 ; x++){
-            if ( i !== x ){
-                allplayer[i].unrealized += allplayer[x]['loseto' + i];
-                allplayer[i].unrealized -= allplayer[i]['loseto' + x];
-            }
-        }
-    }
     add_log(msg);
     app.emit('data_change');
 }
@@ -258,6 +249,7 @@ function hold_banker(){
 }
 function pass_banker(){
     gamestat.round_prevailing += 1;
+    gamestat.streak = 0;
     switch(gamestat.banker){
         case 'E': gamestat.banker = 'S'; break;
         case 'S': gamestat.banker = 'W'; break;
@@ -277,13 +269,30 @@ function tie(action){
     add_log(msg);
     app.emit('data_change');
 }
-
+// ------------------------------------------ //
+// Function for ending streak
+// ------------------------------------------ //
+function end_streak(payer_index, receiver_index){
+    msg = allplayer[payer_index].name + ' 選擇中止與 ' + allplayer[receiver_index].name + ' 的拉踢<br>';
+    pay_full_price(payer_index, receiver_index);
+    add_log(msg);
+    app.emit('data_change');
+}
 // ------------------------------------------ //
 // EVENT HANDLEERS
 // ------------------------------------------ //
-app.on('data_change', async function(){
-    await map_players();
-    start_game_ui();
+app.on('data_change', function(){
+    // Calculate unrealized gain or loses for all player
+    for (i=1; i<=4; i++){
+        allplayer[i].unrealized = 0;
+        for (x = 1; x<=4 ; x++){
+            if ( i !== x ){
+                allplayer[i].unrealized += allplayer[x]['loseto' + i];
+                allplayer[i].unrealized -= allplayer[i]['loseto' + x];
+            }
+        }
+    }
+    save();
     app.emit('ui_update');
 })
 // ------------------------------------------ //
@@ -308,8 +317,7 @@ function save(){
     data.gamestat = {...gamestat};
     data.game_record = [...game_record];
     data.log = [...game_log];
-    let temp_JSON = JSON.stringify(data);
-    fulldata_JSON.unshift(temp_JSON);
+    fulldata_JSON.unshift(JSON.stringify(data));
     localStorage.setItem('data', JSON.stringify(data));
 }
 
@@ -317,19 +325,15 @@ function load(){
     if (localStorage.getItem('default_setting') === null){
     } else {
         default_setting = JSON.parse(localStorage.getItem('default_setting'));
-        apply_theme(default_setting.theme);
-        set_font(default_setting.font);
     }
     if (localStorage.getItem('data') === null){
+        return false;
     } else {
-        if (localStorage.getItem('log') === null){
-        } else {
-            game_log = JSON.parse(localStorage.getItem('log'));
-            update_log_table();
-        }
-    data = JSON.parse(localStorage.getItem('data'));
-    allplayer = data.allplayer;
-    gamestat = data.gamestat;
-    game_record = data.game_record;
+        data = JSON.parse(localStorage.getItem('data'));
+        allplayer = data.allplayer;
+        gamestat = data.gamestat;
+        game_record = data.game_record;
+        game_log = data.log;
+        return true;
     }
 }

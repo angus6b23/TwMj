@@ -181,11 +181,29 @@
         <div class="actions-modal theme-actions">
             <div class="actions-group">
                 <span class="actions-label">主題</span>
-                <div class="actions-button actions-button-bold" onclick="test(1)">
+                <div class="actions-button actions-button-bold" onclick="apply_theme('Nord')">
                     <div class="actions-button-text">北歐</div>
                 </div>
-                <div class="actions-button actions-button-bold" onclick="test(2)">
+                <div class="actions-button actions-button-bold" onclick="apply_theme('Nord_alt')">
+                    <div class="actions-button-text">異色北歐</div>
+                </div>
+                <div class="actions-button actions-button-bold" onclick="apply_theme('Dracula')">
                     <div class="actions-button-text">德古拉</div>
+                </div>
+                <div class="actions-button actions-button-bold" onclick="apply_theme('Gruvbox_light')">
+                    <div class="actions-button-text">亮色航空</div>
+                </div>
+                <div class="actions-button actions-button-bold" onclick="apply_theme('Gruvbox_dark')">
+                    <div class="actions-button-text">暗色航空</div>
+                </div>
+                <div class="actions-button actions-button-bold" onclick="apply_theme('Tomorrow_night')">
+                    <div class="actions-button-text">暗色明日</div>
+                </div>
+                <div class="actions-button actions-button-bold" onclick="apply_theme('Tomorrow')">
+                    <div class="actions-button-text">亮色明日</div>
+                </div>
+                <div class="actions-button actions-button-bold" onclick="apply_theme('High_contrast')">
+                    <div class="actions-button-text">高對比</div>
                 </div>
             </div>
         </div>
@@ -211,8 +229,8 @@
                             <table>
                                 <thead>
                                     <tr>
-                                        <td class="label-cell align-text-center">時間</td>
-                                        <td class="label-cell">記錄</td>
+                                        <th class="label-cell align-text-center">時間</td>
+                                        <th class="label-cell">記錄</td>
                                     </tr>
                                 </thead>
                                 <tbody id="log_table">
