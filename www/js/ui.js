@@ -178,6 +178,25 @@ app.on('ui_update', function(){
         }
     }
     // End of single for loop
+    // Calculate round_prevailing text
+    let round = Math.floor(gamestat.round_prevailing / 16 + 1) // 第n 局
+    let round_prevailing_text = '第' + round + '局・';
+    switch (Math.floor((gamestat.round_prevailing - ((round - 1) * 16) - 1)/ 4)){
+        case 0: round_prevailing_text += '東圈'; break;
+        case 1: round_prevailing_text += '南圈'; break;
+        case 2: round_prevailing_text += '西圈'; break;
+        case 3: round_prevailing_text += '北圈'; break;
+    }
+    switch (gamestat.round_prevailing % 4){
+        case 0: round_prevailing_text += '北'; break;
+        case 1: round_prevailing_text += '東'; break;
+        case 2: round_prevailing_text += '南'; break;
+        case 3: round_prevailing_text += '西'; break;
+    }
+    $('#round_counter').text(round_prevailing_text);
+    // Add banker class to respective player cards;
+    $('.p1_card, .p2_card, .p3_card, p4_card').removeClass('banker');
+    $('.p' + mapped[gamestat.banker] + '_card').addClass('banker');
     // Fill Game Record
     let game_record_append = ''
     for (i=game_record.length - 1; i>= 1; i--){
