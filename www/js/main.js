@@ -159,7 +159,7 @@ function deal(player_index, game_arr){
             allplayer[i].deal_win += 1;
             (game_arr[i] > gamestat.max_yaku) ? gamestat.max_yaku = game_arr[i] : null;
             (game_arr[i] > allplayer[i].max_yaku) ? allplayer[i].max_yaku = game_arr[i] : null;
-            msg += allplayer[player_index].name + ' 己出銃了 ' + game_arr[i] + '番給 ' + allplayer[i].name + '<br>';
+            msg += allplayer[player_index].name + ' 出銃了 ' + game_arr[i] + '番給 ' + allplayer[i].name + '<br>';
         }
     }
     (winner_count == 2) ? gamestat.double_winner += 1 : //Find for double and triple winner
@@ -186,7 +186,7 @@ function tsumo(player_index, game_arr){
         }
     }
     let avg_yaku = Math.round(total_yaku / 3 * 100) / 100;
-    msg += allplayer[player_index].name + ' 己自摸了 ' + avg_yaku + '番<br>';
+    msg += allplayer[player_index].name + ' 自摸了 ' + avg_yaku + '番<br>';
     transaction('tsumo', game_arr);
 }
 function transaction(action, game_arr){
@@ -311,6 +311,8 @@ function save_setting(){
 }
 
 function save(){
+    (undo_count > 0) ? fulldata_JSON = fulldata_JSON.slice(undo_count):null;
+    undo_count = 0;
     gamestat.last_save = new Date();
     let data = new Object();
     data.allplayer = [...allplayer];

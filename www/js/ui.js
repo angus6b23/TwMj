@@ -115,6 +115,7 @@ const themes = { //Object for themes
         'is_Dark': false
     },
 };
+let undo_count = 0;
 // ------------------------------------------ //
 // GLOBAL FUNCTIONS
 // ------------------------------------------ //
@@ -197,6 +198,9 @@ app.on('ui_update', function(){
     // Add banker class to respective player cards;
     $('.p1_card, .p2_card, .p3_card, p4_card').removeClass('banker');
     $('.p' + mapped[gamestat.banker] + '_card').addClass('banker');
+    // Control undo, redo buttons;
+    ( undo_count == 0 ) ? $('#redo').prop('disabled', true):$('#redo').prop('disabled', false);
+    ( undo_count >= fulldata_JSON.length - 1) ? $('#undo').prop('disabled', true): $('#undo').prop('disabled', false);
     // Fill Game Record
     let game_record_append = ''
     for (i=game_record.length - 1; i>= 1; i--){
@@ -215,7 +219,7 @@ app.on('pageInit', function(){ // Add event listeners for all pages
     if(load()){
         map_players();
         fill_names();
-        app.emit('data_change');
+        app.emit('ui_update');
         app.preloader.hide();
     } else {
         app.popup.open('#start-popup');
@@ -231,7 +235,8 @@ $('.quick-actions .actions-button').on('click', function(){ //Event listeners fo
 if(load()){
     map_players();
     fill_names();
-    app.emit('data_change');
+    app.emit('ui_update');
+    fulldata_JSON.unshift(JSON.stringify(data));
     app.preloader.hide();
 } else {
     app.popup.open('#start-popup');
@@ -647,6 +652,29 @@ $('#tsumo-popup').on('popup:closed', function(){
 // ------------------------------------------ //
 // SETTINGS RELATED FUNCTIONS
 // ------------------------------------------ //
+// Function for undo
+function undo(){
+    undo_count += 1;
+    let data = JSON.parse(fulldata_JSON[undo_count]);
+    allplayer = data.allplayer;
+    gamestat = data.gamestat;
+    game_record = data.game_record;
+    game_log[undo_count - 1].removed = true;
+    app.emit('ui_update');
+    app.tab.show('#view-home');
+}
+//  Function for redo
+function redo(){
+    undo_count -= 1;
+    let data = JSON.parse(fulldata_JSON[undo_count]);
+    allplayer = data.allplayer;
+    gamestat = data.gamestat;
+    game_record = data.game_record;
+    game_log[undo_count].removed = false;
+    app.emit('ui_update');
+    app.tab.show('#view-home');
+}
+// Changing display between money and score
 function display_as_money(){
     default_setting.display_as_money = !default_setting.display_as_money;
     app.emit('ui_update');
@@ -691,6 +719,34 @@ $(document).on('popup:open', '.log-popup', function(){
         $('#log_table').html(append_log);
     }
 })
+// Function for creating elements for file_download
+function download(filename, path){
+    let element = document.createElement('a');
+    element.setAttribute('href', path);
+    element.setAttribute('download', filename);
+    element.click();
+}
+// Function for export to clipboard
+function export_to_clipboard(){
+    navigator.clipboard.writeText(fulldata_JSON[0]);
+    $('.export_tick.f7-icons').text('checkmark');
+    $('.export_tick.material-icons').text('done');
+    $('.export_text').text('已匯出至剪貼簿');
+    setTimeout(function(){
+        $('.export_tick.f7-icons').text('doc_on_clipboard_fill');
+        $('.export_tick.material-icons').text('integration_instructions');
+        $('.export_text').text('匯出：複制到剪貼簿');
+    }, 2500);
+}
+// Function export to JSON
+function export_to_json(){
+    const data = fulldata_JSON[0];
+    const blob = new Blob([data], {type: 'application/json'});
+    const path = URL.createObjectURL(blob);
+    let timestamp = new Date();
+    let filename = 'Twmj-' + timestamp.getDate().toString().padStart(2, 0) + '-' + (timestamp.getMonth() + 1).toString().padStart(2, 0);
+    download(filename, path);
+}
 // Function for handling prompt of removal of data
 function remove_data_prompt(){
     app.dialog.confirm('清除資料會影響現時設置及遊戲，確定要清除？', function(){

@@ -4,12 +4,12 @@
         <div class="block-title">動作</div>
         <div class="block block-strong inset">
             <p class="row no-gap">
-                <button href="#" class="col button grid-button row">
+                <button href="#" id="undo" class="col button grid-button row" onclick="undo();">
                     <i class="f7-icons if-not-md col-100">arrowshape_turn_up_left</i>
                     <i class="material-icons md-only col-100">undo</i>
                     <span>還原</span>
                 </button>
-                <button href="#" class="col button grid-button row">
+                <button href="#" id="redo" class="col button grid-button row" onclick="redo();">
                     <i class="f7-icons if-not-md col-100">arrowshape_turn_up_right</i>
                     <i class="material-icons md-only col-100">redo</i>
                     <span>重做</span>
@@ -103,18 +103,18 @@
                     </a>
                 </li>
                 <li>
-                    <a href="#" class="item-link item-content">
+                    <a href="#" class="item-link item-content" onclick="export_to_clipboard()">
                         <div class="item-media">
-                            <i class="f7-icons if-not-md">doc_on_clipboard_fill</i>
-                            <i class="material-icons md-only">integration_instructions</i>
+                            <i class="f7-icons if-not-md export_tick">doc_on_clipboard_fill</i>
+                            <i class="material-icons md-only export_tick">integration_instructions</i>
                         </div>
                         <div class="item-inner">
-                            <div class="item-title">匯出：複制到剪貼簿</div>
+                            <div class="item-title export_text">匯出：複制到剪貼簿</div>
                         </div>
                     </a>
                 </li>
                 <li>
-                    <a href="#" class="item-link item-content">
+                    <a href="#" class="item-link item-content" onclick="export_to_json()">
                         <div class="item-media">
                             <i class="f7-icons if-not-md">floppy_disk</i>
                             <i class="material-icons md-only">save</i>
