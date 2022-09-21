@@ -154,6 +154,7 @@ app.on('ui_update', function(){
                     case 'S': $('#south').append(streak_warning);break;
                     case 'W': $('#west').append(streak_warning);break;
                     case 'N': $('#north').append(streak_warning);break;
+                    default: console.error('Error while applying streak warning sign: Unknown case');
                 }
             }
             //Add dot animations
@@ -175,6 +176,7 @@ app.on('ui_update', function(){
                 case 'S': $('#south').addClass('banker_block'); (gamestat.streak > 0) ? $('#south').html('<h1>' + gamestat.streak + '</h1>'):null; break;
                 case 'W': $('#west').addClass('banker_block'); (gamestat.streak > 0) ? $('#west').html('<h1>' + gamestat.streak + '</h1>'):null; break;
                 case 'N': $('#north').addClass('banker_block'); (gamestat.streak > 0) ? $('#north').html('<h1>' + gamestat.streak + '</h1>'):null; break;
+                default: console.error('Error while adding banker animation: Unknown case');
             }
         }
     }
@@ -187,12 +189,14 @@ app.on('ui_update', function(){
         case 1: round_prevailing_text += '南圈'; break;
         case 2: round_prevailing_text += '西圈'; break;
         case 3: round_prevailing_text += '北圈'; break;
+        default: console.error('Error while applying round text: Unknown case');
     }
     switch (gamestat.round_prevailing % 4){
         case 0: round_prevailing_text += '北'; break;
         case 1: round_prevailing_text += '東'; break;
         case 2: round_prevailing_text += '南'; break;
         case 3: round_prevailing_text += '西'; break;
+        default: console.error('Error while applying round text: Unknown case');
     }
     $('#round_counter').text(round_prevailing_text);
     // Add banker class to respective player cards;
@@ -212,6 +216,13 @@ app.on('ui_update', function(){
     }
     $('#game_record').html(game_record_append);
 });
+function catch_error(message){
+    app.toast.create({
+        text: message,
+        position: 'bottom',
+        closeTimeout: 2500,
+    }).open();
+}
 // ------------------------------------------ //
 // Auto Run Functions
 // ------------------------------------------ //
@@ -295,6 +306,7 @@ function open_action_sheet(player_index){
         case 2: app.actions.open('.p2-actions'); break;
         case 3: app.actions.open('.p3-actions'); break;
         case 4: app.actions.open('.p4-actions'); break;
+        default: console.error('Error while opening player action sheet: Unknown case');
     }
 }
 // Event handlers for clicking block
@@ -320,12 +332,14 @@ $('.tie').on('click', function(){
                 text: '連莊',
                 onClick: function(){
                     tie('hold_banker');
+                    app.dialog.close();
                 }
             },
             {
                 text: '不連莊',
                 onClick: function(){
                     tie('pass_banker');
+                    app.dialog.close();
                 }
             },
             {
@@ -359,12 +373,7 @@ function create_break_dialog(player_index){
 function set_money_multiplier(value){ //Check money multiplier input before setting it as value
     let check_value = parseFloat(value);
     if (isNaN(check_value) || check_value <= 0 || check_value == ''){ //Throw toast error if input is invalid
-        const money_multiplier_error_toast = app.toast.create({
-            text: '設定錯誤！必須為正數！',
-            position: 'bottom',
-            closeTimeout: 1500,
-        });
-        money_multiplier_error_toast.open();
+        catch_error('設定錯誤！必須為正數！');
     } else {
         $('#start-form input[name="multiplier"]').val(value);
     }
@@ -372,14 +381,9 @@ function set_money_multiplier(value){ //Check money multiplier input before sett
 function set_break_streak(value){ //Check break streak input before setting it as value
     let check_value = parseInt(value);
     if (isNaN(check_value) || check_value <= 0 || check_value == ''){ //Throw toast error if input is invalid
-        const break_streak_error_toast = app.toast.create({
-            text: '設定錯誤！必須為正整數！',
-            position: 'bottom',
-            closeTimeout: 1500,
-        });
-        break_streak_error_toast.open();
+        catch_error('設定錯誤！必須為正整數！');
     } else {
-        $('#start-form input[name="break_streak"]').val(value);
+        $('#start-form input[name="break_streak"]').val(check_value);
     }
 }
 function submit_start_form(){ //Function for handling start form submit
@@ -437,12 +441,7 @@ function submit_instantGet_form(){
     }
     instantGet_object.value = parseInt(instantGet_object.value) || 0;
     if (instantGet_object.value == 0){
-        const instantGet_error_toast = app.toast.create({
-            text: '尚未輸入即收的番數或輸入錯誤，即收番數必須為正整數',
-            position: 'bottom',
-            closeTimeout: 1500,
-        });
-        instantGet_error_toast.open();
+        catch_error('尚未輸入即收的番數或輸入錯誤，即收番數必須為正整數');
         return;
     }
     instant_get(instantGet_object.selected, instantGet_object.value);
@@ -488,12 +487,7 @@ function submit_instantPay_form(){
     }
     instantPay_object.value = parseInt(instantPay_object.value) || 0;
     if (instantPay_object.value == 0){
-        const instantPay_error_toast = app.toast.create({
-            text: '尚未輸入即付的番數或輸入錯誤，即收番數必須為正整數',
-            position: 'bottom',
-            closeTimeout: 1500,
-        });
-        instantPay_error_toast.open();
+        catch_error('尚未輸入即付的番數或輸入錯誤，即收番數必須為正整數')
         return;
     }
     instant_pay(instantPay_object.selected, instantPay_object.value);
@@ -550,12 +544,7 @@ function submit_deal_form(){
     for (i=1; i<=4; i++){
         if (i == deal_object.selected){ // When the player is selected player
             if($('#p' + i +'_deal_input').val() == '' || $('#p' + i +'_deal_input').val() == 0){ //Throw error if no input or input = 0
-                const deal_error_toast = app.toast.create({
-                    text: '尚未輸入勝出玩家所贏的番數！',
-                    position: 'bottom',
-                    closeTimeout: 1500,
-                });
-                deal_error_toast.open();
+                catch_error('尚未輸入勝出玩家所贏的番數！');
                 return;
             }
             else{
@@ -625,12 +614,7 @@ function submit_tsumo_form(){
     for (i=1; i<=4; i++){
         if (i != tsumo_object.selected){ // When the player is selected player
             if($('#p' + i +'_tsumo_input').val() == '' || $('#p' + i +'_tsumo_input').val() == 0){ //Throw error if no input or input = 0
-                const tsumo_error_toast = app.toast.create({
-                    text: '尚未輸入所有非自摸玩家所輸的番數！',
-                    position: 'bottom',
-                    closeTimeout: 1500,
-                });
-                tsumo_error_toast.open();
+                catch_error('尚未輸入所有非自摸玩家所輸的番數！');
                 return;
             }
             else{

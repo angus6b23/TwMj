@@ -87,6 +87,7 @@ function start_game(start_obj){
             case 2: position = 'S'; break;
             case 3: position = 'W'; break;
             case 4: position = 'N'; break;
+            default: console.error('Error while staring game: Unknown case');
         }
         let new_player = new player_template(start_obj.name_array[i], position);
         allplayer.push(new_player); //Push all players into single array
@@ -102,6 +103,7 @@ function map_players(){ //Create mapped object, such that mapped.E will return t
             case 'S': mapped.S = i; break;
             case 'W': mapped.W = i; break;
             case 'N': mapped.N = i; break;
+            default: console.error('Error while mapping players: Unknown case');
         }
     }
 }
@@ -255,6 +257,7 @@ function pass_banker(){
         case 'S': gamestat.banker = 'W'; break;
         case 'W': gamestat.banker = 'N'; break;
         case 'N': gamestat.banker = 'E'; break;
+        default: console.error('Error while passing banker: Unknown case');
     }
 }
 // ------------------------------------------ //
@@ -277,6 +280,21 @@ function end_streak(payer_index, receiver_index){
     pay_full_price(payer_index, receiver_index);
     add_log(msg);
     app.emit('data_change');
+}
+// ------------------------------------------ //
+// Function for Renaming players
+// ------------------------------------------ //
+function rename(player_index, new_name){
+    new_name = new_name.toString();
+    if (new_name == ''){
+        catch_error('新名字不能為空白');
+    } else {
+        msg = allplayer[player_index].name + ' 已改名為 ' + new_name;
+        allplayer[player_index].name = new_name;
+        fill_names();
+        add_log(msg);
+        app.emit('data_change');
+    }
 }
 // ------------------------------------------ //
 // EVENT HANDLEERS

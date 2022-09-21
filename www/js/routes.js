@@ -45,6 +45,14 @@ var routes = [
         url: './pages/stats.html',
     },
     {
+        path: '/rename/',
+        url: './pages/rename.html',
+    },
+    {
+        path: '/adjust/',
+        url: './pages/adjust.html',
+    },
+    {
         path: '/dynamic-route/blog/:blogId/post/:postId/',
         componentUrl: './pages/dynamic-route.html',
     },
