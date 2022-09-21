@@ -13,23 +13,22 @@
     </div>
     <div class="page-content">
         <div class="block-title">現時行動</div>
-        <div class="list inset links-list simple-list">
-            <ul>
-                <li>尚未有行動</li>
+        <div class="list">
+            <ul id="adjust-actions">
             </ul>
         </div>
-        <div class="list inset">
+        <div class="list inset" id="adjust-add-buttons">
             <ul>
                 <li>
-                    <a class="list-button">新增行動</a>
+                    <a class="list-button button-fill" href="#" onclick="toggle_adjustment_form();">新增行動</a>
                 </li>
-                <li>
-                    <a class="list-button">套用以上行動</a>
+                <li id="adjust-apply-button">
+                    <a class="list-button button-fill" onclick="adjust();app.popup.close();">套用以上行動</a>
                 </li>
             </ul>
         </div>
-        <div class="block">
-            <form>
+        <div class="block none" id="adjust-add-form">
+            <form action="javascript:submit_adjust_form();">
                 <div class="block-title">新增動作</div>
                 <div class="block-header">1. 選擇玩家</div>
                 <div class="list no-hairlines-md">
@@ -111,12 +110,15 @@
                             <div class="item-inner">
                                 <div class="item-title item-label">番數</div>
                                 <div class="item-input-wrap">
-                                    <input type="number" placeholder="0" / required>
+                                    <input type="number" name="adjust-value" placeholder="0" / required>
                                     <span class="input-clear-button"></span>
                                 </div>
                             </div>
                         </li>
                     </ul>
+                </div>
+                <div class="row">
+                    <button class="button button-fill col" type="submit">新增</button>
                 </div>
             </form>
         </div>

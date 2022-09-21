@@ -116,6 +116,7 @@ const themes = { //Object for themes
     },
 };
 let undo_count = 0;
+let show_adjustment_form = false;
 // ------------------------------------------ //
 // GLOBAL FUNCTIONS
 // ------------------------------------------ //
@@ -730,6 +731,52 @@ function export_to_json(){
     let timestamp = new Date();
     let filename = 'Twmj-' + timestamp.getDate().toString().padStart(2, 0) + '-' + (timestamp.getMonth() + 1).toString().padStart(2, 0);
     download(filename, path);
+}
+// Functions for manual adjustment
+$(document).on('popup:open', '#adjust-popup', function(){
+    app.emit('adjust_change');
+});
+// Function for filling actions upon adjustment change
+app.on('adjust_change', function(){
+    let adjust_html = ''
+    if ( manual_adjust_array.length == 0 ){
+        adjust_html = '<li><div class="item-content"><div class="item-inner"><div class="item-title">尚未有行動</div></div></div></li>'
+    } else {
+        for (i = 0; i < manual_adjust_array.length; i++){
+            let player_name = allplayer[manual_adjust_array[i]['player_index']].name;
+            let action_text = ( manual_adjust_array[i]['action'] == 'add' ) ? ' 增加' : ( manual_adjust_array[i]['action'] == 'minus' ) ? ' 減少' : ( manual_adjust_array[i]['action'] == 'equal' ) ? ' 的番數設定為' : null;
+            let adjust_message = player_name + action_text + manual_adjust_array[i].value + '番';
+            adjust_html += '<li><div class="item-content"><div class="item-media"><button class="button" href="#"  onclick="remove_adjust(' + i + ')"><i class="f7-icons if-not-md">xmark</i><i class="material-icons md-only">close</i></button></div><div class="item-inner"><div class="item-title">' + adjust_message + '</div></div></div></li>';
+        }
+    }
+    $('#adjust-actions').html(adjust_html);
+});
+// Function for removing actions from manual adjustment array
+function remove_adjust(index){
+    manual_adjust_array.splice(index, 1);
+    app.emit('adjust_change');
+}
+// Handle UI for adjustment popup
+function toggle_adjustment_form(){
+    show_adjustment_form = !show_adjustment_form;
+    if(show_adjustment_form){
+        $('#adjust-add-buttons').addClass('none');
+        $('#adjust-add-form').removeClass('none');
+    } else{
+        $('#adjust-add-buttons').removeClass('none');
+        $('#adjust-add-form').addClass('none');
+    }
+}
+// Function for handling the submit of adjustment format
+function submit_adjust_form(){
+    let adjust_obj = new Object;
+    adjust_obj.player_index = $('input[name="adjust-player"]:checked').val();
+    adjust_obj.action = $('input[name="adjust-action"]:checked').val();
+    adjust_obj.value = $('input[name="adjust-value"]').val();
+    manual_adjust_array.push(adjust_obj);
+    app.emit('adjust_change');
+    $('#adjust-popup form')[0].reset();
+    toggle_adjustment_form();
 }
 // Function for handling prompt of removal of data
 function remove_data_prompt(){

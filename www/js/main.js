@@ -6,6 +6,7 @@ let game_record=[NaN]; //Array for record of game, such that game_record[1] = Re
 let fulldata_JSON = new Array; // Array for undo and redo, saves most of the data
 let msg = ''; //Message used for game log
 let game_log = new Array; //Array saving all game log objects
+let manual_adjust_array = new Array; // Array for adding adjutments
 let gamestat={ //Object for holding game statistics
     round: 1,// 1 = 1st game, 2 = 2nd game ...
     round_prevailing: 1,//1 = 第一局東圈東， 2 = 東局南 ... 5 = 第一局南圈東 ... 17 = 第二局東圈東
@@ -294,6 +295,33 @@ function rename(player_index, new_name){
         fill_names();
         add_log(msg);
         app.emit('data_change');
+    }
+}
+// ------------------------------------------ //
+// Function for manual adjustment
+// ------------------------------------------ //
+function adjust(){
+    msg = '手動調整・詐糊：<br>'
+    if (manual_adjust_array.length == 0){
+        catch_error('請先新增行動');
+    } else {
+        for (i=0; i< manual_adjust_array.length; i++){
+            if (manual_adjust_array[i].action == 'add'){
+                msg += allplayer[manual_adjust_array[i]['player_index']].name + ' 增加了' + manual_adjust_array[i].value + '番<br>';
+                allplayer[manual_adjust_array[i]['player_index']].balance += parseInt(manual_adjust_array[i].value);
+            }
+            else if (manual_adjust_array[i].action == 'minus'){
+                msg += allplayer[manual_adjust_array[i]['player_index']].name + ' 減少了' + manual_adjust_array[i].value + '番<br>';
+                allplayer[manual_adjust_array[i]['player_index']].balance -= parseInt(manual_adjust_array[i].value);
+            }
+            else if (manual_adjust_array[i].action == 'equal'){
+                msg += allplayer[manual_adjust_array[i]['player_index']].name + ' 設定為' + manual_adjust_array[i].value + '番<br>';
+                allplayer[manual_adjust_array[i]['player_index']].balance = parseInt(manual_adjust_array[i].value);
+            }
+        }
+        manual_adjust_array = [];
+        add_log(msg);
+        app.emit('data_change')
     }
 }
 // ------------------------------------------ //
