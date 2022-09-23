@@ -39,22 +39,22 @@
                         </div>
                     </div>
                 </div>
-                <a href="#" class="item-link item-content" onclick="app.dialog.prompt('每一番多少錢？', '港式台牌計分版', function(value){set_money_multiplier(value)}, function(){null}, 0.5)">
+                <a href="#" class="item-link item-content" onclick="app.dialog.prompt('每一番多少錢？', '港式台牌計分版', function(value){set_money_multiplier(value)}, function(){null}, default_setting.money)">
                     <div class="item-inner">
                         <div class="item-title">每番金錢</div>
                         <div class="item-after">
                             <div class="item-input-wrap">
-                                <input type="text" name="multiplier" class="align-text-right" value="0.5" disabled></input>
+                                <input type="text" name="multiplier" class="align-text-right" value=0.5 disabled></input>
                             </div>
                         </div>
                     </div>
                 </a>
-                <a href="#" class="item-link item-content" onclick="app.dialog.prompt('玩家可以被拉多少次後選擇終結拉踢？', '港式台牌計分版', function(value){set_break_streak(value)}, function(){null}, 3)">
+                <a href="#" class="item-link item-content" onclick="app.dialog.prompt('玩家可以被拉多少次後選擇終結拉踢？', '港式台牌計分版', function(value){set_break_streak(value)}, function(){null}, default_setting.break)">
                     <div class="item-inner">
                         <div class="item-title">斷拉</div>
                         <div class="item-after">
                             <div class="item-input-wrap">
-                                <input type="text" name="break_streak" class="align-text-right" value="3" disabled></input>
+                                <input type="text" name="break_streak" class="align-text-right" value=3 disabled></input>
                             </div>
                         </div>
                     </div>

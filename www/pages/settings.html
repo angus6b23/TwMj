@@ -55,8 +55,8 @@
                 <li>
                     <a href="#" class="item-link item-content">
                         <div class="item-media">
-                            <i class="f7-icons if-not-md">minus_slash_plus</i>
-                            <i class="material-icons md-only">calculate</i>
+                            <i class="f7-icons if-not-md">bandage</i>
+                            <i class="material-icons md-only">healing</i>
                         </div>
                         <div class="item-inner">
                             <div class="item-title">手動結算</div>
@@ -64,13 +64,13 @@
                     </a>
                 </li>
                 <li>
-                    <a href="#" class="item-link item-content">
+                    <a href="#" class="item-link item-content" onclick="app.popup.open('#adjust-popup')">
                         <div class="item-media">
-                            <i class="f7-icons if-not-md">bandage</i>
-                            <i class="material-icons md-only">healing</i>
+                            <i class="f7-icons if-not-md">minus_slash_plus</i>
+                            <i class="material-icons md-only">calculate</i>
                         </div>
                         <div class="item-inner">
-                            <div class="item-title">調整番數/詐糊</div>
+                            <div class="item-title">詐糊・手動調整</div>
                         </div>
                     </a>
                 </li>
@@ -125,7 +125,8 @@
                     </a>
                 </li>
                 <li>
-                    <a href="#" class="item-link item-content" onclick="remove_data_prompt()">
+                    <a href="#" class="item-link item-content" onclick="app.dialog.confirm('清除資料會影響現時設置及遊戲<br>確定要清除？','清除資料', function(){localStorage.clear();location.reload()},function(){null;}
+                    )">
                         <div class="item-media">
                             <i class="f7-icons if-not-md">bin_xmark_fill</i>
                             <i class="material-icons md-only">delete</i>
@@ -181,28 +182,28 @@
         <div class="actions-modal theme-actions">
             <div class="actions-group">
                 <span class="actions-label">主題</span>
-                <div class="actions-button actions-button-bold" onclick="apply_theme('Nord')">
+                <div class="actions-button actions-button-bold" onclick="apply_theme('Nord');app.emit('setting_change')">
                     <div class="actions-button-text">北歐</div>
                 </div>
-                <div class="actions-button actions-button-bold" onclick="apply_theme('Nord_alt')">
+                <div class="actions-button actions-button-bold" onclick="apply_theme('Nord_alt');app.emit('setting_change')">
                     <div class="actions-button-text">異色北歐</div>
                 </div>
-                <div class="actions-button actions-button-bold" onclick="apply_theme('Dracula')">
+                <div class="actions-button actions-button-bold" onclick="apply_theme('Dracula');app.emit('setting_change')">
                     <div class="actions-button-text">德古拉</div>
                 </div>
-                <div class="actions-button actions-button-bold" onclick="apply_theme('Gruvbox_light')">
+                <div class="actions-button actions-button-bold" onclick="apply_theme('Gruvbox_light');app.emit('setting_change')">
                     <div class="actions-button-text">亮色航空</div>
                 </div>
-                <div class="actions-button actions-button-bold" onclick="apply_theme('Gruvbox_dark')">
+                <div class="actions-button actions-button-bold" onclick="apply_theme('Gruvbox_dark');app.emit('setting_change')">
                     <div class="actions-button-text">暗色航空</div>
                 </div>
-                <div class="actions-button actions-button-bold" onclick="apply_theme('Tomorrow_night')">
+                <div class="actions-button actions-button-bold" onclick="apply_theme('Tomorrow_night');app.emit('setting_change')">
                     <div class="actions-button-text">暗色明日</div>
                 </div>
-                <div class="actions-button actions-button-bold" onclick="apply_theme('Tomorrow')">
+                <div class="actions-button actions-button-bold" onclick="apply_theme('Tomorrow');app.emit('setting_change')">
                     <div class="actions-button-text">亮色明日</div>
                 </div>
-                <div class="actions-button actions-button-bold" onclick="apply_theme('High_contrast')">
+                <div class="actions-button actions-button-bold" onclick="apply_theme('High_contrast');app.emit('setting_change')">
                     <div class="actions-button-text">高對比</div>
                 </div>
             </div>
@@ -233,8 +234,8 @@
                             <table>
                                 <thead>
                                     <tr>
-                                        <th class="label-cell align-text-center">時間</td>
-                                        <th class="label-cell">記錄</td>
+                                        <th class="label-cell align-text-center">時間</th>
+                                        <th class="label-cell align-text-center">記錄</th>
                                     </tr>
                                 </thead>
                                 <tbody id="log_table">

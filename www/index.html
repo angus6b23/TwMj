@@ -2,6 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8">
+    <script src="js/chart.min.js"></script>
     <!--
     Customize this policy to fit your own app's needs. For more guidance, please refer to the docs:
     https://cordova.apache.org/docs/en/latest/
@@ -105,16 +106,16 @@
                                 <p>流局</p>
                             </button>
                             <button class="button col grid-button row popup-open" data-popup="#adjust-popup">
-                                <i class="f7-icons if-not-md col-100">bandage</i>
-                                <i class="material-icons md-only col-100">healing</i>
-                                <p>詐糊</p>
+                                <i class="f7-icons if-not-md col-100">minus_slash_plus</i>
+                                <i class="material-icons md-only col-100">calculate</i>
+                                <p>手動調整</p>
                             </button>
                             <button class="button col grid-button row">
                                 <i class="f7-icons if-not-md col-100">photo</i>
                                 <i class="material-icons md-only col-100">image</i>
                                 <p>概要</p>
                             </button>
-                            <button class="button col grid-button row">
+                            <button class="button col grid-button row" onclick="app.dialog.confirm('結束游戲後會刪除現時遊戲的進度！<br>確定要結束嗎？', '結束遊戲', function(){localStorage.removeItem('data');location.reload();}), function(){null;}">
                                 <i class="f7-icons if-not-md col-100">checkmark_circle</i>
                                 <i class="material-icons md-only col-100">check_circle_outline</i>
                                 <p>結束</p>
@@ -124,14 +125,12 @@
                 </div>
             </div>
 
-            <!-- Catalog View -->
+            <!-- Stat View -->
             <div id="view-stats" class="view view-init tab" data-name="stats" data-url="/stats/">
-                <!-- Catalog page will be loaded here dynamically from /catalog/ route -->
             </div>
 
             <!-- Settings View -->
             <div id="view-settings" class="view view-init tab" data-name="settings" data-url="/settings/">
-                <!-- Settings page will be loaded here dynamically from /settings/ route -->
             </div>
         </div>
 

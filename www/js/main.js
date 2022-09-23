@@ -32,9 +32,10 @@ let default_setting={ //Object for holding settings
     fold: 1.5, //Mutiplier for each consecutive win
     break: 3, //Loser can choose to stop consecutive after 3 loses
     base: 0, //Base Money
-    money: 1, //Multiplier (Money = yaku x money multiplier)
+    money: 0.5, //Multiplier (Money = yaku x money multiplier)
     display_as_money: false //Display money instead of score on main table when true;
 };
+let chart_created = false;
 class player_template{
     constructor(name, position){
         this.name = name;
@@ -74,6 +75,28 @@ class log_template{
         this.removed = false;
     }
 }
+class chart_config{
+    constructor(legend_boolean){
+        this.type = 'line';
+        this.data = {
+                labels: generate_pseudolabels(),
+                datasets: generate_chart_dataset()
+        }
+        this.options = {
+            maintainAspectRatio: false,
+            plugins:{
+                legend:{
+                    display: legend_boolean
+                }
+            }
+        }
+        this.default = {
+            global: {
+                defaultFontColor: (themes[default_setting.theme]['is_Dark']) ? '#FFFFFF' : '#000000',
+            }
+        }
+    }
+}
 let mapped = new Object //Object for saving index of player position
 // ------------------------------------------ //
 // START POPUP FUNCTIONS
@@ -95,6 +118,7 @@ function start_game(start_obj){
     }
     map_players();
     fill_names();
+    app.emit('setting_change');
     app.emit('data_change');
 }
 function map_players(){ //Create mapped object, such that mapped.E will return the index of player who has position of east
@@ -222,6 +246,7 @@ function transaction(action, game_arr){
                 }
             }
         }
+        allplayer[i].bal_arr.push(allplayer[i].balance);
     }
     gamestat.round += 1; // Add round to gamestat
     (allplayer[mapped[gamestat.banker]].status == 'win') ? hold_banker() : pass_banker();
@@ -283,6 +308,33 @@ function end_streak(payer_index, receiver_index){
     app.emit('data_change');
 }
 // ------------------------------------------ //
+// Function for Charts
+// ------------------------------------------ //
+// Generate pseudo-labels on x-axis for chart
+function generate_pseudolabels(){
+    let label_array = []
+    for (i = 0; i < allplayer[1].bal_arr.length; i++){
+        label_array.push(' ');
+    }
+    return label_array;
+}
+function generate_chart_dataset(){
+    let dataset_array = [];
+    let current_theme = themes[default_setting.theme]
+    for (i=1; i<=4; i++){
+        let color_string = '--p' + i + '-color'
+        let data_object = {
+            fill: false,
+            tension: 0.25,
+            label: allplayer[i].name,
+            data: allplayer[i].bal_arr,
+            borderColor: current_theme[color_string]
+        }
+        dataset_array.push(data_object);
+    }
+    return dataset_array;
+}
+// ------------------------------------------ //
 // Function for Renaming players
 // ------------------------------------------ //
 function rename(player_index, new_name){
@@ -301,9 +353,10 @@ function rename(player_index, new_name){
 // Function for manual adjustment
 // ------------------------------------------ //
 function adjust(){
-    msg = '手動調整・詐糊：<br>'
+    msg = '詐糊・手動調整：<br>'
     if (manual_adjust_array.length == 0){
         catch_error('請先新增行動');
+        return false;
     } else {
         for (i=0; i< manual_adjust_array.length; i++){
             if (manual_adjust_array[i].action == 'add'){
@@ -320,8 +373,29 @@ function adjust(){
             }
         }
         manual_adjust_array = [];
+        gamestat.modified = true;
         add_log(msg);
-        app.emit('data_change')
+        app.emit('data_change');
+        return true;
+    }
+}
+// ------------------------------------------ //
+// Function for import
+// ------------------------------------------ //
+function import_data(data){
+    try{
+        allplayer = data.allplayer;
+        gamestat = data.gamestat;
+        game_record = data.game_record;
+        game_log = data.log;
+        map_players();
+        fill_names();
+        app.emit('data_change');
+        app.popup.close('#start-popup');
+        app.tab.show('#view-home');
+        app.toolbar.show('.toolbar');
+    } catch(err){
+        catch_error(err);
     }
 }
 // ------------------------------------------ //
@@ -341,6 +415,9 @@ app.on('data_change', function(){
     save();
     app.emit('ui_update');
 })
+app.on('setting_change', function(){
+    localStorage.setItem('default_setting', JSON.stringify(default_setting));
+})
 // ------------------------------------------ //
 // Functions for handling log
 // ------------------------------------------ //
@@ -349,13 +426,9 @@ function add_log(message){
     game_log.unshift(log);
 }
 
-//
+// ------------------------------------------ //
 // Functions for Save and load
-//
-function save_setting(){
-    localStorage.setItem('default_setting', JSON.stringify(default_setting));
-}
-
+// ------------------------------------------ //
 function save(){
     (undo_count > 0) ? fulldata_JSON = fulldata_JSON.slice(undo_count):null;
     undo_count = 0;

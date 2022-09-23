@@ -33,14 +33,14 @@ const themes = { //Object for themes
     Dracula:{
         '--p1-color': '#8be9fd',
         '--p2-color': '#50fa7b',
-        '--p3-color': '#bd93f9',
+        '--p3-color': '#ff79c6',
         '--p4-color': '#f1fa8c',
         '--bg-nord': '#282a36',
         '--fg-nord': '#f8f8f2',
-        '--f7-theme-color': '#ff79c6',
-        '--f7-theme-color-rgb': '255, 121, 198',
-        '--f7-theme-color-shade': '#ff50b5',
-        '--f7-theme-color-tint': '#ffa2d7',
+        '--f7-theme-color': '#bd93f9',
+        '--f7-theme-color-rgb': '189, 147, 249',
+        '--f7-theme-color-shade': '#a56cf7',
+        '--f7-theme-color-tint': '#d5bafb',
         'zh_name': '德古拉',
         'is_Dark': true
     },
@@ -117,6 +117,8 @@ const themes = { //Object for themes
 };
 let undo_count = 0;
 let show_adjustment_form = false;
+let balance_chart;
+let isFirefox = typeof InstallTrigger !== 'undefined';
 // ------------------------------------------ //
 // GLOBAL FUNCTIONS
 // ------------------------------------------ //
@@ -201,7 +203,7 @@ app.on('ui_update', function(){
     }
     $('#round_counter').text(round_prevailing_text);
     // Add banker class to respective player cards;
-    $('.p1_card, .p2_card, .p3_card, p4_card').removeClass('banker');
+    $('.p1_card, .p2_card, .p3_card, .p4_card').removeClass('banker');
     $('.p' + mapped[gamestat.banker] + '_card').addClass('banker');
     // Control undo, redo buttons;
     ( undo_count == 0 ) ? $('#redo').prop('disabled', true):$('#redo').prop('disabled', false);
@@ -216,6 +218,15 @@ app.on('ui_update', function(){
         }
     }
     $('#game_record').html(game_record_append);
+    // Create or update chart
+    let chart_canvas = $('#stat-chart')[0].getContext('2d');
+    if (chart_created){
+        balance_chart.data = new chart_config(false).data
+        balance_chart.update('none'); //No animation with 'none'
+    } else {
+        chart_created = true;
+        balance_chart = new Chart( chart_canvas, new chart_config(false));
+    }
 });
 function catch_error(message){
     app.toast.create({
@@ -228,32 +239,39 @@ function catch_error(message){
 // Auto Run Functions
 // ------------------------------------------ //
 app.on('pageInit', function(){ // Add event listeners for all pages
-    if(load()){
-        map_players();
-        fill_names();
-        app.emit('ui_update');
-        app.preloader.hide();
-    } else {
-        app.popup.open('#start-popup');
-        app.preloader.hide();
+    console.log('page init event');
+    fill_names();
+    if (isFirefox) {
+        try{
+            app.emit('ui_update');
+        } catch(err){
+            console.info('Firefox:' + err)
+        }
     }
     $('.quick-actions .actions-button').on('click', function(){ //Event listeners for closing actions after click [Firefox]
         app.actions.close();
-    })
+    });
 })
-$('.quick-actions .actions-button').on('click', function(){ //Event listeners for closing actions after click [Chromium]
+
+//Event listeners for closing actions after click [Chromium]
+$('.quick-actions .actions-button').on('click', function(){
     app.actions.close();
 })
 if(load()){
     map_players();
     fill_names();
-    app.emit('ui_update');
+    (isFirefox) ? null: app.emit('ui_update');
     fulldata_JSON.unshift(JSON.stringify(data));
+    apply_theme(default_setting.theme);
     app.preloader.hide();
 } else {
     app.popup.open('#start-popup');
+    $('#start-popup input[name="multiplier"]').val(default_setting.money);
+    $('#start-popup input[name="break_streak"]').val(default_setting.break);
+    apply_theme(default_setting.theme);
     app.preloader.hide();
 }
+
 // ------------------------------------------ //
 // Starting RELATED FUNCTIONS
 // ------------------------------------------ //
@@ -667,13 +685,19 @@ function display_as_money(){
 }
 // Apply themes
 function apply_theme(theme_name){
+    default_setting.theme = theme_name; // Set default setting to theme name which will persists after refresh
     let css_root = document.querySelector(':root')
     for ( parameters in themes[theme_name]){
         css_root.style.setProperty(parameters, themes[theme_name][parameters]);
     }
     (themes[theme_name]['is_Dark']) ? $("#app").addClass('dark') : $("#app").removeClass('dark');
     $('#theme_name').text(themes[theme_name]['zh_name']);
+    app.emit('setting_change');
 }
+// Fill names before entering rename page{
+$(document).on('page:beforein', '.page[data-name="rename"]',function(){
+    app.emit('ui_update');
+});
 // Hide Toolbar after entering license page
 $(document).on('page:afterin', '.page[data-name="license"]', function(){
     app.toolbar.hide('.toolbar');
@@ -682,18 +706,30 @@ $(document).on('page:afterin', '.page[data-name="license"]', function(){
 $(document).on('page:afterout','.page[data-name="license"]', function(){
     app.toolbar.show('.toolbar');
 });
-// Hide Toolbar after entering license page
+// Hide Toolbar after entering import page
 $(document).on('page:afterin', '.page[data-name="import"]', function(){
     $('textarea').focus();
     app.toolbar.hide('.toolbar');
-    $('.import-submit').click(function(){
-        console.log('clicked');// Add submit function
-    });
 });
-// Show Toolbar when entering license page
+// Show Toolbar when exiting import page
 $(document).on('page:afterout','.page[data-name="import"]', function(){
     app.toolbar.show('.toolbar');
 });
+// Function for Validating import
+function validate_import(){
+    try{
+        temp_data = JSON.parse($('#import-json').val());
+        let import_summary = '將匯入的資料如下：<br><br>'
+        import_summary += '第' + temp_data.gamestat.round + '局：<br>';
+        for (i=1; i<=4; i++){
+            import_summary += temp_data.allplayer[i].name + ' ： ' + temp_data.allplayer[i].balance + '(' + temp_data.allplayer[i].unrealized + ')<br>';
+        }
+        import_summary += '<br>匯入資料後，現時的遊遊資料將會被覆蓋<br>確定要匯入嗎？'
+        app.dialog.confirm(import_summary, '匯入資料', function(){import_data(temp_data)}, function(){null});
+    }catch(err){
+        catch_error(err);
+    }
+}
 // Dump logs before show log popup
 $(document).on('popup:open', '.log-popup', function(){
     let append_log = ''
@@ -777,11 +813,4 @@ function submit_adjust_form(){
     app.emit('adjust_change');
     $('#adjust-popup form')[0].reset();
     toggle_adjustment_form();
-}
-// Function for handling prompt of removal of data
-function remove_data_prompt(){
-    app.dialog.confirm('清除資料會影響現時設置及遊戲，確定要清除？', function(){
-        // TODO: Add function for removal of data here
-        console.log('Remove confirmed');
-    })
 }
