@@ -52,7 +52,7 @@ class player_template{
         this.sf4 = 0;
         this.status = 'neutral';
         this.winning_streak = 0;
-        this.max_winning_streak = 0;
+        this.max_streak = 0;
         this.tsumo = 0;
         this.win = 0;
         this.lose = 0;
@@ -98,6 +98,11 @@ class chart_config{
     }
 }
 let mapped = new Object //Object for saving index of player position
+// Function for returning numbers in 2 decimal places
+function round_to_2_dec(num){
+    num = Math.round(num * 100) / 100;
+    return num;
+}
 // ------------------------------------------ //
 // START POPUP FUNCTIONS
 // ------------------------------------------ //
@@ -175,7 +180,6 @@ function deal(player_index, game_arr){
     msg = '第' + gamestat.round + '場：<br>';
     // Manage game statistics first
     gamestat.total_change += Math.abs(game_arr[player_index]);
-    gamestat.deal += 1;
     allplayer[player_index].lose += 1;
     allplayer[player_index].deal_lose += 1;
     let winner_count = 0
@@ -193,26 +197,30 @@ function deal(player_index, game_arr){
     (winner_count == 3) ? gamestat.triple_winner += 1 : null;
     let total_yaku = parseInt(gamestat.avg_yaku) * (parseInt(gamestat.deal) + parseInt(gamestat.tsumo)) + Math.abs(parseInt(game_arr[player_index])); //Calculate total yakus
     gamestat.deal += 1; // Add 1 deal game to gamestat
-    gamestat.avg_yaku = Math.round((total_yaku / (parseInt(gamestat.deal) + parseInt(gamestat.tsumo))) * 100 ) / 100; //Calculate and ound average yaku to 2 decimal places
+    gamestat.avg_yaku = round_to_2_dec(total_yaku / (parseInt(gamestat.deal) + parseInt(gamestat.tsumo))); //Calculate and ound average yaku to 2 decimal places
     transaction('deal', game_arr); //Call transaction after collecting statistics
 }
 function tsumo(player_index, game_arr){
     msg = '第' + gamestat.round + '場：<br>';
     // Manage game statistics first
     gamestat.total_change += Math.abs(game_arr[player_index]);
-    gamestat.tsumo += 1;
     allplayer[player_index].win += 1;
     allplayer[player_index].tsumo += 1;
     let total_yaku = 0;
+    let tsumo_max_yaku = 0
     for (i = 1; i <= 4; i++){ //Find for max yaku and generate log
         if(game_arr[i] < 0){
-            allplayer[i].lose += 1;
+            allplayer[i].lose += 1; //Record losers
             (Math.abs(game_arr[i]) > gamestat.max_yaku) ? gamestat.max_yaku = Math.abs(game_arr[i]) : null;
             (Math.abs(game_arr[i]) > allplayer[player_index].max_yaku) ? allplayer[player_index].max_yaku = Math.abs(game_arr[i]) : null;
             total_yaku += Math.abs(game_arr[i]);
+            (game_arr[i] < 0 && Math.abs(game_arr[i]) > tsumo_max_yaku) ? tsumo_max_yaku = Math.abs(game_arr[i]) : null; //Record largest yaku for calculating average yaku for game stats
         }
     }
-    let avg_yaku = Math.round(total_yaku / 3 * 100) / 100;
+    let avg_yaku = round_to_2_dec(total_yaku / 3);
+    let game_total_yaku = parseInt(gamestat.avg_yaku) * (parseInt(gamestat.deal) + parseInt(gamestat.tsumo)) + tsumo_max_yaku;
+    gamestat.tsumo += 1;
+    gamestat.avg_yaku = round_to_2_dec(parseInt(game_total_yaku) / (parseInt(gamestat.deal) + parseInt(gamestat.tsumo)));
     msg += allplayer[player_index].name + ' 自摸了 ' + avg_yaku + '番<br>';
     transaction('tsumo', game_arr);
 }
@@ -333,6 +341,45 @@ function generate_chart_dataset(){
         dataset_array.push(data_object);
     }
     return dataset_array;
+}
+// ------------------------------------------ //
+// Function for changing seat
+// ------------------------------------------ //
+function change_seat(option){
+    msg = '調位：<br>'
+    option = $('input[name="change-seat"]:checked').val();
+    if (option == 'default'){
+        let temp_allplayer = {...allplayer};
+        for (i=1; i<=4; i++){
+            (temp_allplayer[i].position == 'E') ? allplayer[i].position = 'S' :
+            (temp_allplayer[i].position == 'S') ? allplayer[i].position = 'E' :
+            (temp_allplayer[i].position == 'W') ? allplayer[i].position = 'N' :
+            (temp_allplayer[i].position == 'N') ? allplayer[i].position = 'W' : null;
+        }
+    } else {
+        let east_value = $('input[name="seat-east"]:checked').val()
+        let south_value = $('input[name="seat-south"]:checked').val()
+        let west_value = $('input[name="seat-west"]:checked').val()
+        let north_value = $('input[name="seat-north"]:checked').val()
+        allplayer[east_value].position = 'E';
+        allplayer[south_value].position = 'S';
+        allplayer[west_value].position = 'W';
+        allplayer[north_value].position = 'N';
+    }
+
+    for (i=1; i<=4; i++){
+        let position = ( allplayer[i].position == 'E' ) ? '東位' :
+        ( allplayer[i].position == 'S' ) ? '南位' :
+        ( allplayer[i].position == 'W' ) ? '西位' :
+        ( allplayer[i].position == 'N' ) ? '北位' : null;
+        msg += allplayer[i].name + ' 現在為 ' + position + '<br>';
+    }
+    map_players();
+    fill_names();
+    add_log(msg);
+    app.emit('data_change');
+    app.popup.close();
+    app.tab.show('#view-home');
 }
 // ------------------------------------------ //
 // Function for Renaming players

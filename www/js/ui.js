@@ -182,6 +182,22 @@ app.on('ui_update', function(){
                 default: console.error('Error while adding banker animation: Unknown case');
             }
         }
+        // Fill player statistics
+        $('.p' + i + '-win').text(allplayer[i].win);
+        $('.p' + i + '-lose').text(allplayer[i].lose);
+        $('.p' + i + '-tsumo').text(allplayer[i].tsumo);
+        $('.p' + i + '-deal-lose').text(allplayer[i].deal_lose);
+        $('.p' + i + '-instant-get').text(allplayer[i].instant_get);
+        $('.p' + i + '-instant-pay').text(allplayer[i].instant_pay);
+        $('.p' + i + '-max-yaku').text(allplayer[i].max_yaku);
+        $('.p' + i + '-max-streak').text(allplayer[i].max_streak);
+        (parseInt(gamestat.round) > 1) ? $('.p' + i + '-win-ratio').text(round_to_2_dec(parseInt(allplayer[i].win) / parseInt(gamestat.round-1)) * 100 + '%'): null;
+        (parseInt(gamestat.round) > 1) ? $('.p' + i + '-lose-ratio').text(round_to_2_dec(parseInt(allplayer[i].lose) / parseInt(gamestat.round-1)) * 100 + '%'): null;
+        (parseInt(gamestat.tsumo) > 0) ? $('.p' + i + '-tsumo-ratio').text(round_to_2_dec(parseInt(allplayer[i].tsumo) / parseInt(gamestat.tsumo)) * 100 + '%'): null;
+        (parseInt(gamestat.deal) > 0) ? $('.p' + i + '-deal-lose-ratio').text(round_to_2_dec(parseInt(allplayer[i].deal_lose) / parseInt(gamestat.deal)) * 100 + '%'): null;
+        (parseInt(gamestat.instant_get) > 0) ? $('.p' + i + '-instant-get-ratio').text(round_to_2_dec(parseInt(allplayer[i].instant_get) / parseInt(gamestat.instant_get)) * 100 + '%'): null;
+        (parseInt(gamestat.instant_pay) > 0) ? $('.p' + i + '-instant-pay-ratio').text(round_to_2_dec(parseInt(allplayer[i].instant_pay) / parseInt(gamestat.instant_pay)) * 100 + '%'): null;
+
     }
     // End of single for loop
     // Calculate round_prevailing text
@@ -218,15 +234,41 @@ app.on('ui_update', function(){
         }
     }
     $('#game_record').html(game_record_append);
-    // Create or update chart
-    let chart_canvas = $('#stat-chart')[0].getContext('2d');
-    if (chart_created){
-        balance_chart.data = new chart_config(false).data
-        balance_chart.update('none'); //No animation with 'none'
-    } else {
-        chart_created = true;
-        balance_chart = new Chart( chart_canvas, new chart_config(false));
+    // Fill tds in game stats
+    $('.round_raw').text(gamestat.round - 1);
+    $('.draw_raw').text(gamestat.tie);
+    $('.deal_raw').text(gamestat.deal);
+    $('.tsumo_raw').text(gamestat.tsumo);
+    $('.instantGet_raw').text(gamestat.instant_get);
+    $('.instantPay_raw').text(gamestat.instant_pay);
+    $('.avg_yaku_raw').text(gamestat.avg_yaku);
+    $('.max_yaku_raw').text(gamestat.max_yaku);
+    $('.max_streak_raw').text(gamestat.max_streak);
+    $('.total_yaku_raw').text(gamestat.total_change);
+    $('.double_raw').text(gamestat.double_winner);
+    $('.triple_raw').text(gamestat.triple_winner);
+    // Only fill ratios when round > 1 to prevent NaN
+    if (gamestat.round > 1){
+        $('.draw_ratio').text(round_to_2_dec(gamestat.tie / (gamestat.round - 1)) * 100 + '%');
+        $('.deal_ratio').text(round_to_2_dec(gamestat.deal / (gamestat.round - 1)) * 100 + '%');
+        $('.tsumo_ratio').text(round_to_2_dec(gamestat.tsumo / (gamestat.round - 1)) * 100 + '%');
+        $('.double_ratio').text(round_to_2_dec(gamestat.double_winner / (gamestat.round - 1)) * 100 + '%');
+        $('.triple_ratio').text(round_to_2_dec(gamestat.triple_winner / (gamestat.round - 1)) * 100 + '%');
     }
+    // Create or update chart
+    try{
+        let chart_canvas = $('#stat-chart')[0].getContext('2d');
+        if (chart_created){
+            balance_chart.data = new chart_config(false).data
+            balance_chart.update('none'); //No animation with 'none'
+        } else {
+            chart_created = true;
+            balance_chart = new Chart( chart_canvas, new chart_config(false));
+        }
+    } catch (err){
+        (!isFirefox) ? catch_error(err): null;
+    }
+
 });
 function catch_error(message){
     app.toast.create({
@@ -240,14 +282,7 @@ function catch_error(message){
 // ------------------------------------------ //
 app.on('pageInit', function(){ // Add event listeners for all pages
     console.log('page init event');
-    fill_names();
-    if (isFirefox) {
-        try{
-            app.emit('ui_update');
-        } catch(err){
-            console.info('Firefox:' + err)
-        }
-    }
+    app.emit('ui_update');
     $('.quick-actions .actions-button').on('click', function(){ //Event listeners for closing actions after click [Firefox]
         app.actions.close();
     });
@@ -260,7 +295,7 @@ $('.quick-actions .actions-button').on('click', function(){
 if(load()){
     map_players();
     fill_names();
-    (isFirefox) ? null: app.emit('ui_update');
+    app.emit('ui_update');
     fulldata_JSON.unshift(JSON.stringify(data));
     apply_theme(default_setting.theme);
     app.preloader.hide();
@@ -277,8 +312,24 @@ if(load()){
 // ------------------------------------------ //
 // Starting Modal Functions
 function fill_names(){
-    // Remove all Classes
-    $('#N-text, #N-text2, #north, #E-text, #E-text2, #east, #S-text, #S-text2, #south, #W-text, #W-text2, #west, #N-text, #N-text2, #north').removeClass('p1_name, p1_balance, p1_bg, p2_name, p2_balance, p2_bg, p3_name, p3_balance, p3_bg, p4_name, p4_balance, p4_bg');
+    // Remove all Classes first
+    $('#table h3').removeClass('p1_name');
+    $('#table h3').removeClass('p2_name');
+    $('#table h3').removeClass('p3_name');
+    $('#table h3').removeClass('p4_name');
+    $('#table h3').removeClass('p1_balance');
+    $('#table h3').removeClass('p2_balance');
+    $('#table h3').removeClass('p3_balance');
+    $('#table h3').removeClass('p4_balance');
+    $('#table div').removeClass('p1_bg');
+    $('#table div').removeClass('p2_bg');
+    $('#table div').removeClass('p3_bg');
+    $('#table div').removeClass('p4_bg');
+    $('#table div').removeClass('p1_action');
+    $('#table div').removeClass('p2_action');
+    $('#table div').removeClass('p3_action');
+    $('#table div').removeClass('p4_action');
+    // Add classes correspondingly
     $('#N-text').addClass('p' + mapped.N + '_name');
     $('#N-text2').addClass('p' + mapped.N + '_balance');
     $('#north').addClass('p' + mapped.N + '_bg');
@@ -698,6 +749,54 @@ function apply_theme(theme_name){
 $(document).on('page:beforein', '.page[data-name="rename"]',function(){
     app.emit('ui_update');
 });
+// Functions for change seat pages
+function display_custom(seat_boolean){ //Show seats when custom is selected
+    if (seat_boolean){
+        $('.custom-seat-east').removeClass('none');
+        $('#seat-form button[type="submit"]').addClass('none');
+        let append_html = '';
+        for (i=1; i<=4; i++){
+            append_html += '<p><label class="radio"><input type="radio" name="seat-east" value=' + i + ' onclick="east_trigger();" /><i class="icon-radio"></i></label>' + allplayer[i].name + '</p>'
+        }
+        $('.radio-east').html(append_html);
+    }
+    else {
+        $('.custom-seat-east, .custom-seat-south, .custom-seat-north').addClass('none')
+        $('#seat-form button[type="submit"]').removeClass('none');
+    }
+}
+function east_trigger(){
+    $('.custom-seat-south').removeClass('none');
+    $('.custom-seat-west, .custom-seat-north').addClass('none');
+    $('#seat-form button[type="submit"]').addClass('none');
+    let append_html = '';
+    for (i=1; i<=4; i++){
+        ( i != $('input[name="seat-east"]:checked').val()) ? append_html += '<p><label class="radio"><input type="radio" name="seat-south" value=' + i + ' onclick="south_trigger();" /><i class="icon-radio"></i></label>' + allplayer[i].name + '</p>' : null;
+    }
+    $('.radio-south').html(append_html);
+}
+function south_trigger(){
+    $('.custom-seat-west').removeClass('none');
+    $('.custom-seat-north').addClass('none');
+    $('#seat-form button[type="submit"]').addClass('none');
+    let append_html = '';
+    for (i=1; i<=4; i++){
+        ( i != $('input[name="seat-east"]:checked').val() && i != $('input[name="seat-south"]:checked').val()) ? append_html += '<p><label class="radio"><input type="radio" name="seat-west" value=' + i + ' onclick="west_trigger();" /><i class="icon-radio"></i></label>' + allplayer[i].name + '</p>' : null;
+    }
+    $('.radio-west').html(append_html);
+}
+function west_trigger(){
+    $('.custom-seat-north').removeClass('none');
+    $('#seat-form button[type="submit"]').addClass('none');
+    let append_html = '';
+    for (i=1; i<=4; i++){
+        ( i != $('input[name="seat-east"]:checked').val() && i != $('input[name="seat-south"]:checked').val() && i != $('input[name="seat-west"]:checked').val()) ? append_html += '<p><label class="radio"><input type="radio" name="seat-north" value=' + i + ' onclick="north_trigger()" /><i class="icon-radio"></i></label>' + allplayer[i].name + '</p>' : null;
+    }
+    $('.radio-north').html(append_html);
+}
+function north_trigger(){
+    $('#seat-form button[type="submit"]').removeClass('none');
+}
 // Hide Toolbar after entering license page
 $(document).on('page:afterin', '.page[data-name="license"]', function(){
     app.toolbar.hide('.toolbar');

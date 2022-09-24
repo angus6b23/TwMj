@@ -132,10 +132,12 @@ th{
 table.data-table {
     width: 100%;
     border: none;
-    padding: 0;
+    padding: 0px !important;
     margin: 0;
-    border-collapse: collapse;
     text-align: left;
+}
+.stat-div td{
+    padding: 0px !important;
 }
 /* Hide Input arrows */
 /* Chrome, Safari, Edge, Opera */
@@ -231,7 +233,7 @@ input[type=number] {
 /* -------------------------- */
 /* CSS for stats */
 /* -------------------------- */
-#history-view{
+.stat-div{
     height: 70vh;
     overflow: auto;
 }
