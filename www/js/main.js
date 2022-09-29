@@ -452,6 +452,7 @@ async function capture(){
     $('.left .capture-button').addClass('none');
     $('.left .preloader').removeClass('none');
     $('#summary-title').removeClass('none');
+    $('#summary-url').text(window.location.href);
     $('.timestamp').text(new Date());
     let element = $('.capture')[0];
     let image = await html2canvas(element, {windowWidth: element.scrollWidth, windowHeight: element.scrollHeight});
@@ -465,6 +466,7 @@ async function capture(){
     $('.left .preloader').addClass('none');
     $('#summary-title').addClass('none');
     $('.timestamp').text('');
+    $('#summary-url').text('');
 }
 // ------------------------------------------ //
 // EVENT HANDLEERS
