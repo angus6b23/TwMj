@@ -451,8 +451,10 @@ function import_data(data){
 async function capture(){
     $('.left .capture-button').addClass('none');
     $('.left .preloader').removeClass('none');
+    $('#summary-title').removeClass('none');
     $('.timestamp').text(new Date());
-    let image = await html2canvas($('.capture')[0]);
+    let element = $('.capture')[0];
+    let image = await html2canvas(element, {windowWidth: element.scrollWidth, windowHeight: element.scrollHeight});
     image.toBlob(function(blob){
         const path = URL.createObjectURL(blob);
         let timestamp = new Date();
@@ -461,6 +463,7 @@ async function capture(){
     })
     $('.left .capture-button').removeClass('none');
     $('.left .preloader').addClass('none');
+    $('#summary-title').addClass('none');
     $('.timestamp').text('');
 }
 // ------------------------------------------ //

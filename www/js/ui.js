@@ -118,6 +118,7 @@ const themes = { //Object for themes
 let undo_count = 0;
 let show_adjustment_form = false;
 let balance_chart;
+let summary_chart;
 let isFirefox = typeof InstallTrigger !== 'undefined';
 // ------------------------------------------ //
 // GLOBAL FUNCTIONS
@@ -788,6 +789,12 @@ $('#summary-popup').on('popup:open', function(){
     $('.summary-win-value').text(summary.win.max);
     $('.summary-passerBy-name').text(allplayer[summary.passerBy.index].name);
     $('.summary-passerBy-value').text(summary.passerBy.max);
+    // Create chart in summary
+    let chart_canvas = $('#summary-chart')[0].getContext('2d');
+    summary_chart = new Chart( chart_canvas, new chart_config(true));
+});
+$('#summary-popup').on('popup:close', function(){
+    summary_chart.destroy();
 });
 // ------------------------------------------ //
 // SETTINGS RELATED FUNCTIONS
