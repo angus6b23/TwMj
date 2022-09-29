@@ -281,13 +281,14 @@ function catch_error(message){
 // Auto Run Functions
 // ------------------------------------------ //
 app.on('pageInit', function(){ // Add event listeners for all pages
-    app.emit('ui_update');
-    $('.quick-actions .actions-button').on('click', function(){ //Event listeners for closing actions after click [Firefox]
+    try{
+        app.emit('ui_update')
+    } catch {}
+    $('.quick-actions .actions-button').on('click', function(){ //Event listeners for closing actions after click
         app.actions.close();
     });
 })
 
-//Event listeners for closing actions after click [Chromium]
 $('.quick-actions .actions-button').on('click', function(){
     app.actions.close();
 })
