@@ -3,6 +3,7 @@
 <head>
     <meta charset="utf-8">
     <script src="js/chart.min.js"></script>
+    <script src="js/html2canvas.min.js"></script>
     <!-- manual push -->
     <!--
     Customize this policy to fit your own app's needs. For more guidance, please refer to the docs:
@@ -111,7 +112,7 @@
                                 <i class="material-icons md-only col-100">calculate</i>
                                 <p>手動調整</p>
                             </button>
-                            <button class="button col grid-button row">
+                            <button class="button col grid-button row popup-open" data-popup="#summary-popup">
                                 <i class="f7-icons if-not-md col-100">photo</i>
                                 <i class="material-icons md-only col-100">image</i>
                                 <p>概要</p>
@@ -160,6 +161,10 @@
         <!-- Popup for adjust modal -->
         <div class="popup" id="adjust-popup">
             <div class="view view-init" data-name="adjust" data-url="/adjust/"></div>
+        </div>
+        <!-- Popup for summary modal -->
+        <div class="popup popup-tablet-fullscreen" id="summary-popup">
+            <div class="view view-init" data-name="summary" data-url="/summary/"></div>
         </div>
         <!-- Action Sheets -->
         <!-- Action Sheet for player 1 -->

@@ -57,6 +57,10 @@ var routes = [
         url: './pages/seat.html',
     },
     {
+        path: '/summary/',
+        url: './pages/summary.html'
+    },
+    {
         path: '/dynamic-route/blog/:blogId/post/:postId/',
         componentUrl: './pages/dynamic-route.html',
     },

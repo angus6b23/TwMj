@@ -253,6 +253,45 @@ input[type=number] {
     text-decoration: line-through;
 }
 /* -------------------------- */
+/* CSS for summary */
+/* -------------------------- */
+.p1_rank_name{
+    margin-top: 5px;
+    border-left: 10px solid var(--p1-color);
+    border-bottom: 1px solid var(--p1-color);
+}
+.p1_rank{
+    margin-top: 5px;
+    border-bottom: 1px solid var(--p1-color);
+}
+.p2_rank_name{
+    margin-top: 5px;
+    border-left: 10px solid var(--p2-color);
+    border-bottom: 1px solid var(--p2-color);
+}
+.p2_rank{
+    margin-top: 5px;
+    border-bottom: 1px solid var(--p2-color);
+}
+.p3_rank_name{
+    margin-top: 5px;
+    border-left: 10px solid var(--p3-color);
+    border-bottom: 1px solid var(--p3-color);
+}
+.p3_rank{
+    margin-top: 5px;
+    border-bottom: 1px solid var(--p3-color);
+}
+.p4_rank_name{
+    margin-top: 5px;
+    border-left: 10px solid var(--p4-color);
+    border-bottom: 1px solid var(--p4-color);
+}
+.p4_rank{
+    margin-top: 5px;
+    border-bottom: 1px solid var(--p4-color);
+}
+/* -------------------------- */
 /* Animations for table */
 /* -------------------------- */
 @keyframes p1_to_p2 {

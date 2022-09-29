@@ -446,6 +446,24 @@ function import_data(data){
     }
 }
 // ------------------------------------------ //
+// Function for capturing summary
+// ------------------------------------------ //
+async function capture(){
+    $('.left .capture-button').addClass('none');
+    $('.left .preloader').removeClass('none');
+    $('.timestamp').text(new Date());
+    let image = await html2canvas($('.capture')[0]);
+    image.toBlob(function(blob){
+        const path = URL.createObjectURL(blob);
+        let timestamp = new Date();
+        let filename = 'Twmj-Summary-' + timestamp.getDate().toString().padStart(2, 0) + '-' + (timestamp.getMonth() + 1).toString().padStart(2, 0);
+        download(filename, path);
+    })
+    $('.left .capture-button').removeClass('none');
+    $('.left .preloader').addClass('none');
+    $('.timestamp').text('');
+}
+// ------------------------------------------ //
 // EVENT HANDLEERS
 // ------------------------------------------ //
 app.on('data_change', function(){

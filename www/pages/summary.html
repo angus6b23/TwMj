@@ -1,0 +1,159 @@
+<div class="page" data-name="summary">
+    <div class="navbar">
+        <div class="navbar-bg"></div>
+        <div class="navbar-inner">
+            <div class="left">
+                <a href="#" class="button" onclick="capture();">
+                    <div class="preloader none"></div>
+                    <div class="capture-button">
+                        <i class="icon f7-icons if-not-md">camera_viewfinder</i>
+                        <i class="icon material-icons if-md">screenshot</i>
+                        <span style="margin-left: 2px;">截圖</span>
+                    </div>
+                </a>
+            </div>
+            <div class="title">概要</div>
+            <div class="right">
+                <a class="link popup-close">
+                    <i class="material-icons">close</i>
+                    <span class="if-not-md">關閉</span>
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="page-content capture">
+        <div class="block-title">排名</div>
+        <div class="block-strong block">
+            <div class="row no-gap" id="summary-rank">
+            </div>
+        </div>
+        <div class="block-title">本場之星</div>
+        <div class="block block-strong">
+            <div class="list">
+                <ul>
+                    <li>
+                        <div class="item-content">
+                            <div class="item-media">
+                                <i class="icon f7-icons if-not-md">chevron_up</i>
+                                <i class="icon material-icons if-md">keyboard_double_arrow_up</i>
+                            </div>
+                            <div class="item-inner">
+                                <div class="item-title">
+                                    <div class="item-header">胸懷大志</div>
+                                    <span class="summary-max-yaku-name"></span>
+                                </div>
+                                <div class="item-after">最大番數：<span class="summary-max-yaku-value"></span></div>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="item-content">
+                            <div class="item-media">
+                                <i class="icon f7-icons if-not-md">hand_raised</i>
+                                <i class="icon material-icons if-md">waving_hand</i>
+                            </div>
+                            <div class="item-inner">
+                                <div class="item-title">
+                                    <div class="item-header">好摸手</div>
+                                    <span class="summary-tsumo-name"></span>
+                                </div>
+                                <div class="item-after">自摸次數：<span class="summary-tsumo-value"></span></div>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="item-content">
+                            <div class="item-media">
+                                <i class="icon f7-icons if-not-md">shield_lefthalf_fill</i>
+                                <i class="icon material-icons if-md">security</i>
+                            </div>
+                            <div class="item-inner">
+                                <div class="item-title">
+                                    <div class="item-header">銅牆鐵壁</div>
+                                    <span class="summary-defend-name"></span>
+                                </div>
+                                <div class="item-after">出銃次數：<span class="summary-defend-value"></span></div>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="item-content">
+                            <div class="item-media">
+                                <i class="icon f7-icons if-not-md">wallet</i>
+                                <i class="icon material-icons if-md">savings</i>
+                            </div>
+                            <div class="item-inner">
+                                <div class="item-title">
+                                    <div class="item-header">袋袋平安</div>
+                                    <span class="summary-instantGet-name"></span>
+                                </div>
+                                <div class="item-after">即收番數：<span class="summary-instantGet-value"></span></div>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="item-content">
+                            <div class="item-media">
+                                <i class="icon f7-icons if-not-md">face_smiling</i>
+                                <i class="icon material-icons if-md">sentiment_very_satisfied</i>
+                            </div>
+                            <div class="item-inner">
+                                <div class="item-title">
+                                    <div class="item-header">長莊</div>
+                                    <span class="summary-maxStreak-name"></span>
+                                </div>
+                                <div class="item-after">連莊次數：<span class="summary-maxStreak-value"></span></div>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="item-content">
+                            <div class="item-media">
+                                <i class="icon f7-icons if-not-md">heart_slash_fill</i>
+                                <i class="icon material-icons if-md">heart_broken</i>
+                            </div>
+                            <div class="item-inner">
+                                <div class="item-title">
+                                    <div class="item-header">心已碎</div>
+                                    <span class="summary-instantPay-name"></span>
+                                </div>
+                                <div class="item-after">即付番數：<span class="summary-instantPay-value"></span></div>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="item-content">
+                            <div class="item-media">
+                                <i class="icon f7-icons if-not-md">tornado</i>
+                                <i class="icon material-icons if-md">cookie</i>
+                            </div>
+                            <div class="item-inner">
+                                <div class="item-title">
+                                    <div class="item-header">密密食</div>
+                                    <span class="summary-win-name"></span>
+                                </div>
+                                <div class="item-after">食糊次數：<span class="summary-win-value"></span></div>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="item-content">
+                            <div class="item-media">
+                                <i class="icon f7-icons if-not-md">tortoise</i>
+                                <i class="icon material-icons if-md">directions_walk</i>
+                            </div>
+                            <div class="item-inner">
+                                <div class="item-title">
+                                    <div class="item-header">路人</div>
+                                    <span class="summary-passerBy-name"></span>
+                                </div>
+                                <div class="item-after">食糊和出銃總和：<span class="summary-passerBy-value"></span></div>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <p class="timestamp"></p>
+    </div>
+</div>

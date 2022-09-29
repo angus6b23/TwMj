@@ -281,7 +281,6 @@ function catch_error(message){
 // Auto Run Functions
 // ------------------------------------------ //
 app.on('pageInit', function(){ // Add event listeners for all pages
-    console.log('page init event');
     app.emit('ui_update');
     $('.quick-actions .actions-button').on('click', function(){ //Event listeners for closing actions after click [Firefox]
         app.actions.close();
@@ -293,6 +292,14 @@ $('.quick-actions .actions-button').on('click', function(){
     app.actions.close();
 })
 if(load()){
+    let now = new Date();
+    let days_since_last_save = Math.abs(now - Date.parse(gamestat.last_save)) / (1000 * 3600 * 24);
+    if (days_since_last_save > 2){
+        app.dialog.confirm(
+            '上一次存取記錄已是' + Math.floor(days_since_last_save) + '日前<br>是否清除資料並開始開局？',
+            '清除資料',
+            function(){localStorage.removeItem('data');location.reload();});
+    }
     map_players();
     fill_names();
     app.emit('ui_update');
@@ -702,6 +709,84 @@ function submit_tsumo_form(){
 // Clear all inputs upon popup close
 $('#tsumo-popup').on('popup:closed', function(){
     $('#tsumo-form input').val('');
+});
+// ------------------------------------------ //
+// Functions for Summary popup
+// ------------------------------------------ //
+$('#summary-popup').on('popup:open', function(){
+    let rank_html = '';
+    let summary = {
+        max_yaku: {},
+        tsumo: {},
+        defend: {},
+        instantGet: {},
+        instantPay: {},
+        maxStreak: {},
+        win: {},
+        passerBy: {}
+    };
+    let summary_allplayer = [... allplayer];
+    summary_allplayer.splice(0, 1);
+    for (i = 0; i <=3 ; i++){ //Add unrealized into balance for all players
+        summary_allplayer[i].balance += summary_allplayer[i].unrealized;
+        summary_allplayer[i].money = round_to_2_dec(summary_allplayer[i].balance * default_setting.money);
+    }
+    summary_allplayer.sort((a, b) => b.balance - a.balance); // Sort all players by balance
+
+    // Generate milestones for all players
+    // Max_yaku first
+    summary.max_yaku.map = summary_allplayer.map(x => x.max_yaku);
+    summary.max_yaku.max = Math.max(...summary.max_yaku.map);
+    summary.max_yaku.index = mapped[summary_allplayer[summary.max_yaku.map.indexOf(summary.max_yaku.max)].position];
+    // Tsumo
+    summary.tsumo.map = summary_allplayer.map(x => x.tsumo);
+    summary.tsumo.max = Math.max(...summary.tsumo.map);
+    summary.tsumo.index = mapped[summary_allplayer[summary.tsumo.map.indexOf(summary.tsumo.max)].position];
+    // Defend
+    summary.defend.map = summary_allplayer.map(x => x.deal_lose);
+    summary.defend.max = Math.min(...summary.defend.map);
+    summary.defend.index = mapped[summary_allplayer[summary.defend.map.indexOf(summary.defend.max)].position];
+    // InstantGet
+    summary.instantGet.map = summary_allplayer.map(x => x.instant_get);
+    summary.instantGet.max = Math.max(...summary.instantGet.map);
+    summary.instantGet.index = mapped[summary_allplayer[summary.instantGet.map.indexOf(summary.instantGet.max)].position];
+    // InstantPay
+    summary.instantPay.map = summary_allplayer.map(x => x.instant_pay);
+    summary.instantPay.max = Math.max(...summary.instantPay.map);
+    summary.instantPay.index = mapped[summary_allplayer[summary.instantPay.map.indexOf(summary.instantPay.max)].position];
+    // Max_streak
+    summary.maxStreak.map = summary_allplayer.map(x => x.max_streak);
+    summary.maxStreak.max = Math.max(...summary.maxStreak.map);
+    summary.maxStreak.index = mapped[summary_allplayer[summary.maxStreak.map.indexOf(summary.maxStreak.max)].position];
+    // Win
+    summary.win.map = summary_allplayer.map(x => x.win);
+    summary.win.max = Math.max(...summary.win.map);
+    summary.win.index = mapped[summary_allplayer[summary.win.map.indexOf(summary.win.max)].position];
+    // PasserBy
+    summary.passerBy.map = summary_allplayer.map(x => parseInt(x.deal_lose) + parseInt(x.win));
+    summary.passerBy.max = Math.min(...summary.passerBy.map);
+    summary.passerBy.index = mapped[summary_allplayer[summary.passerBy.map.indexOf(summary.passerBy.max)].position];
+    for (i = 0; i <= 3; i++){
+        rank_html += '<h2 class="col-50 align-text-center p' + mapped[summary_allplayer[i]['position']] + '_rank_name">' + summary_allplayer[i].name + '</h2><h2 class="col-50 p' + mapped[summary_allplayer[i]['position']] + '_rank">' + summary_allplayer[i].balance + ' (＄' + summary_allplayer[i].money + ')' + '</h2>';
+    }
+
+    $('#summary-rank').html(rank_html);
+    $('.summary-max-yaku-name').text(allplayer[summary.max_yaku.index].name);
+    $('.summary-max-yaku-value').text(summary.max_yaku.max);
+    $('.summary-tsumo-name').text(allplayer[summary.tsumo.index].name);
+    $('.summary-tsumo-value').text(summary.tsumo.max);
+    $('.summary-defend-name').text(allplayer[summary.defend.index].name);
+    $('.summary-defend-value').text(summary.defend.max);
+    $('.summary-instantGet-name').text(allplayer[summary.instantGet.index].name);
+    $('.summary-instantGet-value').text(summary.instantGet.max);
+    $('.summary-instantPay-name').text(allplayer[summary.instantPay.index].name);
+    $('.summary-instantPay-value').text(summary.instantPay.max);
+    $('.summary-maxStreak-name').text(allplayer[summary.maxStreak.index].name);
+    $('.summary-maxStreak-value').text(summary.maxStreak.max);
+    $('.summary-win-name').text(allplayer[summary.win.index].name);
+    $('.summary-win-value').text(summary.win.max);
+    $('.summary-passerBy-name').text(allplayer[summary.passerBy.index].name);
+    $('.summary-passerBy-value').text(summary.passerBy.max);
 });
 // ------------------------------------------ //
 // SETTINGS RELATED FUNCTIONS
