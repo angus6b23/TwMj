@@ -105,8 +105,10 @@ class chart_config{
 let mapped = new Object //Object for saving index of player position
 // Function for returning numbers in 2 decimal places
 function round_to_2_dec(num){
-    num = Math.round(num * 100) / 100;
-    return num;
+    return num.toFixed(2);
+}
+function round_to_1_dec(num){
+    return num.toFixed(1);
 }
 // ------------------------------------------ //
 // START POPUP FUNCTIONS

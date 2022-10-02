@@ -192,12 +192,12 @@ app.on('ui_update', function(){
         $('.p' + i + '-instant-pay').text(allplayer[i].instant_pay);
         $('.p' + i + '-max-yaku').text(allplayer[i].max_yaku);
         $('.p' + i + '-max-streak').text(allplayer[i].max_streak);
-        (parseInt(gamestat.round) > 1) ? $('.p' + i + '-win-ratio').text(round_to_2_dec(parseInt(allplayer[i].win) / parseInt(gamestat.round-1)) * 100 + '%'): null;
-        (parseInt(gamestat.round) > 1) ? $('.p' + i + '-lose-ratio').text(round_to_2_dec(parseInt(allplayer[i].lose) / parseInt(gamestat.round-1)) * 100 + '%'): null;
-        (parseInt(gamestat.tsumo) > 0) ? $('.p' + i + '-tsumo-ratio').text(round_to_2_dec(parseInt(allplayer[i].tsumo) / parseInt(gamestat.tsumo)) * 100 + '%'): null;
-        (parseInt(gamestat.deal) > 0) ? $('.p' + i + '-deal-lose-ratio').text(round_to_2_dec(parseInt(allplayer[i].deal_lose) / parseInt(gamestat.deal)) * 100 + '%'): null;
-        (parseInt(gamestat.instant_get) > 0) ? $('.p' + i + '-instant-get-ratio').text(round_to_2_dec(parseInt(allplayer[i].instant_get) / parseInt(gamestat.instant_get)) * 100 + '%'): null;
-        (parseInt(gamestat.instant_pay) > 0) ? $('.p' + i + '-instant-pay-ratio').text(round_to_2_dec(parseInt(allplayer[i].instant_pay) / parseInt(gamestat.instant_pay)) * 100 + '%'): null;
+        (parseInt(gamestat.round) > 1) ? $('.p' + i + '-win-ratio').text(round_to_1_dec(parseInt(allplayer[i].win) / parseInt(gamestat.round-1) * 100 )+ '%'): null;
+        (parseInt(gamestat.round) > 1) ? $('.p' + i + '-lose-ratio').text(round_to_1_dec(parseInt(allplayer[i].lose) / parseInt(gamestat.round-1) * 100 )+ '%'): null;
+        (parseInt(gamestat.tsumo) > 0) ? $('.p' + i + '-tsumo-ratio').text(round_to_1_dec(parseInt(allplayer[i].tsumo) / parseInt(gamestat.tsumo) * 100 )+ '%'): null;
+        (parseInt(gamestat.deal) > 0) ? $('.p' + i + '-deal-lose-ratio').text(round_to_1_dec(parseInt(allplayer[i].deal_lose) / parseInt(gamestat.deal) * 100 )+ '%'): null;
+        (parseInt(gamestat.instant_get) > 0) ? $('.p' + i + '-instant-get-ratio').text(round_to_1_dec(parseInt(allplayer[i].instant_get) / parseInt(gamestat.instant_get) * 100 )+ '%'): null;
+        (parseInt(gamestat.instant_pay) > 0) ? $('.p' + i + '-instant-pay-ratio').text(round_to_1_dec(parseInt(allplayer[i].instant_pay) / parseInt(gamestat.instant_pay) * 100 )+ '%'): null;
 
     }
     // End of single for loop
