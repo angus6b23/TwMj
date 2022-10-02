@@ -260,11 +260,11 @@ app.on('ui_update', function(){
     try{
         let chart_canvas = $('#stat-chart')[0].getContext('2d');
         if (chart_created){
-            balance_chart.data = new chart_config(false).data
+            balance_chart.data = new chart_config(true).data
             balance_chart.update('none'); //No animation with 'none'
         } else {
             chart_created = true;
-            balance_chart = new Chart( chart_canvas, new chart_config(false));
+            balance_chart = new Chart( chart_canvas, new chart_config(true));
         }
     } catch (err){
         (!isFirefox) ? catch_error(err): null;

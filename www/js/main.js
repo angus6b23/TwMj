@@ -86,7 +86,12 @@ class chart_config{
             maintainAspectRatio: false,
             plugins:{
                 legend:{
-                    display: legend_boolean
+                    display: legend_boolean,
+                    labels:{
+                        font:{
+                            size: '16px'
+                        }
+                    }
                 }
             }
         }
