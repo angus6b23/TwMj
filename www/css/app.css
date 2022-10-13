@@ -30,12 +30,6 @@
 /* -------------------------- */
 /* CSS for global Classes */
 /* -------------------------- */
-.align-text-center{
-    text-align: center !important;
-}
-.align-text-right{
-    text-align: right;
-}
 .none{
     display: none !important;
 }

@@ -24,7 +24,8 @@ let gamestat={ //Object for holding game statistics
     modified: false, //State if the results are modified (檢查番數有否被修改)
     double_winner: 0,//Record occurance of double winners(雙響)
     triple_winner: 0,//Record occurance of triple winners(三響)
-    last_save: '' //Record last save time
+    last_save: '', //Record last save time
+    ended: false
 };
 let default_setting={ //Object for holding settings
     font: '',
@@ -84,6 +85,12 @@ class chart_config{
         }
         this.options = {
             maintainAspectRatio: false,
+            elements:{
+                point:{
+                    radius: 1,
+                    hitRadius: 2
+                }
+            },
             plugins:{
                 legend:{
                     display: legend_boolean,

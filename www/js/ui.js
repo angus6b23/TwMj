@@ -140,13 +140,15 @@ app.on('ui_update', function(){
         if (default_setting.display_as_money){ //Calculate balance to money if display_as_money is true
             let display_balance = Math.round(allplayer[i].balance * default_setting.money * 100) / 100;
             let unrealized_balance = Math.round(allplayer[i].unrealized * default_setting.money * 100) / 100;
-            (allplayer[i].unrealized == 0) ? $('.p' + i + '_balance').text('$' + display_balance):
-            (allplayer[i].unrealized > 0) ? $('.p' + i + '_balance').text('$' + display_balance + ' (+$' + unrealized_balance + ')') :
-            $('.p' + i + '_balance').text('$' + display_balance + ' (-$' + Math.abs(unrealized_balance) + ')');
+            (allplayer[i].unrealized == 0) ? $(`.p${i}_balance`).text(`$${display_balance}`):
+            (allplayer[i].unrealized > 0) ? $(`.p${i}_balance`).text(`$${display_balance}(+$${unrealized_balance})`) :
+            $(`.p${i}_balance`).text(`$${display_balance}($${unrealized_balance})`);
+            $('#setting_switch').text('切換為番');
         } else {
-            (allplayer[i].unrealized == 0) ? $('.p' + i + '_balance').text(allplayer[i].balance):
-            (allplayer[i].unrealized > 0) ? $('.p' + i + '_balance').text(allplayer[i].balance + ' (+' + allplayer[i].unrealized + ')') :
-            $('.p' + i + '_balance').text(allplayer[i].balance + ' (' + allplayer[i].unrealized + ')');
+            (allplayer[i].unrealized == 0) ? $(`.p${i}_balance`).text(allplayer[i].balance):
+            (allplayer[i].unrealized > 0) ? $(`.p${i}_balance`).text(`${allplayer[i].balance}(+${allplayer[i].unrealized})`) :
+            $(`.p${i}_balance`).text(`${allplayer[i].balance}(${allplayer[i].unrealized})`);
+            $('#setting_switch').text('切換為錢');
         }
         for (x=1; x<=4; x++){
             //Apply streak_warning
@@ -176,28 +178,28 @@ app.on('ui_update', function(){
         // Add banker animation and banker class
         if (gamestat.banker == allplayer[i].position){
             switch (allplayer[i].position){
-                case 'E': $('#east').addClass('banker_block'); (gamestat.streak > 0) ? $('#east').html('<h1>' + gamestat.streak + '</h1>'):null; break;
-                case 'S': $('#south').addClass('banker_block'); (gamestat.streak > 0) ? $('#south').html('<h1>' + gamestat.streak + '</h1>'):null; break;
-                case 'W': $('#west').addClass('banker_block'); (gamestat.streak > 0) ? $('#west').html('<h1>' + gamestat.streak + '</h1>'):null; break;
-                case 'N': $('#north').addClass('banker_block'); (gamestat.streak > 0) ? $('#north').html('<h1>' + gamestat.streak + '</h1>'):null; break;
+                case 'E': $('#east').addClass('banker_block'); (gamestat.streak > 0) ? $('#east').html(`<h1>${gamestat.streak}</h1>`):null; break;
+                case 'S': $('#south').addClass('banker_block'); (gamestat.streak > 0) ? $('#south').html(`<h1>${gamestat.streak}</h1>`):null; break;
+                case 'W': $('#west').addClass('banker_block'); (gamestat.streak > 0) ? $('#west').html(`<h1>${gamestat.streak}</h1>`):null; break;
+                case 'N': $('#north').addClass('banker_block'); (gamestat.streak > 0) ? $('#north').html(`<h1>${gamestat.streak}</h1>`):null; break;
                 default: console.error('Error while adding banker animation: Unknown case');
             }
         }
         // Fill player statistics
-        $('.p' + i + '-win').text(allplayer[i].win);
-        $('.p' + i + '-lose').text(allplayer[i].lose);
-        $('.p' + i + '-tsumo').text(allplayer[i].tsumo);
-        $('.p' + i + '-deal-lose').text(allplayer[i].deal_lose);
-        $('.p' + i + '-instant-get').text(allplayer[i].instant_get);
-        $('.p' + i + '-instant-pay').text(allplayer[i].instant_pay);
-        $('.p' + i + '-max-yaku').text(allplayer[i].max_yaku);
-        $('.p' + i + '-max-streak').text(allplayer[i].max_streak);
-        (parseInt(gamestat.round) > 1) ? $('.p' + i + '-win-ratio').text(round_to_1_dec(parseInt(allplayer[i].win) / parseInt(gamestat.round-1) * 100 )+ '%'): null;
-        (parseInt(gamestat.round) > 1) ? $('.p' + i + '-lose-ratio').text(round_to_1_dec(parseInt(allplayer[i].lose) / parseInt(gamestat.round-1) * 100 )+ '%'): null;
-        (parseInt(gamestat.tsumo) > 0) ? $('.p' + i + '-tsumo-ratio').text(round_to_1_dec(parseInt(allplayer[i].tsumo) / parseInt(gamestat.tsumo) * 100 )+ '%'): null;
-        (parseInt(gamestat.deal) > 0) ? $('.p' + i + '-deal-lose-ratio').text(round_to_1_dec(parseInt(allplayer[i].deal_lose) / parseInt(gamestat.deal) * 100 )+ '%'): null;
-        (parseInt(gamestat.instant_get) > 0) ? $('.p' + i + '-instant-get-ratio').text(round_to_1_dec(parseInt(allplayer[i].instant_get) / parseInt(gamestat.instant_get) * 100 )+ '%'): null;
-        (parseInt(gamestat.instant_pay) > 0) ? $('.p' + i + '-instant-pay-ratio').text(round_to_1_dec(parseInt(allplayer[i].instant_pay) / parseInt(gamestat.instant_pay) * 100 )+ '%'): null;
+        $(`.p${i}-win`).text(allplayer[i].win);
+        $(`.p${i}-lose`).text(allplayer[i].lose);
+        $(`.p${i}-tsumo`).text(allplayer[i].tsumo);
+        $(`.p${i}-deal-lose`).text(allplayer[i].deal_lose);
+        $(`.p${i}-instant-get`).text(allplayer[i].instant_get);
+        $(`.p${i}-instant-pay`).text(allplayer[i].instant_pay);
+        $(`.p${i}-max-yaku`).text(allplayer[i].max_yaku);
+        $(`.p${i}-max-streak`).text(allplayer[i].max_streak);
+        (parseInt(gamestat.round) > 1) ? $(`.p${i}-win-ratio`).text(round_to_1_dec(parseInt(allplayer[i].win) / parseInt(gamestat.round-1) * 100 )+ '%'): null;
+        (parseInt(gamestat.round) > 1) ? $(`.p${i}-lose-ratio`).text(round_to_1_dec(parseInt(allplayer[i].lose) / parseInt(gamestat.round-1) * 100 )+ '%'): null;
+        (parseInt(gamestat.tsumo) > 0) ? $(`.p${i}-tsumo-ratio`).text(round_to_1_dec(parseInt(allplayer[i].tsumo) / parseInt(gamestat.tsumo) * 100 )+ '%'): null;
+        (parseInt(gamestat.deal) > 0) ? $(`.p${i}-deal-lose-ratio`).text(round_to_1_dec(parseInt(allplayer[i].deal_lose) / parseInt(gamestat.deal) * 100 )+ '%'): null;
+        (parseInt(gamestat.instant_get) > 0) ? $(`.p${i}-instant-get-ratio`).text(round_to_1_dec(parseInt(allplayer[i].instant_get) / parseInt(gamestat.instant_get) * 100 )+ '%'): null;
+        (parseInt(gamestat.instant_pay) > 0) ? $(`.p${i}-instant-pay-ratio`).text(round_to_1_dec(parseInt(allplayer[i].instant_pay) / parseInt(gamestat.instant_pay) * 100 )+ '%'): null;
 
     }
     // End of single for loop
@@ -229,9 +231,13 @@ app.on('ui_update', function(){
     let game_record_append = ''
     for (i=game_record.length - 1; i>= 1; i--){
         if(game_record[i].length == 5){
-            game_record_append += '<tr><td>' + i + '</td><td>' + game_record[i][1] + '</td><td>' + game_record[i][2] + '</td><td>' + game_record[i][3] + '</td><td>'+ game_record[i][4] + '</td></tr>'
+            game_record_append += `<tr><td>${i}</td>
+                                        <td>${game_record[i][1]}</td>
+                                        <td>${game_record[i][2]}</td>
+                                        <td>${game_record[i][3]}</td>
+                                        <td>${game_record[i][4]}</td></tr>`
         } else {
-            game_record_append += '<tr><td>' + i + '</td><td colspan="4">流局</td></tr>';
+            game_record_append += `<tr><td>${i}</td><td colspan="4">流局</td></tr>`;
         }
     }
     $('#game_record').html(game_record_append);
@@ -339,39 +345,39 @@ function fill_names(){
     $('#table div').removeClass('p3_action');
     $('#table div').removeClass('p4_action');
     // Add classes correspondingly
-    $('#N-text').addClass('p' + mapped.N + '_name');
-    $('#N-text2').addClass('p' + mapped.N + '_balance');
-    $('#north').addClass('p' + mapped.N + '_bg');
-    $('#E-text').addClass('p' + mapped.E + '_name');
-    $('#E-text2').addClass('p' + mapped.E + '_balance');
-    $('#east').addClass('p' + mapped.E + '_bg');
-    $('#S-text').addClass('p' + mapped.S + '_name');
-    $('#S-text2').addClass('p' + mapped.S + '_balance');
-    $('#south').addClass('p' + mapped.S + '_bg');
-    $('#W-text').addClass('p' + mapped.W + '_name');
-    $('#W-text2').addClass('p' + mapped.W + '_balance');
-    $('#west').addClass('p' + mapped.W + '_bg');
-    $('.north-block').addClass('p' + mapped.N + '_action');
-    $('.east-block').addClass('p' + mapped.E + '_action');
-    $('.south-block').addClass('p' + mapped.S + '_action');
-    $('.west-block').addClass('p' + mapped.W + '_action');
-    let css_root = document.querySelector(':root')
+    $('#N-text').addClass(`p${mapped.N}_name`);
+    $('#N-text2').addClass(`p${mapped.N}_balance`);
+    $('#north').addClass(`p${mapped.N}_bg`);
+    $('#E-text').addClass(`p${mapped.E}_name`);
+    $('#E-text2').addClass(`p${mapped.E}_balance`);
+    $('#east').addClass(`p${mapped.E}_bg`);
+    $('#S-text').addClass(`p${mapped.S}_name`);
+    $('#S-text2').addClass(`p${mapped.S}_balance`);
+    $('#south').addClass(`p${mapped.S}_bg`);
+    $('#W-text').addClass(`p${mapped.W}_name`);
+    $('#W-text2').addClass(`p${mapped.W}_balance`);
+    $('#west').addClass(`p${mapped.W}_bg`);
+    $('.north-block').addClass(`p${mapped.N}_action`);
+    $('.east-block').addClass(`p${mapped.E}_action`);
+    $('.south-block').addClass(`p${mapped.S}_action`);
+    $('.west-block').addClass(`p${mapped.W}_action`);
+    let css_root = document.querySelector(':root');
     for (i=1; i<=4; i++){ //Set position in css for animations
         if (allplayer[i].position == 'E'){
-            css_root.style.setProperty('--p' + i + '-position-top', 'calc(50% - 1vh)');
-            css_root.style.setProperty('--p' + i + '-position-left', '-2vh');
+            css_root.style.setProperty(`--p${i}-position-top`, 'calc(50% - 1vh)');
+            css_root.style.setProperty(`--p${i}-position-left`, '-2vh');
         }
         else if (allplayer[i].position == 'S'){
-            css_root.style.setProperty('--p' + i + '-position-top', 'calc(100% + 2vh)');
-            css_root.style.setProperty('--p' + i + '-position-left', 'calc(50% - 1vh)');
+            css_root.style.setProperty(`--p${i}-position-top`, 'calc(100% + 2vh)');
+            css_root.style.setProperty(`--p${i}-position-left`, 'calc(50% - 1vh)');
         }
         else if (allplayer[i].position == 'W'){
-            css_root.style.setProperty('--p' + i + '-position-top', 'calc(50% - 1vh)');
-            css_root.style.setProperty('--p' + i + '-position-left', 'calc(100% + 2vh)');
+            css_root.style.setProperty(`--p${i}-position-top`, 'calc(50% - 1vh)');
+            css_root.style.setProperty(`--p${i}-position-left`, 'calc(100% + 2vh)');
         }
         else if (allplayer[i].position == 'N'){
-            css_root.style.setProperty('--p' + i + '-position-top', '-2vh');
-            css_root.style.setProperty('--p' + i + '-position-left', 'calc(50% - 1vh)');
+            css_root.style.setProperty(`--p${i}-position-top`, '-2vh');
+            css_root.style.setProperty(`--p${i}-position-left`, 'calc(50% - 1vh)');
         }
     }
 }
@@ -433,11 +439,11 @@ $('.tie').on('click', function(){
     }).open();
 });
 function create_break_dialog(player_index){
-    let dialog_text = allplayer[player_index].name + '：<br>';
+    let dialog_text = `${allplayer[player_index].name}：<br>`;
     let receiver_index;
     for(i = 1; i<=4; i++){
         if (allplayer[player_index]['sf' + i] > 0 && allplayer[player_index]['sf' + i] % default_setting.break == 0){
-            dialog_text += '己被 ' + allplayer[i].name + ' 拉了' + allplayer[player_index]['sf' + i] + '次；總計' + allplayer[player_index]['loseto' + i] + '番<br>';
+            dialog_text += `己被 ${allplayer[i].name} 拉了${allplayer[player_index]['sf' + i]}次；總計${allplayer[player_index]['loseto' + i]}番<br>`;
             receiver_index = i;
             break;
         }
@@ -487,10 +493,10 @@ function set_instantGet_position(player_selected){
     $('#instantGet-form .card').addClass('none');
     for (i=1; i<=4; i++){
         if (i == player_selected){ //Append selected player into specific position
-            $('#p' +i + '_instantGet').removeClass('none');
-            $('.instantGet_selected').append($('#p' + i + '_instantGet'));
+            $(`#p${i}_instantGet`).removeClass('none');
+            $('.instantGet_selected').append($(`#p${i}_instantGet`));
         } else {
-            $('#instantGet_cards').append($('#p' + i + '_instantGet'));
+            $('#instantGet_cards').append($(`#p${i}_instantGet`));
         }
     }
 }
@@ -509,7 +515,7 @@ function instantGet_change(){
 function submit_instantGet_form(){
     let instantGet_object = new Object();
     for(i=1; i<=4; i++){ //Search for index of selected player
-        if($('.instantGet_selected div').hasClass('p' + i + '_card')){
+        if($('.instantGet_selected div').hasClass(`p${i}_card`)){
             instantGet_object.selected = i;
             break;
         }
@@ -532,12 +538,12 @@ function submit_instantGet_form(){
 // Putting the index of selected_player into the top div
 function set_instantPay_position(player_selected){
     $('#instantPay-form .card').addClass('none');
-    for (x=1; x<=4; x++){
-        if (x == player_selected){ //Append selected player into specific position
-            $('#p' +x + '_instantPay').removeClass('none');
-            $('.instantPay_selected').append($('#p' + x + '_instantPay'));
+    for (i=1; i<=4; i++){
+        if (i == player_selected){ //Append selected player into specific position
+            $(`#p${i}_instantPay`).removeClass('none');
+            $('.instantPay_selected').append($(`#p${i}_instantPay`));
         } else {
-            $('#instantPay_cards').append($('#p' + x + '_instantPay'));
+            $('#instantPay_cards').append($(`#p${i}_instantPay`));
         }
     }
 }
@@ -555,7 +561,7 @@ function instantPay_change(){
 function submit_instantPay_form(){
     let instantPay_object = new Object();
     for(i=1; i<=4; i++){ //Search for index of selected player
-        if($('.instantPay_selected div').hasClass('p' + i + '_card')){
+        if($('.instantPay_selected div').hasClass(`p${i}_card`)){
             instantPay_object.selected = i;
             break;
         }
@@ -582,23 +588,23 @@ function set_deal_position(player_selected){
     let position = 'left';
     for (i=1; i<=4; i++){
         if (i == player_selected){ //Append selected player into specific position
-            $('.deal_selected').append($('#p' + i + '_deal'));
+            $('.deal_selected').append($(`#p${i}_deal`));
             $('.deal_selected .plus_or_minus').text('-');
-            $('#p' + i + '_deal_input').prop('disabled', true);
+            $(`#p${i}_deal_input`).prop('disabled', true);
         } else if (position == 'left'){ //Append other players into corresponding positions
-            $('.deal_' + position).append($('#p' + i + '_deal'));
-            $('.deal_' + position + ' .plus_or_minus').text('+');
-            $('#p' + i + '_deal_input').prop('disabled', false)
+            $(`.deal_${position}`).append($(`#p${i}_deal`));
+            $(`.deal_${position} .plus_or_minus`).text('+');
+            $(`#p${i}_deal_input`).prop('disabled', false)
             position = 'center';
         } else if (position == 'center'){
-            $('.deal_' + position).append($('#p' + i + '_deal'));
-            $('.deal_' + position + ' .plus_or_minus').text('+');
-            $('#p' + i + '_deal_input').prop('disabled', false)
+            $(`.deal_${position}`).append($(`#p${i}_deal`));
+            $(`.deal_${position} .plus_or_minus`).text('+');
+            $(`#p${i}_deal_input`).prop('disabled', false)
             position = 'right';
         } else {
-            $('.deal_' + position).append($('#p' + i + '_deal'));
-            $('.deal_' + position + ' .plus_or_minus').text('+');
-            $('#p' + i + '_deal_input').prop('disabled', false)
+            $(`.deal_${position}`).append($(`#p${i}_deal`));
+            $(`.deal_${position} .plus_or_minus`).text('+');
+            $(`#p${i}_deal_input`).prop('disabled', false)
         }
     }
 }
@@ -615,23 +621,23 @@ function submit_deal_form(){
     let deal_object = new Object(); //Create an object for storing index of selected player and array
     deal_object.array = [NaN];
     for(i=1; i<=4; i++){ //Search for index of selected player
-        if($('.deal_selected div').hasClass('p' + i + '_card')){
+        if($('.deal_selected div').hasClass(`p${i}_card`)){
             deal_object.selected = i;
             break;
         }
     }
     for (i=1; i<=4; i++){
         if (i == deal_object.selected){ // When the player is selected player
-            if($('#p' + i +'_deal_input').val() == '' || $('#p' + i +'_deal_input').val() == 0){ //Throw error if no input or input = 0
+            if($(`#p${i}_deal_input`).val() == '' || $(`#p${i}_deal_input`).val() == 0){ //Throw error if no input or input = 0
                 catch_error('尚未輸入勝出玩家所贏的番數！');
                 return;
             }
             else{
-                let value = 0 - parseInt($('#p' + i +'_deal_input').val()); //Pass negative value to array for selected player
+                let value = 0 - parseInt($(`#p${i}_deal_input`).val()); //Pass negative value to array for selected player
                 deal_object.array.push(value);
             }
         } else {
-            let value = parseInt($('#p' + i + '_deal_input').val()) || 0; //Pass 0 as empty value for other players
+            let value = parseInt($(`#p${i}_deal_input`).val()) || 0; //Pass 0 as empty value for other players
             deal_object.array.push(value);
         }
     }
@@ -652,23 +658,23 @@ function set_tsumo_position(player_selected){
     let position = 'left';
     for (i=1; i<=4; i++){
         if (i == player_selected){ //Append selected player into specific position
-            $('.tsumo_selected').append($('#p' + i + '_tsumo'));
+            $('.tsumo_selected').append($(`#p${i}_tsumo`));
             $('.tsumo_selected input').prop('disabled', true);
             $('.tsumo_selected .plus_or_minus').text('+');
         } else if (position == 'left'){ //Append other players into corresponding positions
-            $('.tsumo_' + position).append($('#p' + i + '_tsumo'));
-            $('.tsumo_' + position + ' .plus_or_minus').text('-');
-            $('#p' + i + '_tsumo_input').prop('disabled', false);
+            $(`.tsumo_${position}`).append($(`#p${i}_tsumo`));
+            $(`.tsumo_${position} .plus_or_minus`).text('-');
+            $(`#p${i}_tsumo_input`).prop('disabled', false);
             position = 'center';
         } else if (position == 'center'){
-            $('.tsumo_' + position).append($('#p' + i + '_tsumo'));
-            $('.tsumo_' + position + ' .plus_or_minus').text('-');
-            $('#p' + i + '_tsumo_input').prop('disabled', false);
+            $(`.tsumo_${position}`).append($(`#p${i}_tsumo`));
+            $(`.tsumo_${position} .plus_or_minus`).text('-');
+            $(`#p${i}_tsumo_input`).prop('disabled', false);
             position = 'right';
         } else {
-            $('.tsumo_' + position).append($('#p' + i + '_tsumo'));
-            $('.tsumo_' + position + ' .plus_or_minus').text('-');
-            $('#p' + i + '_tsumo_input').prop('disabled', false);
+            $(`.tsumo_${position}`).append($(`#p${i}_tsumo`));
+            $(`.tsumo_${position} .plus_or_minus`).text('-');
+            $(`#p${i}_tsumo_input`).prop('disabled', false);
         }
     }
 }
@@ -685,23 +691,23 @@ function submit_tsumo_form(){
     let tsumo_object = new Object(); //Create an object for storing index of selected player and array
     tsumo_object.array = [NaN];
     for(i=1; i<=4; i++){ //Search for index of selected player
-        if($('.tsumo_selected div').hasClass('p' + i + '_card')){
+        if($('.tsumo_selected div').hasClass(`p${i}_card`)){
             tsumo_object.selected = i;
             break;
         }
     }
     for (i=1; i<=4; i++){
         if (i != tsumo_object.selected){ // When the player is selected player
-            if($('#p' + i +'_tsumo_input').val() == '' || $('#p' + i +'_tsumo_input').val() == 0){ //Throw error if no input or input = 0
+            if($(`#p${i}_tsumo_input`).val() == '' || $(`#p${i}_tsumo_input`).val() == 0){ //Throw error if no input or input = 0
                 catch_error('尚未輸入所有非自摸玩家所輸的番數！');
                 return;
             }
             else{
-                let value = 0 - parseInt($('#p' + i +'_tsumo_input').val()); //Pass negative value to array for unselected player
+                let value = 0 - parseInt($(`#p${i}_tsumo_input`).val()); //Pass negative value to array for unselected player
                 tsumo_object.array.push(value);
             }
         } else {
-            let value = parseInt($('#p' + i + '_tsumo_input').val()); //Pass value for selected players
+            let value = parseInt($(`#p${i}_tsumo_input`).val()); //Pass value for selected players
             tsumo_object.array.push(value);
         }
     }
@@ -769,7 +775,9 @@ $('#summary-popup').on('popup:open', function(){
     summary.passerBy.max = Math.min(...summary.passerBy.map);
     summary.passerBy.index = mapped[summary_allplayer[summary.passerBy.map.indexOf(summary.passerBy.max)].position];
     for (i = 0; i <= 3; i++){
-        rank_html += '<h2 class="col-50 align-text-center p' + mapped[summary_allplayer[i]['position']] + '_rank_name">' + summary_allplayer[i].name + '</h2><h2 class="col-50 p' + mapped[summary_allplayer[i]['position']] + '_rank">' + summary_allplayer[i].balance + ' (＄' + summary_allplayer[i].money + ')' + '</h2>';
+        rank_html += `<h2 class="col-40 text-align-center p${mapped[summary_allplayer[i]['position']]}_rank_name">${summary_allplayer[i].name}</h2>
+                    <h2 class="col-20 p${mapped[summary_allplayer[i]['position']]}_rank">${summary_allplayer[i].balance}</h2>
+                    <h2 class="col-40 p${mapped[summary_allplayer[i]['position']]}_rank">(＄${summary_allplayer[i].money})</h2>`;
     }
 
     $('#summary-rank').html(rank_html);
@@ -927,8 +935,8 @@ $(document).on('popup:open', '.log-popup', function(){
     let append_log = ''
     $('.log-popup .log').remove();
     for(i = 0; i < game_log.length; i++){
-        game_log[i].removed ? append_log += '<tr><td class="log align-text-center removed">' + game_log[i].timestamp + '</td><td class="log removed">' + game_log[i].message + '</td></tr>' :
-        append_log += '<tr><td class="log align-text-center">' + game_log[i].timestamp + '</td><td class="log">' + game_log[i].message + '</td></tr>';
+        game_log[i].removed ? append_log += '<tr><td class="log text-align-center removed">' + game_log[i].timestamp + '</td><td class="log removed">' + game_log[i].message + '</td></tr>' :
+        append_log += '<tr><td class="log text-align-center">' + game_log[i].timestamp + '</td><td class="log">' + game_log[i].message + '</td></tr>';
         $('#log_table').html(append_log);
     }
 })
