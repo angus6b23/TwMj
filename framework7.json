@@ -17,7 +17,7 @@
     "fillBars": false
   },
   "customBuild": false,
-  "pkg": "io.framework7.TwMj",
+  "pkg": "12a.app.TwMj",
   "cordova": {
     "folder": "cordova",
     "platforms": [
