@@ -13,25 +13,23 @@
                 </a>
             </div>
             <div class="title">概要</div>
-            <div class="right">
-                <a class="link popup-close">
-                    <i class="material-icons">close</i>
-                    <span class="if-not-md">關閉</span>
-                </a>
-            </div>
         </div>
     </div>
     <div class="toolbar toolbar-bottom">
         <div class="toolbar-inner">
-            <a href="#" class="tab-link margin-left">
-                <i class="icon f7-icons if-not-md">play_fill</i>
-                <i class="icon material-icons if-md">play_arrow</i>
-                <span class="tabbar-label margin-left">繼續游戲</span>
+            <a href="#" class="margin-left" onclick="mark_ended(false);app.popup.close()">
+                <i class="icon f7-icons if-not-md display-inline-block">play_fill</i>
+                <i class="icon material-icons if-md display-inline-block">play_arrow</i>
+                <span class="margin-left display-inline-block">繼續游戲</span>
             </a>
-            <a href="#" class="tab-link margin-right">
-                <span class="tabbar-label margin-right">開新局</span>
-                <i class="icon f7-icons if-not-md">plus_app</i>
-                <i class="icon material-icons if-md">add_box</i>
+            <a href="#" class="margin-right" onclick="app.dialog.confirm(
+            '結束游戲後會刪除現時遊戲的進度！<br>確定要結束嗎？',
+            '結束遊戲',
+            function(){localStorage.removeItem('data');location.reload();},
+            function(){null;})">
+                <i class="icon f7-icons if-not-md display-inline-block">plus_app</i>
+                <i class="icon material-icons if-md display-inline-block">add_box</i>
+                <span class="margin-left display-inline-block">開新局</span>
             </a>
         </div>
     </div>

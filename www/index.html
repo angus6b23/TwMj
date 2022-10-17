@@ -113,12 +113,7 @@
                                     <i class="material-icons md-only col-100">calculate</i>
                                     <p>手動調整</p>
                                 </button>
-                                <button class="button col grid-button row popup-open" data-popup="#summary-popup">
-                                    <i class="f7-icons if-not-md col-100">photo</i>
-                                    <i class="material-icons md-only col-100">image</i>
-                                    <p>概要</p>
-                                </button>
-                                <button class="button col grid-button row" onclick="app.dialog.confirm('結束游戲後會刪除現時遊戲的進度！<br>確定要結束嗎？', '結束遊戲', function(){localStorage.removeItem('data');location.reload();}), function(){null;}">
+                                <button class="button col grid-button row" onclick="mark_ended(true);">
                                     <i class="f7-icons if-not-md col-100">checkmark_circle</i>
                                     <i class="material-icons md-only col-100">check_circle_outline</i>
                                     <p>結束</p>

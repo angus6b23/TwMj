@@ -275,7 +275,11 @@ app.on('ui_update', function(){
     } catch (err){
         (!isFirefox) ? catch_error(err): null;
     }
-
+    // Show Summary popup if game is marked as ended
+    if (gamestat.ended){
+        app.popup.open('#summary-popup');
+        fill_summary();
+    }
 });
 function catch_error(message){
     app.toast.create({
@@ -299,27 +303,29 @@ app.on('pageInit', function(){ // Add event listeners for all pages
 $('.quick-actions .actions-button').on('click', function(){
     app.actions.close();
 })
-if(load()){
-    let now = new Date();
-    let days_since_last_save = Math.abs(now - Date.parse(gamestat.last_save)) / (1000 * 3600 * 24);
-    if (days_since_last_save > 2){
-        app.dialog.confirm(
-            '上一次存取記錄已是' + Math.floor(days_since_last_save) + '日前<br>是否清除資料並開始開局？',
-            '清除資料',
-            function(){localStorage.removeItem('data');location.reload();});
+window.onload = () => {
+    if(load()){
+        let now = new Date();
+        let days_since_last_save = Math.abs(now - Date.parse(gamestat.last_save)) / (1000 * 3600 * 24);
+        if (days_since_last_save > 2){
+            app.dialog.confirm(
+                '上一次存取記錄已是' + Math.floor(days_since_last_save) + '日前<br>是否清除資料並開始開局？',
+                '清除資料',
+                function(){localStorage.removeItem('data');location.reload();});
+        }
+        map_players();
+        fill_names();
+        app.emit('ui_update');
+        fulldata_JSON.unshift(JSON.stringify(data));
+        apply_theme(default_setting.theme);
+        app.preloader.hide();
+    } else {
+        app.popup.open('#start-popup');
+        $('#start-popup input[name="multiplier"]').val(default_setting.money);
+        $('#start-popup input[name="break_streak"]').val(default_setting.break);
+        apply_theme(default_setting.theme);
+        app.preloader.hide();
     }
-    map_players();
-    fill_names();
-    app.emit('ui_update');
-    fulldata_JSON.unshift(JSON.stringify(data));
-    apply_theme(default_setting.theme);
-    app.preloader.hide();
-} else {
-    app.popup.open('#start-popup');
-    $('#start-popup input[name="multiplier"]').val(default_setting.money);
-    $('#start-popup input[name="break_streak"]').val(default_setting.break);
-    apply_theme(default_setting.theme);
-    app.preloader.hide();
 }
 
 // ------------------------------------------ //
@@ -450,6 +456,14 @@ function create_break_dialog(player_index){
     }
     dialog_text += '<br>是否終止此拉踢？'
     app.dialog.confirm(dialog_text, '中斷拉踢', function(){end_streak(player_index,receiver_index)}, function(){app.dialog.close()});
+}
+
+function mark_ended(boolean){
+    msg = ''
+    gamestat.ended = boolean;
+    (boolean) ? msg = '遊戲被設定為已完結' : msg = '遊戲被設定為未完結';
+    add_log(msg);
+    app.emit('data_change');
 }
 // ------------------------------------------ //
 // POPUP RELATED FUNCTIONS
@@ -721,7 +735,7 @@ $('#tsumo-popup').on('popup:closed', function(){
 // ------------------------------------------ //
 // Functions for Summary popup
 // ------------------------------------------ //
-$('#summary-popup').on('popup:open', function(){
+function fill_summary(){
     let rank_html = '';
     let summary = {
         max_yaku: {},
@@ -733,7 +747,7 @@ $('#summary-popup').on('popup:open', function(){
         win: {},
         passerBy: {}
     };
-    let summary_allplayer = [... allplayer];
+    let summary_allplayer = JSON.parse(JSON.stringify(allplayer));// Use deep copy for nested array
     summary_allplayer.splice(0, 1);
     for (i = 0; i <=3 ; i++){ //Add unrealized into balance for all players
         summary_allplayer[i].balance += summary_allplayer[i].unrealized;
@@ -798,11 +812,15 @@ $('#summary-popup').on('popup:open', function(){
     $('.summary-passerBy-name').text(allplayer[summary.passerBy.index].name);
     $('.summary-passerBy-value').text(summary.passerBy.max);
     // Create chart in summary
-    let chart_canvas = $('#summary-chart')[0].getContext('2d');
-    summary_chart = new Chart( chart_canvas, new chart_config(true));
-});
+    try{
+        let chart_canvas = $('#summary-chart')[0].getContext('2d');
+        summary_chart = new Chart( chart_canvas, new chart_config(true));
+    } catch(err){}
+};
 $('#summary-popup').on('popup:close', function(){
-    summary_chart.destroy();
+    try{
+        summary_chart.destroy();
+    } catch(err){}
 });
 // ------------------------------------------ //
 // SETTINGS RELATED FUNCTIONS
