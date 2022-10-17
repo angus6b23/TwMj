@@ -204,21 +204,25 @@ input[type=number] {
 }
 .card{
     border: 1px solid transparent;
+    display: block;
 }
-.p1_card.banker h2{
-    color: var(--p1-color);
+.p1_card.banker{
+    border: 1px solid var(--p1-color);
 }
-.p2_card.banker h2{
-    color: var(--p2-color);
+.p2_card.banker{
+    border: 1px solid var(--p2-color);
 }
-.p3_card.banker h2{
-    color: var(--p3-color);
+.p3_card.banker{
+    border: 1px solid var(--p3-color);
 }
-.p4_card.banker h2{
-    color: var(--p4-color);
+.p4_card.banker{
+    border: 1px solid var(--p4-color);
 }
 .plus_or_minus{
     display: inline-block;
+}
+.input-width-limit{
+    width: 80%;
 }
 .input_wrapper{
     display: flex;
