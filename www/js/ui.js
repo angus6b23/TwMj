@@ -141,13 +141,13 @@ app.on('ui_update', function(){
             let display_balance = Math.round(allplayer[i].balance * default_setting.money * 100) / 100;
             let unrealized_balance = Math.round(allplayer[i].unrealized * default_setting.money * 100) / 100;
             (allplayer[i].unrealized == 0) ? $(`.p${i}_balance`).text(`$${display_balance}`):
-            (allplayer[i].unrealized > 0) ? $(`.p${i}_balance`).text(`$${display_balance}(+$${unrealized_balance})`) :
-            $(`.p${i}_balance`).text(`$${display_balance}($${unrealized_balance})`);
+            (allplayer[i].unrealized > 0) ? $(`.p${i}_balance`).text(`$${display_balance} (+$${unrealized_balance})`) :
+            $(`.p${i}_balance`).text(`$${display_balance} ($${unrealized_balance})`);
             $('#setting_switch').text('切換為番');
         } else {
             (allplayer[i].unrealized == 0) ? $(`.p${i}_balance`).text(allplayer[i].balance):
-            (allplayer[i].unrealized > 0) ? $(`.p${i}_balance`).text(`${allplayer[i].balance}(+${allplayer[i].unrealized})`) :
-            $(`.p${i}_balance`).text(`${allplayer[i].balance}(${allplayer[i].unrealized})`);
+            (allplayer[i].unrealized > 0) ? $(`.p${i}_balance`).text(`${allplayer[i].balance} (+${allplayer[i].unrealized})`) :
+            $(`.p${i}_balance`).text(`${allplayer[i].balance} (${allplayer[i].unrealized})`);
             $('#setting_switch').text('切換為錢');
         }
         for (x=1; x<=4; x++){
@@ -256,11 +256,11 @@ app.on('ui_update', function(){
     $('.triple_raw').text(gamestat.triple_winner);
     // Only fill ratios when round > 1 to prevent NaN
     if (gamestat.round > 1){
-        $('.draw_ratio').text(round_to_2_dec(gamestat.tie / (gamestat.round - 1)) * 100 + '%');
-        $('.deal_ratio').text(round_to_2_dec(gamestat.deal / (gamestat.round - 1)) * 100 + '%');
-        $('.tsumo_ratio').text(round_to_2_dec(gamestat.tsumo / (gamestat.round - 1)) * 100 + '%');
-        $('.double_ratio').text(round_to_2_dec(gamestat.double_winner / (gamestat.round - 1)) * 100 + '%');
-        $('.triple_ratio').text(round_to_2_dec(gamestat.triple_winner / (gamestat.round - 1)) * 100 + '%');
+        $('.draw_ratio').text(round_to_2_dec((gamestat.tie / (gamestat.round - 1)) * 100) + '%');
+        $('.deal_ratio').text(round_to_2_dec((gamestat.deal / (gamestat.round - 1)) * 100 )+ '%');
+        $('.tsumo_ratio').text(round_to_2_dec((gamestat.tsumo / (gamestat.round - 1)) * 100) + '%');
+        $('.double_ratio').text(round_to_2_dec((gamestat.double_winner / (gamestat.round - 1)) * 100) + '%');
+        $('.triple_ratio').text(round_to_2_dec((gamestat.triple_winner / (gamestat.round - 1)) * 100) + '%');
     }
     // Create or update chart
     try{
@@ -473,13 +473,17 @@ function set_money_multiplier(value){ //Check money multiplier input before sett
     let check_value = parseFloat(value);
     if (isNaN(check_value) || check_value <= 0 || check_value == ''){ //Throw toast error if input is invalid
         catch_error('設定錯誤！必須為正數！');
+    } else if (check_value > 1000){
+        catch_error('最大數為1000，請重新設定');
     } else {
         $('#start-form input[name="multiplier"]').val(value);
     }
 }
 function set_break_streak(value){ //Check break streak input before setting it as value
     let check_value = parseInt(value);
-    if (isNaN(check_value) || check_value <= 0 || check_value == ''){ //Throw toast error if input is invalid
+    if (check_value == -1){
+        $('#start-form input[name="break_streak"]').val(check_value);
+    }else if (isNaN(check_value) || check_value <= 0 || check_value == ''){ //Throw toast error if input is invalid
         catch_error('設定錯誤！必須為正整數！');
     } else {
         $('#start-form input[name="break_streak"]').val(check_value);
@@ -494,7 +498,7 @@ function submit_start_form(){ //Function for handling start form submit
     start_obj.name_array.push(start_form.elements['west_name'].value);
     start_obj.name_array.push(start_form.elements['north_name'].value);
     start_obj.multiplier = parseFloat(start_form.elements['multiplier'].value);
-    start_obj.break_streak = parseInt(start_form.elements['break_streak'].value);
+    start_obj.break_streak = start_form.elements['break_streak'].value == -1 ? Infinity : parseInt(start_form.elements['break_streak'].value);
     start_game(start_obj); //Function from Main.js
     // Call function in main.js here
     app.popup.close('#start-popup');
@@ -834,7 +838,6 @@ function undo(){
     game_record = data.game_record;
     game_log[undo_count - 1].removed = true;
     app.emit('ui_update');
-    app.tab.show('#view-home');
 }
 //  Function for redo
 function redo(){
@@ -845,7 +848,6 @@ function redo(){
     game_record = data.game_record;
     game_log[undo_count].removed = false;
     app.emit('ui_update');
-    app.tab.show('#view-home');
 }
 // Changing display between money and score
 function display_as_money(){
@@ -875,7 +877,17 @@ function display_custom(seat_boolean){ //Show seats when custom is selected
         $('#seat-form button[type="submit"]').addClass('none');
         let append_html = '';
         for (i=1; i<=4; i++){
-            append_html += '<p><label class="radio"><input type="radio" name="seat-east" value=' + i + ' onclick="east_trigger();" /><i class="icon-radio"></i></label>' + allplayer[i].name + '</p>'
+            append_html += `
+            <li>
+                <label class="item-radio item-radio-icon-start item-content">
+                    <input type="radio" name="seat-east" value="${i}" onclick="east_trigger()"/>
+                    <i class="icon icon-radio"></i>
+                    <div class="item-inner">
+                        <div class="item-title">${allplayer[i].name}</div>
+                    </div>
+                </label>
+            </li>
+            `
         }
         $('.radio-east').html(append_html);
     }
@@ -890,7 +902,17 @@ function east_trigger(){
     $('#seat-form button[type="submit"]').addClass('none');
     let append_html = '';
     for (i=1; i<=4; i++){
-        ( i != $('input[name="seat-east"]:checked').val()) ? append_html += '<p><label class="radio"><input type="radio" name="seat-south" value=' + i + ' onclick="south_trigger();" /><i class="icon-radio"></i></label>' + allplayer[i].name + '</p>' : null;
+        ( i != $('input[name="seat-east"]:checked').val()) ? append_html +=  `
+        <li>
+            <label class="item-radio item-radio-icon-start item-content">
+                <input type="radio" name="seat-south" value="${i}" onclick="south_trigger()"/>
+                <i class="icon icon-radio"></i>
+                <div class="item-inner">
+                    <div class="item-title">${allplayer[i].name}</div>
+                </div>
+            </label>
+        </li>
+        ` : null;
     }
     $('.radio-south').html(append_html);
 }
@@ -900,7 +922,17 @@ function south_trigger(){
     $('#seat-form button[type="submit"]').addClass('none');
     let append_html = '';
     for (i=1; i<=4; i++){
-        ( i != $('input[name="seat-east"]:checked').val() && i != $('input[name="seat-south"]:checked').val()) ? append_html += '<p><label class="radio"><input type="radio" name="seat-west" value=' + i + ' onclick="west_trigger();" /><i class="icon-radio"></i></label>' + allplayer[i].name + '</p>' : null;
+        ( i != $('input[name="seat-east"]:checked').val() && i != $('input[name="seat-south"]:checked').val()) ? append_html +=  `
+        <li>
+            <label class="item-radio item-radio-icon-start item-content">
+                <input type="radio" name="seat-west" value="${i}" onclick="west_trigger()"/>
+                <i class="icon icon-radio"></i>
+                <div class="item-inner">
+                    <div class="item-title">${allplayer[i].name}</div>
+                </div>
+            </label>
+        </li>
+        ` : null;
     }
     $('.radio-west').html(append_html);
 }
@@ -909,7 +941,17 @@ function west_trigger(){
     $('#seat-form button[type="submit"]').addClass('none');
     let append_html = '';
     for (i=1; i<=4; i++){
-        ( i != $('input[name="seat-east"]:checked').val() && i != $('input[name="seat-south"]:checked').val() && i != $('input[name="seat-west"]:checked').val()) ? append_html += '<p><label class="radio"><input type="radio" name="seat-north" value=' + i + ' onclick="north_trigger()" /><i class="icon-radio"></i></label>' + allplayer[i].name + '</p>' : null;
+        ( i != $('input[name="seat-east"]:checked').val() && i != $('input[name="seat-south"]:checked').val() && i != $('input[name="seat-west"]:checked').val()) ? append_html +=  `
+        <li>
+            <label class="item-radio item-radio-icon-start item-content">
+                <input type="radio" name="seat-north" value="${i}" onclick="north_trigger()"/>
+                <i class="icon icon-radio"></i>
+                <div class="item-inner">
+                    <div class="item-title">${allplayer[i].name}</div>
+                </div>
+            </label>
+        </li>
+        ` : null;
     }
     $('.radio-north').html(append_html);
 }

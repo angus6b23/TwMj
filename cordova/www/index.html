@@ -1,50 +1,265 @@
 <!DOCTYPE html>
-<!--
-    Licensed to the Apache Software Foundation (ASF) under one
-    or more contributor license agreements.  See the NOTICE file
-    distributed with this work for additional information
-    regarding copyright ownership.  The ASF licenses this file
-    to you under the Apache License, Version 2.0 (the
-    "License"); you may not use this file except in compliance
-    with the License.  You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-    Unless required by applicable law or agreed to in writing,
-    software distributed under the License is distributed on an
-    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-     KIND, either express or implied.  See the License for the
-    specific language governing permissions and limitations
-    under the License.
--->
 <html>
-    <head>
-        <meta charset="utf-8">
-        <!--
-        Customize this policy to fit your own app's needs. For more guidance, please refer to the docs:
-            https://cordova.apache.org/docs/en/latest/
-        Some notes:
-            * https://ssl.gstatic.com is required only on Android and is needed for TalkBack to function properly
-            * Disables use of inline scripts in order to mitigate risk of XSS vulnerabilities. To change this:
-                * Enable inline JS: add 'unsafe-inline' to default-src
-        -->
-        <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: https://ssl.gstatic.com 'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src *; img-src 'self' data: content:;">
-        <meta name="format-detection" content="telephone=no">
-        <meta name="msapplication-tap-highlight" content="no">
-        <meta name="viewport" content="initial-scale=1, width=device-width, viewport-fit=cover">
-        <meta name="color-scheme" content="light dark">
-        <link rel="stylesheet" href="css/index.css">
-        <title>Hello World</title>
-    </head>
-    <body>
-        <div class="app">
-            <h1>Apache Cordova</h1>
-            <div id="deviceready" class="blink">
-                <p class="event listening">Connecting to Device</p>
-                <p class="event received">Device is Ready</p>
+<head>
+    <meta charset="utf-8">
+    <script src="js/chart.min.js"></script>
+    <script src="js/html2canvas.min.js"></script>
+    <!-- manual push -->
+    <!--
+    Customize this policy to fit your own app's needs. For more guidance, please refer to the docs:
+    https://cordova.apache.org/docs/en/latest/
+    Some notes:
+    * https://ssl.gstatic.com is required only on Android and is needed for TalkBack to function properly
+    * Disables use of inline scripts in order to mitigate risk of XSS vulnerabilities. To change this:
+    * Enable inline JS: add 'unsafe-inline' to default-src
+-->
+<meta http-equiv="Content-Security-Policy" content="default-src * 'self' 'unsafe-inline' 'unsafe-eval' data: content:">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#212121">
+<meta name="format-detection" content="telephone=no">
+<meta name="msapplication-tap-highlight" content="no">
+<title>港式台牌計分版</title>
+<link rel="stylesheet" href="framework7/framework7-bundle.min.css">
+<link rel="stylesheet" href="css/icons.css">
+<link rel="stylesheet" href="css/app.css">
+</head>
+<body>
+    <div id="app" class="dark">
+        <!-- Views/Tabs container -->
+        <div class="views tabs safe-areas">
+            <!-- Tabbar for switching views-tabs -->
+            <div class="toolbar toolbar-bottom tabbar-labels">
+                <div class="toolbar-inner">
+                    <a href="#view-home" class="tab-link tab-link-active">
+                        <i class="icon f7-icons if-not-md">house_fill</i>
+                        <i class="icon material-icons if-md">home</i>
+                        <span class="tabbar-label">主頁</span>
+                    </a>
+                    <a href="#view-stats" class="tab-link">
+                        <i class="icon f7-icons if-not-md">chart_bar_alt_fill</i>
+                        <i class="icon material-icons if-md">leaderboard</i>
+                        <span class="tabbar-label">數據</span>
+                    </a>
+                    <a href="#view-settings" class="tab-link">
+                        <i class="icon f7-icons if-not-md">ellipsis_vertical</i>
+                        <i class="icon material-icons if-md">more_vert</i>
+                        <span class="tabbar-label">更多</span>
+                    </a>
+                </div>
+            </div>
+            <!-- Your main view/tab, should have "view-main" class. It also has "tab-active" class -->
+            <div id="view-home" class="view view-main view-init tab tab-active">
+                <div class="page" data-name="home">
+                    <!-- Scrollable page content-->
+                    <div class="page-content">
+                        <div class="block block-strong">
+                            <h1 id="round_counter" class="text-align-center">港式台牌計分版</h1>
+                        </div>
+                        <div id="table_wrap">
+                            <div id="table" class="row no-gap">
+                                <div class="col-25 table_short_block"></div>
+                                <div class="col-50 table_short_block north-block">
+                                    <h3 id="N-text" class="text-align-center"></h3>
+                                    <h3 id="N-text2" class="text-align-center"></h3>
+                                </div>
+                                <div class="col-25 table_short_block"></div>
+                                <div class="col-25 table_short_block"></div>
+                                <div class="col-50 table_short_block north-block" id="north"></div>
+                                <div class="col-25 table_short_block"></div>
+                                <div class="col-25 row no-gap table_long_block">
+                                    <div class="col-50 table_fill east-block">
+                                        <h3 id="E-text" class="text-align-center"></h3>
+                                        <h3 id="E-text2" class="text-align-center"></h3>
+                                    </div>
+                                    <div class="col-50 table_fill east-block" id="east"></div>
+                                </div>
+                                <div class="col-50 table_long_block" id="center"></div>
+                                <div class="col-25 row no-gap table_long_block">
+                                    <div class="col-50 table_fill west-block" id="west"></div>
+                                    <div class="col-50 table_fill west-block">
+                                        <h3 id="W-text" class="text-align-center"></h3>
+                                        <h3 id="W-text2" class="text-align-center"></h3>
+                                    </div>
+                                </div>
+                                <div class="col-25 table_short_block"></div>
+                                <div class="col-50 table_short_block south-block" id="south"></div>
+                                <div class="col-25 table_short_block"></div>
+                                <div class="col-25 table_short_block"></div>
+                                <div class="col-50 table_short_block south-block">
+                                    <h3 id="S-text" class="text-align-center"></h3>
+                                    <h3 id="S-text2" class="text-align-center"></h3>
+                                </div>
+                                <div class="col-25 table_short_block"></div>
+                            </div>
+                        </div>
+                        <div class="block block-strong">
+                            <div class="row align-items-flex-end">
+                                <button class="button col grid-button row tie align-content-space-around">
+                                    <i class="f7-icons if-not-md col-100">hourglass</i>
+                                    <i class="material-icons md-only col-100">hourglass_empty</i>
+                                    <span>流局</span>
+                                </button>
+                                <button class="button col grid-button row popup-open align-content-space-around" data-popup="#adjust-popup">
+                                    <i class="f7-icons if-not-md col-100">minus_slash_plus</i>
+                                    <i class="material-icons md-only col-100">calculate</i>
+                                    <span>手動調整</span>
+                                </button>
+                                <button class="button col grid-button row align-content-space-around" onclick="mark_ended(true);">
+                                    <i class="f7-icons if-not-md col-100">checkmark_circle</i>
+                                    <i class="material-icons md-only col-100">check_circle_outline</i>
+                                    <span>結束</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Stat View -->
+            <div id="view-stats" class="view view-init tab" data-name="stats" data-url="/stats/">
+            </div>
+            <!-- Settings View -->
+            <div id="view-settings" class="view view-init tab" data-name="settings" data-url="/settings/">
             </div>
         </div>
-        <script src="cordova.js"></script>
-        <script src="js/index.js"></script>
-    </body>
+        <!-- Popups -->
+        <!-- Popup for Starting game -->
+        <div class="popup popup-tablet-fullscreen" id="start-popup">
+            <div class="view view-init" data-name="start" data-url="/start/"></div>
+        </div>
+        <!-- Popup for deal modal -->
+        <div class="popup" id="deal-popup">
+            <div class="view view-init" data-name="deal" data-url="/deal/"></div>
+        </div>
+        <!-- Popup for tsumo modal -->
+        <div class="popup" id="tsumo-popup">
+            <div class="view view-init" data-name="tsumo" data-url="/tsumo/"></div>
+        </div>
+        <!-- Popup for instant get modal -->
+        <div class="popup" id="instantGet-popup">
+            <div class="view view-init" data-name="instantGet" data-url="/instantGet/"></div>
+        </div>
+        <!-- Popup for instant get modal -->
+        <div class="popup" id="instantPay-popup">
+            <div class="view view-init" data-name="instantPay" data-url="/instantPay/"></div>
+        </div>
+        <!-- Popup for adjust modal -->
+        <div class="popup" id="adjust-popup">
+            <div class="view view-init" data-name="adjust" data-url="/adjust/"></div>
+        </div>
+        <!-- Popup for summary modal -->
+        <div class="popup popup-tablet-fullscreen" id="summary-popup">
+            <div class="view view-init" data-name="summary" data-url="/summary/"></div>
+        </div>
+        <!-- Action Sheets -->
+        <!-- Action Sheet for player 1 -->
+        <div class="actions-modal p1-actions quick-actions">
+            <div class="actions-group">
+                <span class="actions-label p1_name"></span>
+                <div class="actions-button actions-button-bold" onclick="set_instantGet_position(1);app.popup.open('#instantGet-popup');">
+                    <div class="actions-button-text">即收</div>
+                </div>
+                <div class="actions-button actions-button-bold" onclick="set_instantPay_position(1);app.popup.open('#instantPay-popup');">
+                    <div class="actions-button-text">即付</div>
+                </div>
+                <div class="actions-button actions-button-bold" onclick="set_deal_position(1);app.popup.open('#deal-popup')">
+                    <div class="actions-button-text">出銃</div>
+                </div>
+                <div class="actions-button actions-button-bold" onclick="set_tsumo_position(1);app.popup.open('#tsumo-popup')">
+                    <div class="actions-button-text">自摸</div>
+                </div>
+                <div id="p1-action-break" class="action-break actions-button actions-button-bold none" onclick="create_break_dialog(1);">
+                    <div class="actions-button-text">中斷拉踢</div>
+                </div>
+            </div>
+        </div>
+        <!-- Action Sheet for player 2 -->
+        <div class="actions-modal p2-actions quick-actions">
+            <div class="actions-group">
+                <span class="actions-label p2_name"></span>
+                <div class="actions-button actions-button-bold" onclick="set_instantGet_position(2);app.popup.open('#instantGet-popup');">
+                    <div class="actions-button-text">即收</div>
+                </div>
+                <div class="actions-button actions-button-bold" onclick="set_instantPay_position(2);app.popup.open('#instantPay-popup');">
+                    <div class="actions-button-text">即付</div>
+                </div>
+                <div class="actions-button actions-button-bold" onclick="set_deal_position(2);app.popup.open('#deal-popup')">
+                    <div class="actions-button-text">出銃</div>
+                </div>
+                <div class="actions-button actions-button-bold" onclick="set_tsumo_position(2);app.popup.open('#tsumo-popup')">
+                    <div class="actions-button-text">自摸</div>
+                </div>
+                <div id="p2-action-break" class="action-break actions-button actions-button-bold none" onclick="create_break_dialog(2);">
+                    <div class="actions-button-text">中斷拉踢</div>
+                </div>
+            </div>
+        </div>
+        <!-- Action Sheet for player 3 -->
+        <div class="actions-modal p3-actions quick-actions">
+            <div class="actions-group">
+                <span class="actions-label p3_name"></span>
+                <div class="actions-button actions-button-bold" onclick="set_instantGet_position(3);app.popup.open('#instantGet-popup');">
+                    <div class="actions-button-text">即收</div>
+                </div>
+                <div class="actions-button actions-button-bold" onclick="set_instantPay_position(3);app.popup.open('#instantPay-popup');">
+                    <div class="actions-button-text">即付</div>
+                </div>
+                <div class="actions-button actions-button-bold" onclick="set_deal_position(3);app.popup.open('#deal-popup')">
+                    <div class="actions-button-text">出銃</div>
+                </div>
+                <div class="actions-button actions-button-bold" onclick="set_tsumo_position(3);app.popup.open('#tsumo-popup')">
+                    <div class="actions-button-text">自摸</div>
+                </div>
+                <div id="p3-action-break" class="action-break actions-button actions-button-bold none" onclick="create_break_dialog(3);">
+                    <div class="actions-button-text">中斷拉踢</div>
+                </div>
+            </div>
+        </div>
+        <!-- Action Sheet for player 4 -->
+        <div class="actions-modal p4-actions quick-actions">
+            <div class="actions-group">
+                <span class="actions-label p4_name"></span>
+                <div class="actions-button actions-button-bold" onclick="set_instantGet_position(4);app.popup.open('#instantGet-popup');">
+                    <div class="actions-button-text">即收</div>
+                </div>
+                <div class="actions-button actions-button-bold" onclick="set_instantPay_position(4);app.popup.open('#instantPay-popup');">
+                    <div class="actions-button-text">即付</div>
+                </div>
+                <div class="actions-button actions-button-bold" onclick="set_deal_position(4);app.popup.open('#deal-popup')">
+                    <div class="actions-button-text">出銃</div>
+                </div>
+                <div class="actions-button actions-button-bold" onclick="set_tsumo_position(4);app.popup.open('#tsumo-popup')">
+                    <div class="actions-button-text">自摸</div>
+                </div>
+                <div id="p4-action-break" class="action-break actions-button actions-button-bold none" onclick="create_break_dialog(4);">
+                    <div class="actions-button-text">中斷拉踢</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- DOM for cloning -->
+    <div id="clones" class="none">
+        <!-- exclamation sign when streak reaches break -->
+        <div class="exclamation">
+            <i class="icon f7-icons if-not-md">exclamationmark_circle_fill</i>
+            <i class="icon material-icons if-md">error</i>
+        </div>
+        <!-- Dots for animation -->
+        <div class="animation_dots"></div>
+    </div>
+    <script src="cordova.js"></script>
+    <!-- Framework7 library -->
+    <script src="framework7/framework7-bundle.min.js"></script>
+    <!-- Cordova APIs -->
+    <script src="js/cordova-app.js"></script>
+    <!-- App routes -->
+    <script src="js/routes.js"></script>
+    <!-- App store -->
+    <script src="js/store.js"></script>
+    <!-- App scripts -->
+    <script src="js/app.js"></script>
+    <!-- Main Scripts -->
+    <script src="js/main.js"></script>
+    <!-- Scripts for UI handling -->
+    <script src="js/ui.js"></script>
+</body>
 </html>

@@ -1,0 +1,254 @@
+<div class="page" data-name="settings">
+    <div class="page-content">
+        <!-- Action Block -->
+        <div class="block-title">動作</div>
+        <div class="block block-strong inset">
+            <p class="row no-gap">
+                <button href="#" id="undo" class="col button grid-button row" onclick="undo();">
+                    <i class="f7-icons if-not-md col-100">arrowshape_turn_up_left</i>
+                    <i class="material-icons md-only col-100">undo</i>
+                    <span>還原</span>
+                </button>
+                <button href="#" id="redo" class="col button grid-button row" onclick="redo();">
+                    <i class="f7-icons if-not-md col-100">arrowshape_turn_up_right</i>
+                    <i class="material-icons md-only col-100">redo</i>
+                    <span>重做</span>
+                </button>
+                <button href="#" data-popup=".log-popup" class="col button grid-button row popup-open">
+                    <i class="f7-icons if-not-md col-100">arrow_counterclockwise_circle</i>
+                    <i class="material-icons md-only col-100">history</i>
+                    <span>記錄</span>
+                </button>
+                <button href="#" class="col button grid-button row" onclick="display_as_money();">
+                    <i class="f7-icons if-not-md col-100">arrow_right_arrow_left</i>
+                    <i class="material-icons md-only col-100">switch_left</i>
+                    <span id="setting_switch">切換為錢</span>
+                </button>
+            </p>
+        </div>
+        <!-- Setting List -->
+        <div class="block-title">游戲設置</div>
+        <div class="list">
+            <ul>
+                <li>
+                    <a href="#" class="item-link item-content popup-open" data-popup="#seat-popup">
+                        <div class="item-media">
+                            <i class="f7-icons if-not-md">arrow_swap</i>
+                            <i class="material-icons md-only">swap_calls</i>
+                        </div>
+                        <div class="item-inner">
+                            <div class="item-title">調位</div>
+                        </div>
+                    </a>
+                </li>
+                <li>
+                    <a href="#" class="item-link item-content popup-open" data-popup="#rename-popup">
+                        <div class="item-media">
+                            <i class="f7-icons if-not-md">pencil_ellipsis_rectangle</i>
+                            <i class="material-icons md-only">edit_note</i>
+                        </div>
+                        <div class="item-inner">
+                            <div class="item-title">改名</div>
+                        </div>
+                    </a>
+                </li>
+                <li>
+                    <a href="#" class="item-link item-content">
+                        <div class="item-media">
+                            <i class="f7-icons if-not-md">bandage</i>
+                            <i class="material-icons md-only">healing</i>
+                        </div>
+                        <div class="item-inner">
+                            <div class="item-title">手動結算</div>
+                        </div>
+                    </a>
+                </li>
+                <li>
+                    <a href="#" class="item-link item-content" onclick="app.popup.open('#adjust-popup')">
+                        <div class="item-media">
+                            <i class="f7-icons if-not-md">minus_slash_plus</i>
+                            <i class="material-icons md-only">calculate</i>
+                        </div>
+                        <div class="item-inner">
+                            <div class="item-title">詐糊・手動調整</div>
+                        </div>
+                    </a>
+                </li>
+            </ul>
+        <!-- Setting List -->
+        <div class="block-title">設定</div>
+        <div class="list">
+            <ul>
+                <li>
+                    <a href="#" data-actions=".theme-actions" class="item-link item-content actions-open">
+                        <div class="item-media">
+                            <i class="f7-icons if-not-md">circle_grid_hex_fill</i>
+                            <i class="material-icons md-only">palette</i>
+                        </div>
+                        <div class="item-inner">
+                            <div class="item-title">主題</div>
+                            <div id="theme_name" class="item-after">北歐</div>
+                        </div>
+                    </a>
+                </li>
+                <li>
+                    <a href="/import/" class="item-link item-content">
+                        <div class="item-media">
+                            <i class="f7-icons if-not-md">tray_arrow_down_fill</i>
+                            <i class="material-icons md-only">file_download</i>
+                        </div>
+                        <div class="item-inner">
+                            <div class="item-title">匯入</div>
+                        </div>
+                    </a>
+                </li>
+                <li>
+                    <a href="#" class="item-link item-content" onclick="export_to_clipboard()">
+                        <div class="item-media">
+                            <i class="f7-icons if-not-md export_tick">doc_on_clipboard_fill</i>
+                            <i class="material-icons md-only export_tick">integration_instructions</i>
+                        </div>
+                        <div class="item-inner">
+                            <div class="item-title export_text">匯出：複制到剪貼簿</div>
+                        </div>
+                    </a>
+                </li>
+                <li>
+                    <a href="#" class="item-link item-content" onclick="export_to_json()">
+                        <div class="item-media">
+                            <i class="f7-icons if-not-md">floppy_disk</i>
+                            <i class="material-icons md-only">save</i>
+                        </div>
+                        <div class="item-inner">
+                            <div class="item-title">匯出：儲存為JSON</div>
+                        </div>
+                    </a>
+                </li>
+                <li>
+                    <a href="#" class="item-link item-content" onclick="app.dialog.confirm('清除資料會影響現時設置及遊戲<br>確定要清除？','清除資料', function(){localStorage.clear();location.reload()},function(){null;}
+                    )">
+                        <div class="item-media">
+                            <i class="f7-icons if-not-md">bin_xmark_fill</i>
+                            <i class="material-icons md-only">delete</i>
+                        </div>
+                        <div class="item-inner">
+                            <div class="item-title">清除所有資料</div>
+                        </div>
+                    </a>
+                </li>
+            </ul>
+        </div>
+        <!-- About list -->
+        <div class="block-title">關於</div>
+        <div class="list">
+            <ul>
+                <li>
+                    <a href="/license/" class="item-link item-content">
+                        <div class="item-media">
+                            <i class="f7-icons if-not-md">question_circle</i>
+                            <i class="material-icons md-only">school</i>
+                        </div>
+                        <div class="item-inner">
+                            <div class="item-title">教學</div>
+                        </div>
+                    </a>
+                </li>
+                <li>
+                    <a href="/license/" class="item-link item-content">
+                        <div class="item-media">
+                            <i class="f7-icons if-not-md">circle_grid_hex_fill</i>
+                            <i class="material-icons md-only">task_alt</i>
+                        </div>
+                        <div class="item-inner">
+                            <div class="item-title">使用條款</div>
+                        </div>
+                    </a>
+                </li>
+                <li>
+                    <a href="#" class="item-link item-content">
+                        <div class="item-media">
+                            <i class="f7-icons if-not-md">heart_circle</i>
+                            <i class="material-icons md-only">volunteer_activism</i>
+                        </div>
+                        <div class="item-inner">
+                            <div class="item-title">支持</div>
+                        </div>
+                    </a>
+                </li>
+            </ul>
+        </div>
+        <!-- Actions -->
+        <!-- Actions for themes -->
+        <div class="actions-modal theme-actions">
+            <div class="actions-group">
+                <span class="actions-label">主題</span>
+                <div class="actions-button actions-button-bold" onclick="apply_theme('Nord');app.emit('setting_change')">
+                    <div class="actions-button-text">北歐</div>
+                </div>
+                <div class="actions-button actions-button-bold" onclick="apply_theme('Nord_alt');app.emit('setting_change')">
+                    <div class="actions-button-text">異色北歐</div>
+                </div>
+                <div class="actions-button actions-button-bold" onclick="apply_theme('Dracula');app.emit('setting_change')">
+                    <div class="actions-button-text">德古拉</div>
+                </div>
+                <div class="actions-button actions-button-bold" onclick="apply_theme('Gruvbox_light');app.emit('setting_change')">
+                    <div class="actions-button-text">亮色航空</div>
+                </div>
+                <div class="actions-button actions-button-bold" onclick="apply_theme('Gruvbox_dark');app.emit('setting_change')">
+                    <div class="actions-button-text">暗色航空</div>
+                </div>
+                <div class="actions-button actions-button-bold" onclick="apply_theme('Tomorrow_night');app.emit('setting_change')">
+                    <div class="actions-button-text">暗色明日</div>
+                </div>
+                <div class="actions-button actions-button-bold" onclick="apply_theme('Tomorrow');app.emit('setting_change')">
+                    <div class="actions-button-text">亮色明日</div>
+                </div>
+                <div class="actions-button actions-button-bold" onclick="apply_theme('High_contrast');app.emit('setting_change')">
+                    <div class="actions-button-text">高對比</div>
+                </div>
+            </div>
+        </div>
+        <!-- Popups -->
+        <!-- Pop up for rename -->
+        <div class="popup" id="rename-popup">
+            <div class="view view-init" data-name="rename" data-url="/rename/"></div>
+        </div>
+        <div class="popup" id="seat-popup">
+            <div class="view view-init" data-name="seat" data-url="/seat/"></div>
+        </div>
+        <!-- Popup for log -->
+        <div class="popup log-popup popup-tablet-fullscreen">
+            <div class="view">
+                <div class="page">
+                    <div class="navbar">
+                        <div class="navbar-bg"></div>
+                        <div class="navbar-inner">
+                            <div class="title">記錄</div>
+                            <div class="right">
+                                <a class="link popup-close">
+                                    <i class="material-icons">close</i>
+                                    <span class="if-not-md">關閉</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="page-content">
+                        <div class="data-table">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th class="label-cell text-align-center">時間</th>
+                                        <th class="label-cell text-align-center">記錄</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="log_table">
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- -->
+    </div>
+</div>

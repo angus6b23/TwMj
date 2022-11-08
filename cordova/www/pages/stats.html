@@ -1,0 +1,200 @@
+<div class="page" data-name="stats">
+    <div class="page-content">
+        <div class="block">
+            <p class="segmented segmented-raised">
+                <button href="#history-view" class="button button-outline tab-link tab-link-active">遊戲記綠</button>
+                <button href="#game_stat-view" class="button button-outline tab-link">遊戲數據</button>
+                <button href="#player_stat-view" class="button button-outline tab-link">玩家數據</button>
+                <button href="#chart-view" class="button button-outline tab-link">圖表</button>
+            </p>
+        </div>
+        <div class="tabs">
+            <div id="history-view" class="view view-init tab tab-active stat-div">
+                <table class="data-table">
+                    <thead>
+                        <tr class="tr-sticky">
+                            <th class="numeric-cell text-align-center default_th" style="width:12%">#</th>
+                            <th class="numeric-cell text-align-center p1_name p1_th" style="width:22%"></th>
+                            <th class="numeric-cell text-align-center p2_name p2_th" style="width:22%"></th>
+                            <th class="numeric-cell text-align-center p3_name p3_th" style="width:22%"></th>
+                            <th class="numeric-cell text-align-center p4_name p4_th" style="width:22%"></th>
+                        </tr>
+                        <tbody id="game_record" class="text-align-center">
+                        </tbody>
+                    </thead>
+                </table>
+            </div>
+            <div id="game_stat-view" class="view tab stat-div">
+                <table class="data-table">
+                    <thead>
+                        <tr class="tr-sticky">
+                            <th class="numeric-cell text-align-center default_th" style="width:33%;">項目</th>
+                            <th class="numeric-cell text-align-center default_th" style="width:33%;">數值</th>
+                            <th class="numeric-cell text-align-center default_th" style="width:33%;">比率</th>
+                        </tr>
+                        <tbody class="text-align-center">
+                            <tr>
+                                <td>總局數</td>
+                                <td class="round_raw"></td>
+                                <td>-</td>
+                            </tr>
+                            <tr>
+                                <td>流局</td>
+                                <td class="draw_raw"></td>
+                                <td class="draw_ratio"></td>
+                            </tr>
+                            <tr>
+                                <td>出銃</td>
+                                <td class="deal_raw"></td>
+                                <td class="deal_ratio"></td>
+                            </tr>
+                            <tr>
+                                <td>自摸</td>
+                                <td class="tsumo_raw"></td>
+                                <td class="tsumo_ratio"></td>
+                            </tr>
+                            <tr>
+                                <td>雙響</td>
+                                <td class="double_raw"></td>
+                                <td class="double_ratio"></td>
+                            </tr>
+                            <tr>
+                                <td>三響</td>
+                                <td class="triple_raw"></td>
+                                <td class="triple_ratio"></td>
+                            </tr>
+                            <tr>
+                                <td>即收總和</td>
+                                <td class="instantGet_raw"></td>
+                                <td>-</td>
+                            </tr>
+                            <tr>
+                                <td>即付總和</td>
+                                <td class="instantPay_raw"></td>
+                                <td>-</td>
+                            </tr>
+                            <tr>
+                                <td>平均食糊番數</td>
+                                <td class="avg_yaku_raw"></td>
+                                <td>-</td>
+                            </tr>
+                            <tr>
+                                <td>最大食糊番數</td>
+                                <td class="max_yaku_raw"></td>
+                                <td>-</td>
+                            </tr>
+                            <tr>
+                                <td>最大連莊</td>
+                                <td class="max_streak_raw"></td>
+                                <td>-</td>
+                            </tr>
+                            <tr>
+                                <td>總番數流動</td>
+                                <td class="total_yaku_raw"></td>
+                                <td>-</td>
+                            </tr>
+                        </tbody>
+                    </thead>
+                </table>
+            </div>
+            <div id="player_stat-view" class="view tab stat-div">
+                <table class="data-table">
+                    <thead>
+                        <tr class="tr-sticky">
+                            <th class="numeric-cell text-align-center default_th" style="width:20%">項目</th>
+                            <th colspan=2 class="numeric-cell text-align-center p1_name p1_th" style="width:20%"></th>
+                            <th colspan=2 class="numeric-cell text-align-center p2_name p2_th" style="width:20%"></th>
+                            <th colspan=2 class="numeric-cell text-align-center p3_name p3_th" style="width:20%"></th>
+                            <th colspan=2 class="numeric-cell text-align-center p4_name p4_th" style="width:20%"></th>
+                        </tr>
+                        <tbody class="text-align-center">
+                            <tr>
+                                <td>勝</td>
+                                <td class="p1-win"></td>
+                                <td class="p1-win-ratio"></td>
+                                <td class="p2-win"></td>
+                                <td class="p2-win-ratio"></td>
+                                <td class="p3-win"></td>
+                                <td class="p3-win-ratio"></td>
+                                <td class="p4-win"></td>
+                                <td class="p4-win-ratio"></td>
+                            </tr>
+                            <tr>
+                                <td>敗</td>
+                                <td class="p1-lose"></td>
+                                <td class="p1-lose-ratio"></td>
+                                <td class="p2-lose"></td>
+                                <td class="p2-lose-ratio"></td>
+                                <td class="p3-lose"></td>
+                                <td class="p3-lose-ratio"></td>
+                                <td class="p4-lose"></td>
+                                <td class="p4-lose-ratio"></td>
+                            </tr>
+                            <tr>
+                                <td>自摸</td>
+                                <td class="p1-tsumo"></td>
+                                <td class="p1-tsumo-ratio"></td>
+                                <td class="p2-tsumo"></td>
+                                <td class="p2-tsumo-ratio"></td>
+                                <td class="p3-tsumo"></td>
+                                <td class="p3-tsumo-ratio"></td>
+                                <td class="p4-tsumo"></td>
+                                <td class="p4-tsumo-ratio"></td>
+                            </tr>
+                            <tr>
+                                <td>出銃</td>
+                                <td class="p1-deal-lose"></td>
+                                <td class="p1-deal-lose-ratio"></td>
+                                <td class="p2-deal-lose"></td>
+                                <td class="p2-deal-lose-ratio"></td>
+                                <td class="p3-deal-lose"></td>
+                                <td class="p3-deal-lose-ratio"></td>
+                                <td class="p4-deal-lose"></td>
+                                <td class="p4-deal-lose-ratio"></td>
+                            </tr>
+                            <tr>
+                                <td>即收</td>
+                                <td class="p1-instant-get"></td>
+                                <td class="p1-instant-get-ratio"></td>
+                                <td class="p2-instant-get"></td>
+                                <td class="p2-instant-get-ratio"></td>
+                                <td class="p3-instant-get"></td>
+                                <td class="p3-instant-get-ratio"></td>
+                                <td class="p4-instant-get"></td>
+                                <td class="p4-instant-get-ratio"></td>
+                            </tr>
+                            <tr>
+                                <td>即付</td>
+                                <td class="p1-instant-pay"></td>
+                                <td class="p1-instant-pay-ratio"></td>
+                                <td class="p2-instant-pay"></td>
+                                <td class="p2-instant-pay-ratio"></td>
+                                <td class="p3-instant-pay"></td>
+                                <td class="p3-instant-pay-ratio"></td>
+                                <td class="p4-instant-pay"></td>
+                                <td class="p4-instant-pay-ratio"></td>
+                            </tr>
+                            <tr>
+                                <td>最大番數</td>
+                                <td colspan=2 class="p1-max-yaku"></td>
+                                <td colspan=2 class="p2-max-yaku"></td>
+                                <td colspan=2 class="p3-max-yaku"></td>
+                                <td colspan=2 class="p4-max-yaku"></td>
+                            </tr>
+                            <tr>
+                                <td>最大連莊</td>
+                                <td colspan=2 class="p1-max-streak"></td>
+                                <td colspan=2 class="p2-max-streak"></td>
+                                <td colspan=2 class="p3-max-streak"></td>
+                                <td colspan=2 class="p4-max-streak"></td>
+                            </tr>
+                        </tbody>
+                    </thead>
+                </table>
+            </div>
+            <div id="chart-view" class="view tab">
+                <canvas id="stat-chart" style="height: 40vh;"></canvas>
+            </div>
+        </div>
+    </div>
+</div>

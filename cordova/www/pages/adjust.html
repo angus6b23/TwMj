@@ -1,0 +1,126 @@
+<div class="page" data-name="adjust">
+    <div class="navbar">
+        <div class="navbar-bg"></div>
+        <div class="navbar-inner">
+            <div class="title">詐糊・手動調整</div>
+            <div class="right">
+                <a class="link popup-close">
+                    <i class="material-icons">close</i>
+                    <span class="if-not-md">關閉</span>
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="page-content">
+        <div class="block-title">現時行動</div>
+        <div class="list">
+            <ul id="adjust-actions">
+            </ul>
+        </div>
+        <div class="list inset" id="adjust-add-buttons">
+            <ul>
+                <li>
+                    <a class="list-button button-fill" href="#" onclick="toggle_adjustment_form();">新增行動</a>
+                </li>
+                <li id="adjust-apply-button">
+                    <a class="list-button button-fill" onclick="if(adjust()){app.popup.close()};">套用以上行動</a>
+                </li>
+            </ul>
+        </div>
+        <div class="block none" id="adjust-add-form">
+            <form action="javascript:submit_adjust_form();">
+                <div class="block-title">新增動作</div>
+                <div class="block-header">1. 選擇玩家</div>
+                <div class="list no-hairlines-md">
+                    <ul>
+                        <li>
+                            <label class="item-radio item-radio-icon-start item-content">
+                                <input type="radio" name="adjust-player" value="1" checked />
+                                <i class="icon icon-radio"></i>
+                                <div class="item-inner">
+                                    <div class="item-title p1_name"></div>
+                                </div>
+                            </label>
+                        </li>
+                        <li>
+                            <label class="item-radio item-radio-icon-start item-content">
+                                <input type="radio" name="adjust-player" value="2" />
+                                <i class="icon icon-radio"></i>
+                                <div class="item-inner">
+                                    <div class="item-title p2_name"></div>
+                                </div>
+                            </label>
+                        </li>
+                        <li>
+                            <label class="item-radio item-radio-icon-start item-content">
+                                <input type="radio" name="adjust-player" value="3" />
+                                <i class="icon icon-radio"></i>
+                                <div class="item-inner">
+                                    <div class="item-title p3_name"></div>
+                                </div>
+                            </label>
+                        </li>
+                        <li>
+                            <label class="item-radio item-radio-icon-start item-content">
+                                <input type="radio" name="adjust-player" value="4" />
+                                <i class="icon icon-radio"></i>
+                                <div class="item-inner">
+                                    <div class="item-title p4_name"></div>
+                                </div>
+                            </label>
+                        </li>
+                    </ul>
+                </div>
+                <div class="block-header">2. 選擇動作</div>
+                <div class="list no-hairlines-md">
+                    <ul>
+                        <li>
+                            <label class="item-radio item-radio-icon-start item-content">
+                                <input type="radio" name="adjust-action" value="add" checked />
+                                <i class="icon icon-radio"></i>
+                                <div class="item-inner">
+                                    <div class="item-title">增加番數</div>
+                                </div>
+                            </label>
+                        </li>
+                        <li>
+                            <label class="item-radio item-radio-icon-start item-content">
+                                <input type="radio" name="adjust-action" value="minus"/>
+                                <i class="icon icon-radio"></i>
+                                <div class="item-inner">
+                                    <div class="item-title">減少番數</div>
+                                </div>
+                            </label>
+                        </li>
+                        <li>
+                            <label class="item-radio item-radio-icon-start item-content">
+                                <input type="radio" name="adjust-action" value="equal"/>
+                                <i class="icon icon-radio"></i>
+                                <div class="item-inner">
+                                    <div class="item-title">把番數設定為</div>
+                                </div>
+                            </label>
+                        </li>
+                    </ul>
+                </div>
+                <div class="block-header">3. 輸入番數</div>
+                <div class="list no-hairlines-md">
+                    <ul>
+                        <li class="item-content item-input">
+                            <div class="item-inner">
+                                <div class="item-title item-label">番數</div>
+                                <div class="item-input-wrap">
+                                    <input type="number" name="adjust-value" placeholder="0" / required>
+                                    <span class="input-clear-button"></span>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="row">
+                    <button class="button button-fill col" type="submit">新增</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

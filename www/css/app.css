@@ -244,6 +244,10 @@ input[type=number] {
   z-index: 99 !important;
   background-color: var(--f7-page-bg-color) !important;
 }
+.chart_container{
+    height: 75vh;
+    width: 100%;
+}
 /* -------------------------- */
 /* CSS for logs */
 /* -------------------------- */

@@ -1,0 +1,518 @@
+/* iOS Cordova Tweak */
+.device-cordova.device-ios {
+  height: 100vh;
+}
+
+/* Custom color theme properties */
+:root {
+  --f7-theme-color: #81a1c1;
+  --f7-theme-color-rgb: 129, 161, 193;
+  --f7-theme-color-shade: #668db4;
+  --f7-theme-color-tint: #9cb5ce;
+  --p1-color: #d08770;
+  --p2-color: #ebcb8b;
+  --p3-color: #a3be8c;
+  --p4-color: #b48ead;
+  --bg-nord: #2e3440;
+  --fg-nord: #e5e9f0;
+  --highlight: #81a1c1;
+  --p1-position-top: calc(50% - 1vh);
+  --p1-position-left: -2vh;
+  --p2-position-top: calc(100% + 2vh);
+  --p2-position-left: calc(50% - 1vh);
+  --p3-position-top: calc(50% - 1vh);
+  --p3-position-left: calc(100% + 2vh);
+  --p4-position-top: -2vh;
+  --p4-position-left: calc(50% - 1vh);
+}
+
+/* Your app custom styles here */
+/* -------------------------- */
+/* CSS for global Classes */
+/* -------------------------- */
+.none{
+    display: none !important;
+}
+.input_underlined{
+    border-bottom:  1px var(--f7-theme-color) solid !important;
+}
+.input_underlined:disabled{
+    border-bottom: 0px black solid !important;
+}
+.p1_input{
+    border-bottom: 1px var(--p1-color) solid !important;
+    background-color: transparent;
+    transition 0.5s;
+}
+.p1_input:focus{
+    background-color: var(--p1-color) !important;
+    transition: 0.5s;
+}
+.p2_input{
+    border-bottom: 1px var(--p2-color) solid !important;
+    background-color: transparent;
+    transition 0.5s;
+}
+.p2_input:focus{
+    background-color: var(--p2-color) !important;
+    transition: 0.5s;
+}
+.p3_input{
+    border-bottom: 1px var(--p3-color) solid !important;
+    background-color: transparent;
+    transition 0.5s;
+}
+.p3_input:focus{
+    background-color: var(--p3-color) !important;
+    transition: 0.5s;
+}
+.p4_input{
+    border-bottom: 1px var(--p4-color) solid !important;
+    background-color: transparent;
+    transition 0.5s;
+}
+.p4_input:focus{
+    background-color: var(--p4-color) !important;
+    transition: 0.5s;
+}
+.p1_bg{
+    background-color: var(--p1-color);
+    z-index: 10;
+}
+.p2_bg{
+    background-color: var(--p2-color);
+    z-index: 10;
+}
+.p3_bg{
+    background-color: var(--p3-color);
+    z-index: 10;
+}
+.p4_bg{
+    background-color: var(--p4-color);
+    z-index: 10;
+}
+table{
+    border-collapse: separate !important;
+}
+.default_th{
+    border-bottom: 2px solid var(--f7-theme-color);
+}
+.p1_th{
+    border-bottom: 2px solid var(--p1-color);
+}
+.p2_th{
+    border-bottom: 2px solid var(--p2-color);
+}
+.p3_th{
+    border-bottom: 2px solid var(--p3-color);
+}
+.p4_th{
+    border-bottom: 2px solid var(--p4-color);
+}
+th{
+    font-size: 1rem !important;
+    padding: 0px !important;
+}
+.grid-button{
+    justify-content: center;
+    align-items: center;
+    aspect-ratio: 1 / 1;
+    height: 100%;
+    max-height: max(70px, 10vh);
+}
+.grid-button:disabled{
+    color: var(--f7-tabbar-link-inactive-color);
+}
+table.data-table {
+    width: 100%;
+    border: none;
+    padding: 0px !important;
+    margin: 0;
+    text-align: left;
+}
+.stat-div td{
+    padding: 0px !important;
+}
+/* Hide Input arrows */
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+    -moz-appearance: textfield;
+}
+/* -------------------------- */
+/* CSS for start popup */
+/* -------------------------- */
+#start-form input:disabled{
+    width: 10vw;
+}
+/* -------------------------- */
+/* CSS for table in main view */
+/* -------------------------- */
+#table_wrap{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+#table{
+    display: flex;
+    height: min(65vh, 90vw);
+    width: min(65vh, 90vw);
+}
+#table div{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+    flex-wrap:wrap;
+}
+#table h3{
+    width: 100%;
+    margin-top: 2px;
+    margin-bottom: 2px;
+    z-index: 15;
+}
+.table_short_block{
+    height:12.5%;
+}
+.table_long_block{
+    height:50%;
+}
+.table_fill{
+    height:100%;
+}
+#center {
+    height: 50%;
+    width: 50%;
+    display: block !important;
+    position: relative
+}
+
+/* CSS for deal and tsumo popup */
+.edit-icon{
+    max-width:5vw;
+    font-size: 2em;
+}
+.card input{
+    display: inline-block;
+    width: 100%;
+}
+.card{
+    border: 1px solid transparent;
+    display: block;
+}
+.p1_card.banker{
+    border: 1px solid var(--p1-color);
+}
+.p2_card.banker{
+    border: 1px solid var(--p2-color);
+}
+.p3_card.banker{
+    border: 1px solid var(--p3-color);
+}
+.p4_card.banker{
+    border: 1px solid var(--p4-color);
+}
+.plus_or_minus{
+    display: inline-block;
+}
+.input-width-limit{
+    width: 80%;
+}
+.input_wrapper{
+    display: flex;
+    justify-content: center;
+}
+/* -------------------------- */
+/* CSS for stats */
+/* -------------------------- */
+.stat-div{
+    height: 70vh;
+    overflow: auto;
+}
+#history-view table{
+    width: 100%;
+}
+.tr-sticky{
+  position: sticky !important;
+  top: 0px !important;
+  z-index: 99 !important;
+  background-color: var(--f7-page-bg-color) !important;
+}
+/* -------------------------- */
+/* CSS for logs */
+/* -------------------------- */
+.log.removed{
+    text-decoration: line-through;
+}
+/* -------------------------- */
+/* CSS for summary */
+/* -------------------------- */
+.p1_rank_name{
+    margin-top: 5px;
+    border-left: 10px solid var(--p1-color);
+    border-bottom: 1px solid var(--p1-color);
+}
+.p1_rank{
+    margin-top: 5px;
+    border-bottom: 1px solid var(--p1-color);
+}
+.p2_rank_name{
+    margin-top: 5px;
+    border-left: 10px solid var(--p2-color);
+    border-bottom: 1px solid var(--p2-color);
+}
+.p2_rank{
+    margin-top: 5px;
+    border-bottom: 1px solid var(--p2-color);
+}
+.p3_rank_name{
+    margin-top: 5px;
+    border-left: 10px solid var(--p3-color);
+    border-bottom: 1px solid var(--p3-color);
+}
+.p3_rank{
+    margin-top: 5px;
+    border-bottom: 1px solid var(--p3-color);
+}
+.p4_rank_name{
+    margin-top: 5px;
+    border-left: 10px solid var(--p4-color);
+    border-bottom: 1px solid var(--p4-color);
+}
+.p4_rank{
+    margin-top: 5px;
+    border-bottom: 1px solid var(--p4-color);
+}
+/* -------------------------- */
+/* Animations for table */
+/* -------------------------- */
+@keyframes p1_to_p2 {
+    from{
+        top: var(--p1-position-top);
+        left: var(--p1-position-left);
+        background-color: var(--p1-color);
+    }
+    to{
+        top: var(--p2-position-top);
+        left: var(--p2-position-left);
+        background-color: var(--p2-color);
+    }
+}
+@keyframes p1_to_p3 {
+    from{
+        top: var(--p1-position-top);
+        left: var(--p1-position-left);
+        background-color: var(--p1-color);
+    }
+    to{
+        top: var(--p3-position-top);
+        left: var(--p3-position-left);
+        background-color: var(--p3-color);
+    }
+}
+@keyframes p1_to_p4 {
+    from{
+        top: var(--p1-position-top);
+        left: var(--p1-position-left);
+        background-color: var(--p1-color);
+    }
+    to{
+        top: var(--p4-position-top);
+        left: var(--p4-position-left);
+        background-color: var(--p4-color);
+    }
+}
+@keyframes p2_to_p1 {
+    from{
+        top: var(--p2-position-top);
+        left: var(--p2-position-left);
+        background-color: var(--p2-color);
+    }
+    to{
+        top: var(--p1-position-top);
+        left: var(--p1-position-left);
+        background-color: var(--p1-color);
+    }
+}
+@keyframes p2_to_p3 {
+    from{
+        top: var(--p2-position-top);
+        left: var(--p2-position-left);
+        background-color: var(--p2-color);
+    }
+    to{
+        top: var(--p3-position-top);
+        left: var(--p3-position-left);
+        background-color: var(--p3-color);
+    }
+}
+@keyframes p2_to_p4 {
+    from{
+        top: var(--p2-position-top);
+        left: var(--p2-position-left);
+        background-color: var(--p2-color);
+    }
+    to{
+        top: var(--p4-position-top);
+        left: var(--p4-position-left);
+        background-color: var(--p4-color);
+    }
+}
+@keyframes p3_to_p1 {
+    from{
+        top: var(--p3-position-top);
+        left: var(--p3-position-left);
+        background-color: var(--p3-color);
+    }
+    to{
+        top: var(--p1-position-top);
+        left: var(--p1-position-left);
+        background-color: var(--p1-color);
+    }
+}
+@keyframes p3_to_p2 {
+    from{
+        top: var(--p3-position-top);
+        left: var(--p3-position-left);
+        background-color: var(--p3-color);
+    }
+    to{
+        top: var(--p2-position-top);
+        left: var(--p2-position-left);
+        background-color: var(--p2-color);
+    }
+}
+@keyframes p3_to_p4 {
+    from{
+        top: var(--p3-position-top);
+        left: var(--p3-position-left);
+        background-color: var(--p3-color);
+    }
+    to{
+        top: var(--p4-position-top);
+        left: var(--p4-position-left);
+        background-color: var(--p4-color);
+    }
+}
+@keyframes p4_to_p1 {
+    from{
+        top: var(--p4-position-top);
+        left: var(--p4-position-left);
+        background-color: var(--p4-color);
+    }
+    to{
+        top: var(--p1-position-top);
+        left: var(--p1-position-left);
+        background-color: var(--p1-color);
+    }
+}
+@keyframes p4_to_p2 {
+    from{
+        top: var(--p4-position-top);
+        left: var(--p4-position-left);
+        background-color: var(--p4-color);
+    }
+    to{
+        top: var(--p2-position-top);
+        left: var(--p2-position-left);
+        background-color: var(--p2-color);
+    }
+}
+@keyframes p4_to_p3 {
+    from{
+        top: var(--p4-position-top);
+        left: var(--p4-position-left);
+        background-color: var(--p4-color);
+    }
+    to{
+        top: var(--p3-position-top);
+        left: var(--p3-position-left);
+        background-color: var(--p3-color);
+    }
+}
+.p1_to_p2{
+    animation-name: p1_to_p2;
+}
+.p1_to_p3{
+    animation-name: p1_to_p3;
+}
+.p1_to_p4{
+    animation-name: p1_to_p4;
+}
+.p2_to_p1{
+    animation-name: p2_to_p1;
+}
+.p2_to_p3{
+    animation-name: p2_to_p3;
+}
+.p2_to_p4{
+    animation-name: p2_to_p4;
+}
+.p3_to_p1{
+    animation-name: p3_to_p1;
+}
+.p3_to_p2{
+    animation-name: p3_to_p2;
+}
+.p3_to_p4{
+    animation-name: p3_to_p4;
+}
+.p4_to_p1{
+    animation-name: p4_to_p1;
+}
+.p4_to_p2{
+    animation-name: p4_to_p2;
+}
+.p4_to_p3{
+    animation-name: p4_to_p3;
+}
+.delay_1{
+    animation-delay: 0.2s;
+}
+.delay_2{
+    animation-delay: 0.4s;
+}
+.delay_3{
+    animation-delay: 0.6s;
+}
+.delay_4{
+    animation-delay: 0.8s;
+}
+.delay_5{
+    animation-delay: 1.0s;
+}
+.delay_6{
+    animation-delay: 1.2s;
+}
+.animation_dots{
+    position: absolute;
+    height: 2vh;
+    width: 2vh;
+    border-radius: 50%;
+    z-index: 8;
+    animation-duration: 2s;
+    animation-iteration-count: infinite;
+    z-index: 8;
+}
+/* Animation for banker */
+@keyframes banker {
+    from {
+    }
+    to{
+        background-color: var(--f7-page-bg-color);
+    }
+
+}
+.banker_block{
+    animation-name: banker;
+    animation-duration: 3s;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+    animation-timing-function: ease-in;
+}

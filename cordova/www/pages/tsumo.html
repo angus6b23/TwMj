@@ -1,0 +1,120 @@
+<div class="page" data-name="tsumo">
+    <div class="navbar">
+        <div class="navbar-bg"></div>
+        <div class="navbar-inner">
+            <div class="title">自摸</div>
+            <div class="right">
+                <a class="link popup-close">
+                    <i class="material-icons">close</i>
+                    <span class="if-not-md">關閉</span>
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="page-content">
+        <form id="tsumo-form" action="javascript:submit_tsumo_form()">
+            <div class="block block-strong">
+                <div class="row">
+                    <h2 class="col-100 text-align-center">自摸玩家</h2>
+                    <div class="col-33"></div>
+                    <div class="col-33">
+                        <div class="tsumo_selected">
+                        </div>
+                    </div>
+                    <div class="col-33">
+                        <h2><a href="#" data-actions=".tsumo-actions" class="button edit-icon actions-open">
+                            <i class="f7-icons if-not-md">square_pencil</i>
+                            <i class="material-icons md-only">edit</i>
+                        </a></h2>
+                    </div>
+                </div>
+            </div>
+            <div class="block">
+                <div class="row no-gap">
+                    <div class="col-33">
+                        <h2 class="text-align-center">
+                            <i class="f7-icons if-not-md">arrow_up_right</i>
+                            <i class="material-icons md-only">north_east</i>
+                        </h2>
+                        <div class="tsumo_left">
+                        </div>
+                    </div>
+                    <div class="col-33">
+                        <h2 class="text-align-center">
+                            <i class="f7-icons if-not-md">arrow_up</i>
+                            <i class="material-icons md-only">north</i>
+                        </h2>
+                        <div class="tsumo_center">
+                        </div>
+                    </div>
+                    <div class="col-33">
+                        <h2 class="text-align-center">
+                            <i class="f7-icons if-not-md">arrow_up_left</i>
+                            <i class="material-icons md-only">north_west</i>
+                        </h2>
+                        <div class="tsumo_right">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="p1_tsumo" class="card p1_card" onclick="$('#p1_tsumo input').focus()">
+                <h2 class="p1_name text-align-center"></h2>
+                <div class="input_wrapper">
+                    <h3 class="plus_or_minus">+</h3>
+                    <h3 class="input-width-limit">
+                        <input type="number" min=0 id="p1_tsumo_input" class="text-align-center p1_input" oninput="validity.valid||(value='');tsumo_input_actions()"></input>
+                    </h3>
+                </div>
+            </div>
+            <div id="p2_tsumo" class="card p2_card" onclick="$('#p2_tsumo input').focus()">
+                <h2 class="p2_name text-align-center"></h2>
+                <div class="input_wrapper">
+                    <h3 class="plus_or_minus">+</h3>
+                    <h3 class="input-width-limit">
+                        <input type="number" min=0 id="p2_tsumo_input" class="text-align-center p2_input" oninput="validity.valid||(value='');tsumo_input_actions()"></input>
+                    </h3>
+                </div>
+            </div>
+            <div id="p3_tsumo" class="card p3_card" onclick="$('#p3_tsumo input').focus()">
+                <h2 class="p3_name text-align-center"></h2>
+                <div class="input_wrapper">
+                    <h3 class="plus_or_minus">+</h3>
+                    <h3 class="input-width-limit">
+                        <input type="number" min=0 id="p3_tsumo_input" class="text-align-center p3_input" oninput="validity.valid||(value='');tsumo_input_actions()"></input>
+                    </h3>
+                </div>
+            </div>
+            <div id="p4_tsumo" class="card p4_card" onclick="$('#p4_tsumo input').focus()">
+                <h2 class="p4_name text-align-center"></h2>
+                <div class="input_wrapper">
+                    <h3 class="plus_or_minus">+</h3>
+                    <h3 class="input-width-limit">
+                        <input type="number" min=0 id="p4_tsumo_input" class="text-align-center p4_input" oninput="validity.valid||(value='');tsumo_input_actions()"></input>
+                    </h3>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <button type="submit" class="button button-fill">確定</button>
+                </div>
+            </div>
+        </form>
+        <div class="actions-modal tsumo-actions">
+            <div class="actions-group">
+                <span class="actions-label">請選擇自摸者</span>
+                <div class="actions-button actions-button-bold" onclick="set_tsumo_position(1);app.actions.close();">
+                    <div class="actions-button-text p1_name"></div>
+                </div>
+                <div class="actions-button actions-button-bold" onclick="set_tsumo_position(2);app.actions.close();">
+                    <div class="actions-button-text p2_name"></div>
+                </div>
+                <div class="actions-button actions-button-bold" onclick="set_tsumo_position(3);app.actions.close();">
+                    <div class="actions-button-text p3_name"></div>
+                </div>
+                <div class="actions-button actions-button-bold" onclick="set_tsumo_position(4);app.actions.close();">
+                    <div class="actions-button-text p4_name"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

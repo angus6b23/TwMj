@@ -1,0 +1,115 @@
+<div class="page" data-name="instantGet">
+    <div class="navbar">
+        <div class="navbar-bg"></div>
+        <div class="navbar-inner">
+            <div class="title">即收</div>
+            <div class="right">
+                <a class="link popup-close">
+                    <i class="material-icons">close</i>
+                    <span class="if-not-md">關閉</span>
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="page-content">
+        <form id="instantGet-form" action="javascript:submit_instantGet_form()">
+            <div class="block block-strong">
+                <div class="row">
+                    <h2 class="col-100 text-align-center">即收者</h2>
+                    <div class="col-33"></div>
+                    <div class="col-33">
+                        <div class="instantGet_selected">
+                        </div>
+                    </div>
+                    <div class="col-33">
+                        <h2><a href="#" data-actions=".instantGet-actions" class="button edit-icon actions-open">
+                            <i class="f7-icons if-not-md">square_pencil</i>
+                            <i class="material-icons md-only">edit</i>
+                        </a></h2>
+                    </div>
+                </div>
+            </div>
+            <div class="block-title">番數</div>
+            <div class="list">
+                <ul>
+                    <li>
+                        <label class="item-radio item-radio-icon-start item-content">
+                            <input type="radio" name="instant-get" value="3" onchange="instantGet_change()" checked />
+                            <i class="icon icon-radio"></i>
+                            <div class="item-inner">
+                                <div class="item-title">3</div>
+                            </div>
+                        </label>
+                    </li>
+                    <li>
+                        <label class="item-radio item-radio-icon-start item-content">
+                            <input type="radio" name="instant-get" value="5" onchange="instantGet_change()" />
+                            <i class="icon icon-radio"></i>
+                            <div class="item-inner">
+                                <div class="item-title">5</div>
+                            </div>
+                        </label>
+                    </li>
+                    <li>
+                        <label class="item-radio item-radio-icon-start item-content">
+                            <input type="radio" name="instant-get" value="8" onchange="instantGet_change()" />
+                            <i class="icon icon-radio"></i>
+                            <div class="item-inner">
+                                <div class="item-title">8</div>
+                            </div>
+                        </label>
+                    </li>
+                    <li>
+                        <label class="item-radio item-radio-icon-start item-content">
+                            <input type="radio" name="instant-get" value="others" onchange="instantGet_change()" />
+                            <i class="icon icon-radio"></i>
+                            <div class="item-inner">
+                                <div class="item-title">其他：</div>
+                                <div class="item-input-wrap" style="width: 85%;">
+                                    <input class="input_underlined none" type="number" name="instantGet_others"/>
+                                </div>
+                            </div>
+
+                        </label>
+                    </li>
+                </ul>
+            </div>
+            <div id="instantGet_cards">
+                <div id="p1_instantGet" class="card p1_card">
+                    <h2 class="p1_name text-align-center"></h2>
+                </div>
+                <div id="p2_instantGet" class="card p2_card">
+                    <h2 class="p2_name text-align-center"></h2>
+                </div>
+                <div id="p3_instantGet" class="card p3_card">
+                    <h2 class="p3_name text-align-center"></h2>
+                </div>
+                <div id="p4_instantGet" class="card p4_card">
+                    <h2 class="p4_name text-align-center"></h2>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <button type="submit" class="button button-fill">確定</button>
+                </div>
+            </div>
+        </form>
+        <div class="actions-modal instantGet-actions quick-actions">
+            <div class="actions-group">
+                <span class="actions-label">請選擇即收者</span>
+                <div class="actions-button actions-button-bold" onclick="set_instantGet_position(1);">
+                    <div class="actions-button-text p1_name"></div>
+                </div>
+                <div class="actions-button actions-button-bold" onclick="set_instantGet_position(2);">
+                    <div class="actions-button-text p2_name"></div>
+                </div>
+                <div class="actions-button actions-button-bold" onclick="set_instantGet_position(3);">
+                    <div class="actions-button-text p3_name"></div>
+                </div>
+                <div class="actions-button actions-button-bold" onclick="set_instantGet_position(4);">
+                    <div class="actions-button-text p4_name"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

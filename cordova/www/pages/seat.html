@@ -1,0 +1,60 @@
+<div class="page" data-name="seat">
+    <div class="navbar">
+        <div class="navbar-bg"></div>
+        <div class="navbar-inner">
+            <div class="title">調位</div>
+            <div class="right">
+                <a class="link popup-close">
+                    <i class="material-icons">close</i>
+                    <span class="if-not-md">關閉</span>
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="page-content">
+        <form id="seat-form" action="javascript:change_seat()">
+            <div class="block-title">調位方式</div>
+            <div class="list no-hairlines-md">
+                <ul>
+                    <li>
+                        <label class="item-radio item-radio-icon-start item-content">
+                            <input type="radio" name="change-seat" value="default" onclick='display_custom(false)' checked />
+                            <i class="icon icon-radio"></i>
+                            <div class="item-inner">
+                                <div class="item-title">東南對調、西北對調</div>
+                            </div>
+                        </label>
+                    </li>
+                    <li>
+                        <label class="item-radio item-radio-icon-start item-content">
+                            <input type="radio" name="change-seat" value="custom" onclick='display_custom(true)' />
+                            <i class="icon icon-radio"></i>
+                            <div class="item-inner">
+                                <div class="item-title">自訂</div>
+                            </div>
+                        </label>
+                    </li>
+                </ul>
+            </div>
+            <div class="none custom-seat-east">
+                <div class="block-title">東位</div>
+                <div class="block block-strong radio-east"></div>
+            </div>
+            <div class="none custom-seat-south">
+                <div class="block-title">南位</div>
+                <div class="block block-strong radio-south"></div>
+            </div>
+            <div class="none custom-seat-west">
+                <div class="block-title">西位</div>
+                <div class="block block-strong radio-west"></div>
+            </div>
+            <div class="none custom-seat-north">
+                <div class="block-title">北位</div>
+                <div class="block block-strong radio-north"></div>
+            </div>
+            <div class="row">
+                <button type="submit" class="button button-fill col">確定</button>
+            </div>
+            </form>
+        </div>
+    </div>
