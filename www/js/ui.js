@@ -466,6 +466,43 @@ function mark_ended(boolean){
     app.emit('data_change');
 }
 // ------------------------------------------ //
+// POPOvER RELATED FUNCTIONS
+// ------------------------------------------ //
+function roll_dice(){
+    $('.dice-text').text('');
+    $('#dice-slider').addClass('none');
+    let positions = ['E', 'S', 'W', 'N', 'E', 'S', 'W', 'N']
+    let dice_array = []
+    for(i = 0; i <= 14; i++){ //Randomize 15 dices and put it into an array
+        dice_array.push(Math.ceil(Math.random() * 6));
+    }
+    let dice_sum = dice_array[dice_array.length-2] + dice_array[dice_array.length-3] + dice_array[dice_array.length-4] //Only pick last 2nd, 3rd, 4th for the sum
+    // Generate html icons for displaying dice animation
+    let dice_html = ''
+    for (dice of dice_array){
+        dice_html +=
+        ( dice == 1 ) ? `<i class='material-icons dice'>looks_one</i>` :
+        ( dice == 2 ) ? `<i class='material-icons dice'>looks_two</i>` :
+        `<i class='material-icons dice'>looks_${dice}</i>`
+    }
+    $('#dice-slider').html(dice_html);
+    $('#dice-slider').removeClass('none');
+    // Get position of player for starting tiles
+    let position_open =
+        (gamestat.banker == 'E') ? 0 :
+        (gamestat.banker == 'S') ? 1 :
+        (gamestat.banker == 'W') ? 2 : 3
+    position_open += (dice_sum % 4) - 1;
+    (position_open < 0) ? position_open = positions.length - 1 : null;
+    let dice_text = `${dice_sum}點<br>${allplayer[mapped[positions[position_open]]].name} 開`
+    setTimeout(function(){
+        $('.dice-text').html(dice_text);
+    }, 1000);
+}
+
+$('.dice-popover').on('popover:open', roll_dice);
+
+// ------------------------------------------ //
 // POPUP RELATED FUNCTIONS
 // ------------------------------------------ //
 // Starting Modal Functions

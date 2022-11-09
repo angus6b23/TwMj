@@ -192,7 +192,39 @@ input[type=number] {
     display: block !important;
     position: relative
 }
-
+/* CSS for dice popover */
+.dice-popover{
+    height: 18rem;
+    width: 20rem;
+}
+.dice-container{
+    height: 6rem;
+    width: 18rem;
+    margin: auto;
+    overflow: hidden;
+}
+#dice-slider{
+    position: relative;
+    white-space: nowrap;
+    width: 34.8rem;
+    animation-name: dice-slide;
+    animation-duration: 1s;
+    animation-iteration-count: 1;
+    animation-fill-mode: forwards;
+}
+.dice{
+    font-size: 5.8rem;
+}
+.dice-text{
+    height: 3rem;
+    font-size: 1rem;
+}
+/* Dice Slider Animation */
+@keyframes dice-slide{
+    0%  {left: 17.4rem}
+    90% {left: -65rem}
+    100%{left: -63.8rem}
+}
 /* CSS for deal and tsumo popup */
 .edit-icon{
     max-width:5vw;
