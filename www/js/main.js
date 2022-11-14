@@ -34,7 +34,8 @@ let default_setting={ //Object for holding settings
     break: 3, //Loser can choose to stop consecutive after 3 loses
     base: 0, //Base Money
     money: 0.5, //Multiplier (Money = yaku x money multiplier)
-    display_as_money: false //Display money instead of score on main table when true;
+    display_as_money: false, //Display money instead of score on main table when true
+    tsumo_half: false //Losers only need to pay half for tsumo
 };
 let chart_created = false;
 class player_template{
@@ -123,6 +124,7 @@ function round_to_1_dec(num){
 function start_game(start_obj){
     default_setting.money = start_obj.multiplier; //Apply settings into corresponding object
     default_setting.break = start_obj.break_streak;
+    default_setting.tsumo_half = start_obj.tsumo_half;
     for (i = 1; i<5; i++){
         let position;
         switch(i){
@@ -228,15 +230,33 @@ function tsumo(player_index, game_arr){
             (Math.abs(game_arr[i]) > gamestat.max_yaku) ? gamestat.max_yaku = Math.abs(game_arr[i]) : null;
             (Math.abs(game_arr[i]) > allplayer[player_index].max_yaku) ? allplayer[player_index].max_yaku = Math.abs(game_arr[i]) : null;
             total_yaku += Math.abs(game_arr[i]);
-            (game_arr[i] < 0 && Math.abs(game_arr[i]) > tsumo_max_yaku) ? tsumo_max_yaku = Math.abs(game_arr[i]) : null; //Record largest yaku for calculating average yaku for game stats
+            (Math.abs(game_arr[i]) > tsumo_max_yaku) ? tsumo_max_yaku = Math.abs(game_arr[i]) : null; //Record largest yaku for calculating average yaku for game stats
         }
     }
     let avg_yaku = round_to_2_dec(total_yaku / 3);
     let game_total_yaku = parseInt(gamestat.avg_yaku) * (parseInt(gamestat.deal) + parseInt(gamestat.tsumo)) + tsumo_max_yaku;
     gamestat.tsumo += 1;
     gamestat.avg_yaku = round_to_2_dec(parseInt(game_total_yaku) / (parseInt(gamestat.deal) + parseInt(gamestat.tsumo)));
-    msg += allplayer[player_index].name + ' 自摸了 ' + avg_yaku + '番<br>';
-    transaction('tsumo', game_arr);
+    if (default_setting.tsumo_half){
+        // Show different messages for cutting half for tsumo
+        msg += `${allplayer[player_index].name} 自摸了${avg_yaku}番 [自摸減半]<br>`
+        // Modify losers' yakus into half and calculate total
+        let total = 0
+        let half_arr = game_arr.map(function(yaku){
+            if (yaku < 0){
+                let yaku_half = Math.floor(yaku/2);
+                total += Math.abs(yaku_half);
+                return yaku_half;
+            }
+        });
+        // Then set winner's yaku to total yaku
+        half_arr[player_index] = total;
+        console.log(half_arr);
+        transaction('tsumo', half_arr);
+    } else {
+        msg += `${allplayer[player_index].name} 自摸了${avg_yaku}番<br>`;
+        transaction('tsumo', game_arr);
+    }
 }
 function transaction(action, game_arr){
     game_record.push(game_arr);
