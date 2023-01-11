@@ -461,6 +461,15 @@ function adjust(){
     }
 }
 // ------------------------------------------ //
+// Function for manual payment
+// ------------------------------------------ //
+function manual_pay(payer, reciever){
+    msg = '手動結算：<br>';
+    pay_full_price(payer, reciever);
+    add_log(msg);
+    app.emit('data_change');
+}
+// ------------------------------------------ //
 // Function for import
 // ------------------------------------------ //
 function import_data(data){
@@ -483,24 +492,41 @@ function import_data(data){
 // Function for capturing summary
 // ------------------------------------------ //
 async function capture(){
-    $('.left .capture-button').addClass('none');
-    $('.left .preloader').removeClass('none');
-    $('#summary-title').removeClass('none');
-    $('#summary-url').text(window.location.href);
-    $('.timestamp').text(new Date());
-    let element = $('.capture')[0];
-    let image = await html2canvas(element, {windowWidth: element.scrollWidth, windowHeight: element.scrollHeight});
-    image.toBlob(function(blob){
-        const path = URL.createObjectURL(blob);
-        let timestamp = new Date();
-        let filename = 'Twmj-Summary-' + timestamp.getDate().toString().padStart(2, 0) + '-' + (timestamp.getMonth() + 1).toString().padStart(2, 0);
-        download(filename, path);
-    })
-    $('.left .capture-button').removeClass('none');
-    $('.left .preloader').addClass('none');
-    $('#summary-title').addClass('none');
-    $('.timestamp').text('');
-    $('#summary-url').text('');
+    try{
+        $('.left .capture-button').addClass('none');
+        $('.left .preloader').removeClass('none');
+        $('#summary-title').removeClass('none');
+        $('#summary-url').text(window.location.href);
+        $('.timestamp').text(new Date());
+        try{
+            setTimeout(async()=>{
+                let element = $('.capture')[0];
+                let image = await html2canvas(element, {windowWidth: element.scrollWidth, windowHeight: element.scrollHeight});
+                image.toBlob(function(blob){
+                    const path = URL.createObjectURL(blob);
+                    let timestamp = new Date();
+                    let filename = 'Twmj-Summary-' + timestamp.getDate().toString().padStart(2, 0) + '-' + (timestamp.getMonth() + 1).toString().padStart(2, 0);
+                    download(filename, path);
+                })
+                $('.left .capture-button').removeClass('none');
+                $('.left .preloader').addClass('none');
+                $('#summary-title').addClass('none');
+                $('.timestamp').text('');
+                $('#summary-url').text('');
+            }, 100);
+        } catch (err){
+            catch_error(`Capture Err: ${err}`);
+            $('.left .capture-button').removeClass('none');
+            $('.left .preloader').addClass('none');
+            $('#summary-title').addClass('none');
+            $('.timestamp').text('');
+            $('#summary-url').text('');
+        }
+
+    } catch (err){
+        catch_error(err);
+    }
+
 }
 // ------------------------------------------ //
 // EVENT HANDLEERS

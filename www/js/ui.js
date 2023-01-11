@@ -895,7 +895,6 @@ function redo(){
 function display_as_money(){
     default_setting.display_as_money = !default_setting.display_as_money;
     app.emit('ui_update');
-    app.tab.show('#view-home');
 }
 // Apply themes
 function apply_theme(theme_name){
@@ -1000,6 +999,25 @@ function west_trigger(){
 function north_trigger(){
     $('#seat-form button[type="submit"]').removeClass('none');
 }
+// Functions for pay popup, see function manual_pay in main.js
+$(document).on('popup:opened', '#pay-popup', function(){
+    let append_html = ''
+    for (i = 1; i <= 4; i++){
+        for(j = 1; j <= 4; j++){
+            if (allplayer[i]['sf' + j] > 0){
+                append_html += `
+                <li>
+                    <a href="#" class="item-link item-content" onclick="app.dialog.confirm('結算此拉踢?<br>${allplayer[i].name} 付${allplayer[i]['loseto' + j]}番給 ${allplayer[j].name}﹔${allplayer[i]['sf' + j]}口', '港式台牌計分版 - 手動結算', function(){manual_pay(${i}, ${j}); app.popup.close('#pay-popup'); app.tab.show('#view-home')})">
+                        <div class="item-inner">
+                            <div class="item-title">${allplayer[i].name} → ${allplayer[j].name}：${allplayer[i]['sf' + j]}口 ${allplayer[i]['loseto' + j]}番</div>
+                        </div>
+                    </a>
+                </li>`
+            }
+        }
+    }
+    $('#pay_append').html(append_html);
+})
 // Hide Toolbar after entering license page
 $(document).on('page:afterin', '.page[data-name="license"]', function(){
     app.toolbar.hide('.toolbar');
