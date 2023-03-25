@@ -61,6 +61,10 @@ var routes = [
         url: './pages/summary.html'
     },
     {
+        path: '/pay/',
+        url: './pages/pay.html'
+    },
+    {
         path: '/dynamic-route/blog/:blogId/post/:postId/',
         componentUrl: './pages/dynamic-route.html',
     },
