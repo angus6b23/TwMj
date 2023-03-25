@@ -536,7 +536,7 @@ function submit_start_form(){ //Function for handling start form submit
     start_obj.name_array.push(start_form.elements['north_name'].value);
     start_obj.multiplier = parseFloat(start_form.elements['multiplier'].value);
     start_obj.break_streak = start_form.elements['break_streak'].value == -1 ? Infinity : parseInt(start_form.elements['break_streak'].value);
-    start_obj.tsumo_half = start_form.elements['tsumo_half'].checked;
+    start_obj.tsumo_method = start_form.elements['tsumo_method'].value;
     start_game(start_obj); //Function from Main.js
     // Call function in main.js here
     app.popup.close('#start-popup');
@@ -709,7 +709,7 @@ $('#deal-popup').on('popup:closed', function(){
 // ------------------------------------------ //
 // Check whether tsumo_half is enabled on popup open
 $('#tsumo-popup').on('popup:open', function(){
-    (!default_setting.tsumo_half) ? $('.tsumo_half_message').addClass('none') : $('.tsumo_half_message').removeClass('none');
+    (default_setting.tsumo_method === 'half' || default_setting.tsumo_method === 'even') ? $('.tsumo_half_message').addClass('none') : $('.tsumo_half_message').removeClass('none');
 })
 // Putting the index of selected_player into the top div
 function set_tsumo_position(player_selected){
