@@ -900,10 +900,14 @@ $("#deal-popup").on("popup:closed", function () {
 // ------------------------------------------ //
 // Check whether tsumo_half is enabled on popup open
 $("#tsumo-popup").on("popup:open", function () {
-  default_setting.tsumo_method === "half" ||
-  default_setting.tsumo_method === "even"
-    ? $(".tsumo_half_message").addClass("none")
-    : $(".tsumo_half_message").removeClass("none");
+  if (
+    default_setting.tsumo_method === "half" ||
+    default_setting.tsumo_method === "even"
+  ) {
+    $(".tsumo_half_message").removeClass("none");
+  } else {
+    $(".tsumo_half_message").addClass("none");
+  }
 });
 // Putting the index of selected_player into the top div
 function set_tsumo_position(player_selected) {
