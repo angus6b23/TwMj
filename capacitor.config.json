@@ -1,0 +1,6 @@
+{
+  "appId": "app.twmj",
+  "appName": "Twmj",
+  "webDir": "www",
+  "CAPACITOR_ANDROID_STUDIO_PATH": "/usr/bin/flatpak run --branch=stable --arch=x86_64 --command=android-studio com.google.AndroidStudio"
+}

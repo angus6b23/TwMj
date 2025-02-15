@@ -133,6 +133,10 @@ table.data-table {
 .stat-div td{
     padding: 0px !important;
 }
+.page-content{
+    overflow: auto !important;
+    height: calc(100dvh - 56px);
+}
 /* Hide Input arrows */
 /* Chrome, Safari, Edge, Opera */
 input::-webkit-outer-spin-button,
