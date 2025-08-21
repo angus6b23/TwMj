@@ -33,6 +33,10 @@
 .none{
     display: none !important;
 }
+div.view > div.page {
+    overflow: auto;
+    padding-bottom: 0.5rem;
+}
 .input_underlined{
     border-bottom:  1px var(--f7-theme-color) solid !important;
 }
@@ -133,9 +137,10 @@ table.data-table {
 .stat-div td{
     padding: 0px !important;
 }
-.page-content{
-    overflow: auto !important;
-    height: calc(100dvh - 56px);
+@media only screen and (max-width: 600px) {
+  .page-content{ 
+      height: calc(100dvh - 56px);
+  }
 }
 /* Hide Input arrows */
 /* Chrome, Safari, Edge, Opera */
